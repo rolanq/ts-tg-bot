@@ -1,9 +1,26 @@
 import { Context } from "telegraf";
-import { MESSAGES } from "constants/messages";
+import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { getMainKeyboard } from "keyboards/main";
+import { createUserIfNotExists } from "services/User";
 
-export function handleStart(ctx: Context) {
-  return ctx.reply(MESSAGES.WELCOME, {
-    reply_markup: getMainKeyboard(),
-  });
+export async function handleStart(ctx: Context) {
+  try {
+    if (!ctx.from?.id) {
+      ctx.reply(ERROR_MESSAGES.ERROR);
+      return;
+    }
+
+    await createUserIfNotExists(
+      ctx.from?.id.toString(),
+      ctx.from?.username || ""
+    );
+
+    await ctx.deleteMessage();
+
+    return ctx.reply(MESSAGES.WELCOME, {
+      reply_markup: getMainKeyboard(),
+    });
+  } catch (error) {
+    ctx.reply(ERROR_MESSAGES.ERROR);
+  }
 }

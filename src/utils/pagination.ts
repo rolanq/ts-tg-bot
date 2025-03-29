@@ -4,6 +4,8 @@ type PaginationOptions = {
   itemsPerPage?: number;
   currentPage?: number;
   buttonCallback?: string;
+  totalItems?: number;
+  isLastPage?: boolean;
 };
 
 export function getPaginatedInlineKeyboard<T>(
@@ -12,24 +14,29 @@ export function getPaginatedInlineKeyboard<T>(
   options: PaginationOptions = {}
 ) {
   const {
-    itemsPerPage = 5,
+    itemsPerPage = 8,
     currentPage = 1,
     buttonCallback = "page",
+    totalItems = 0,
+    isLastPage = false,
   } = options;
 
-  const totalPages = Math.ceil(items.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = items.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const keyboard: InlineKeyboardButton[][] = [];
 
-  // Добавляем кнопки для текущих элементов
-  currentItems.forEach((item) => {
-    keyboard.push([renderButton(item)]);
-  });
+  for (let i = 0; i < items.length; i += 2) {
+    const row: InlineKeyboardButton[] = [];
 
-  // Добавляем навигационные кнопки
+    row.push(renderButton(items[i]));
+
+    if (i + 1 < items.length) {
+      row.push(renderButton(items[i + 1]));
+    }
+
+    keyboard.push(row);
+  }
+
   const navigationRow: InlineKeyboardButton[] = [];
 
   if (currentPage > 1) {
@@ -39,12 +46,14 @@ export function getPaginatedInlineKeyboard<T>(
     });
   }
 
-  navigationRow.push({
-    text: `${currentPage}/${totalPages}`,
-    callback_data: "ignore",
-  });
+  if (totalItems > itemsPerPage) {
+    navigationRow.push({
+      text: `Страница ${currentPage} из ${totalPages}`,
+      callback_data: "ignore",
+    });
+  }
 
-  if (currentPage < totalPages) {
+  if (currentPage < totalPages && !isLastPage) {
     navigationRow.push({
       text: "▶️",
       callback_data: `${buttonCallback}:${currentPage + 1}`,

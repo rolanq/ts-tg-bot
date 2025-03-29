@@ -1,9 +1,9 @@
 import { Markup } from "telegraf";
-import { MAIN_MENU_BUTTONS } from "../constants/buttons.js";
+import { MAIN_MENU_BUTTONS_TEXT } from "../constants/buttons/buttonsText.js";
 
 export function getMainKeyboard() {
   return Markup.keyboard([
-    [MAIN_MENU_BUTTONS.CREATE_AD],
-    [MAIN_MENU_BUTTONS.PROFILE, MAIN_MENU_BUTTONS.SEARCH],
+    [MAIN_MENU_BUTTONS_TEXT.CREATE_AD],
+    [MAIN_MENU_BUTTONS_TEXT.PROFILE, MAIN_MENU_BUTTONS_TEXT.SEARCH],
   ]).resize().reply_markup;
 }

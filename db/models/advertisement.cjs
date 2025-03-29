@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       engineType: {
-        type: DataTypes.ENUM("бензин", "дизель", "электро", "гибрид"),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       horsePower: {
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       driveType: {
-        type: DataTypes.ENUM("полный", "задний", "передний"),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       transmission: {
@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
       },
       hideReason: {
-        type: DataTypes.ENUM("bot", "other", "just_hide"),
+        type: DataTypes.STRING,
         allowNull: true,
       },
       userId: {

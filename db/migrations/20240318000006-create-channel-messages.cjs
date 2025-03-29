@@ -1,13 +1,12 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("ChannelMessages", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
         type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
       },
       advertisementId: {
         type: Sequelize.INTEGER,
@@ -19,35 +18,29 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      channelId: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       messageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      createdAt: {
+      channelId: {
+        type: Sequelize.STRING,
         allowNull: false,
+      },
+      createdAt: {
         type: Sequelize.DATE,
+        allowNull: false,
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
       },
     });
 
-    // Добавляем уникальный составной индекс
-    await queryInterface.addIndex(
-      "ChannelMessages",
-      ["advertisementId", "channelId", "messageId"],
-      {
-        unique: true,
-        name: "channel_message_unique_index",
-      }
-    );
+    await queryInterface.addIndex("ChannelMessages", ["advertisementId"]);
+    await queryInterface.addIndex("ChannelMessages", ["messageId"]);
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("ChannelMessages");
   },
 };

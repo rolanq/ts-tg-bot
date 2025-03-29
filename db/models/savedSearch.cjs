@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       engineType: {
-        type: DataTypes.ENUM("бензин", "дизель", "электро", "гибрид"),
+        type: DataTypes.STRING,
         allowNull: true,
       },
       horsePowerMin: {
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       driveType: {
-        type: DataTypes.ENUM("полный", "задний", "передний"),
+        type: DataTypes.STRING,
         allowNull: true,
       },
       transmission: {
