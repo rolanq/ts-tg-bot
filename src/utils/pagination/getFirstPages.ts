@@ -15,7 +15,7 @@ import {
   ENGINE_TYPES,
   TRANSMISSION_TYPES,
   DRIVE_TYPES,
-} from "constants/engine";
+} from "constants/config";
 
 export const getFirstPageForRegions = async () => {
   const regions = await getRegionsPerPage(1);

@@ -1,6 +1,6 @@
 import { Message } from "@telegraf/types";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { parseNumberWithAbbreviations } from "utils/utils";

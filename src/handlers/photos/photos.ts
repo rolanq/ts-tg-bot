@@ -1,7 +1,6 @@
 import { PHOTOS_BUTTONS } from "constants/buttons/buttons";
 import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
-import { STEPS_ENUM } from "constants/steps";
-import { USER_STATE_ENUM } from "constants/userState";
+import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { checkUserState } from "handlers/common/checkUserState";
 import {
   getAdvertisementDraft,

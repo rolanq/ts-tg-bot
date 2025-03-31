@@ -1,5 +1,5 @@
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM } from "constants/config";
 import {
   dropAdvertisementDraft,
   getAdvertisementDraft,

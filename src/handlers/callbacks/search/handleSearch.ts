@@ -23,7 +23,9 @@ export const handleSearch = async (ctx: Context) => {
     const ads = await getAdvertisements(whereCondition);
 
     if (ads.length === 0) {
-      return ctx.reply(renderAdsNotFoundMessage(savedSearch));
+      return ctx.answerCbQuery(renderAdsNotFoundMessage(savedSearch), {
+        show_alert: true,
+      });
     }
 
     ads.forEach(async (ad) => {

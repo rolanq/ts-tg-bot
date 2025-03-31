@@ -1,5 +1,5 @@
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { USER_STATE_ENUM } from "constants/userState";
+import { USER_STATE_ENUM } from "constants/config";
 import { getUser, updateUser } from "services/User";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";

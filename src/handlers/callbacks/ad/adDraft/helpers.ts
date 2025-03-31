@@ -7,7 +7,7 @@ import {
   getFirstPageForTransmissionTypes,
   getFirstPageForYears,
 } from "utils/pagination/getFirstPages";
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM } from "constants/config";
 import { getFirstPageForRegions } from "utils/pagination/getFirstPages";
 import { IAdvertisementDraft } from "utils/db";
 

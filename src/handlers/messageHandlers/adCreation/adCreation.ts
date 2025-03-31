@@ -1,6 +1,5 @@
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { STEPS_ENUM } from "constants/steps";
-import { USER_STATE_ENUM } from "constants/userState";
+import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { getAdvertisementDraft } from "services/advertismentDraft";
 import { getUser, updateUser } from "services/User";
 import { Context } from "telegraf";

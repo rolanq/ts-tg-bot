@@ -3,7 +3,7 @@ import {
   CONFIRM_HIDE_AD_BUTTONS,
   HIDE_AD_REASON_BUTTONS,
 } from "constants/buttons/buttons";
-import { HIDE_REASONS } from "constants/hideReasons";
+import { HIDE_REASONS } from "constants/config";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { editAdInChannel } from "handlers/common/channelMessage";
 import {

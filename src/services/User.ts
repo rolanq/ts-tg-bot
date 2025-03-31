@@ -1,6 +1,5 @@
+import { HIDE_REASONS, USER_STATE_ENUM } from "constants/config";
 import { Advertisement, IUser, User } from "utils/db";
-import { USER_STATE_ENUM } from "constants/userState";
-import { HIDE_REASONS } from "constants/hideReasons";
 
 export const createUser = async (userId: string, username: string) => {
   const user = await User.create({

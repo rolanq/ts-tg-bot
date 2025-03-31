@@ -1,5 +1,5 @@
+import { USER_STATE_ENUM } from "constants/config";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { USER_STATE_ENUM } from "constants/userState";
 import { sendAdToChannel } from "handlers/common/channelMessage";
 import { createAdvertisement } from "services/advertisment";
 import {

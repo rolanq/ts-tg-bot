@@ -1,4 +1,5 @@
-import { HIDE_REASONS } from "constants/hideReasons";
+
+import { HIDE_REASONS } from "constants/config";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
 import { IAdvertisement } from "utils/db";
 

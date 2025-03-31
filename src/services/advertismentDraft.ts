@@ -1,4 +1,4 @@
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM } from "constants/config";
 import {
   IAdvertisementDraft,
   AdvertisementDraft,
@@ -68,4 +68,4 @@ export const dropAdvertisementDraft = async (userId: string) => {
     price: null,
     photos: [],
   });
-};
+};  

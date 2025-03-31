@@ -3,7 +3,7 @@ import { Context } from "telegraf";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { CallbackQuery } from "@telegraf/types";
 import { getUser, updateUser } from "services/User";
-import { USER_STATE_ENUM } from "constants/userState";
+import { USER_STATE_ENUM } from "constants/config";
 import { getRegionsPerPage } from "services/regionService";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
 import {

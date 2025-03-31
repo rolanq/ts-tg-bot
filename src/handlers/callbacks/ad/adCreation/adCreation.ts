@@ -2,7 +2,7 @@ import { CallbackQuery } from "@telegraf/types";
 import { Context } from "telegraf";
 import { brandStep } from "./adCreationSteps/brandStep";
 import { regionStep } from "./adCreationSteps/regionStep";
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { modelStep } from "./adCreationSteps/modelStep";
 import { yearStep } from "./adCreationSteps/yearStep";
 import { engineTypeStep } from "./adCreationSteps/engineTypeStep";
@@ -10,7 +10,6 @@ import { driveTypeStep } from "./adCreationSteps/driveTypeStep";
 import { transmissionTypeStep } from "./adCreationSteps/transmissionTypeStep";
 import { ERROR_MESSAGES } from "constants/messages";
 import { getUser } from "services/User";
-import { USER_STATE_ENUM } from "constants/userState";
 
 export const adCreation = async (ctx: Context) => {
   try {

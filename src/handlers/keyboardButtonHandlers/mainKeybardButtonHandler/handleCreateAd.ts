@@ -2,7 +2,6 @@ import {
   EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
 } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { USER_STATE_ENUM } from "constants/userState";
 import {
   getAdvertisementDraft,
   createAdvertisementDraft,
@@ -11,6 +10,7 @@ import { getUser, updateUser } from "services/User";
 import { getFirstPageForRegions } from "utils/pagination/getFirstPages";
 import { Context } from "telegraf";
 import { renderAdvertisementDraftMessage } from "./helpers";
+import { USER_STATE_ENUM } from "constants/config";
 
 export async function handleCreateAd(ctx: Context) {
   try {
