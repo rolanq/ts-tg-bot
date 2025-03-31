@@ -33,8 +33,12 @@ export const renderAdvertismentMessage = async (
       adPhotosCount: ad.photos?.length || 0,
     };
 
-    if ("isOnHold" in ad) {
-      tempAd.adStatus = ad.isOnHold ? "[ПОД ЗАДАТКОМ]" : "";
+    if ("isActive" in ad) {
+      tempAd.adStatus = ad.isActive ? "" : "[ПРОДАНО]";
+
+      if ("isOnHold" in ad) {
+        tempAd.adStatus = ad.isOnHold ? "[ПОД ЗАДАТКОМ]" : "";
+      }
     }
 
     if (ad.brandId) {

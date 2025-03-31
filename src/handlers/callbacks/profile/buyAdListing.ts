@@ -20,7 +20,9 @@ export const handleBuyAdListing = async (ctx: Context) => {
 
     await ctx.deleteMessage();
 
-    return ctx.reply(MESSAGES.AD_LISTING_PURCHASED);
+    return ctx.answerCbQuery(MESSAGES.AD_LISTING_PURCHASED, {
+      show_alert: true,
+    });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR);
   }

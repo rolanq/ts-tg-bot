@@ -1,26 +1,11 @@
-import { Markup } from "telegraf";
 import {
   InlineKeyboardButton,
-  KeyboardButton,
+  InputMediaPhoto,
 } from "telegraf/typings/core/types/typegram";
-import {
-  IAdvertisement,
-  IAdvertisementDraft,
-  IBrand,
-  ICarModel,
-  IRegion,
-  ISavedSearch,
-} from "./db";
-import { ADVERTISEMENT_MESSAGE } from "constants/messages";
-import { getRegionsPerPage } from "services/regionService";
-import { getPaginatedInlineKeyboard } from "./pagination";
-import { getBrandsPerPage, getModelsPerPage } from "services/brandService";
-import {
-  renderPaginatedBrandButtons,
-  renderPaginatedModelButtons,
-  renderPaginatedRegionButtons,
-} from "../constants/buttons/renderPaginatedButtons";
+import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "./db";
 import { Op, WhereOptions } from "sequelize";
+import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
+import { MediaGroup } from "telegraf/typings/telegram-types";
 
 export const getInlineKeyboard = (buttons: InlineKeyboardButton[]) => {
   return {
@@ -133,4 +118,22 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
   }
 
   return whereCondition;
+};
+
+export const formatAdvertisementMedia = async (
+  ad: IAdvertisement
+): Promise<{ text: string | null; media: InputMediaPhoto[] | null }> => {
+  const message = await renderAdvertismentMessage(ad);
+
+  if (!ad.photos || ad.photos.length === 0) {
+    return { text: message, media: null };
+  }
+
+  const media: InputMediaPhoto[] = ad.photos.map((photo, index) => ({
+    type: "photo",
+    media: photo,
+    caption: index === 0 ? message : undefined,
+  }));
+
+  return { text: null, media };
 };

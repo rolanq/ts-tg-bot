@@ -1,10 +1,11 @@
-import { CallbackQuery } from "@telegraf/types";
-import { HIDE_AD_BUTTONS } from "constants/buttons/buttons";
+import { CallbackQuery, Message } from "@telegraf/types";
+import { AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { getAdvertisementsByUserId } from "services/advertisment";
 import { getUser } from "services/User";
 import { Context } from "telegraf";
+import { formatAdvertisementMedia } from "utils/utils";
 
 export const handleMyAds = async (ctx: Context) => {
   try {
@@ -23,41 +24,42 @@ export const handleMyAds = async (ctx: Context) => {
     );
 
     if (advertisements.length === 0) {
-      return ctx.reply(
+      return ctx.answerCbQuery(
         selectedAdsStatus === "active"
           ? MESSAGES.NO_ACTIVE_ADS
-          : MESSAGES.NO_HIDDEN_ADS
+          : MESSAGES.NO_HIDDEN_ADS,
+        { show_alert: true }
       );
     }
 
-    advertisements.forEach(async (ad) => {
+    await ctx.deleteMessage();
+
+    for (const ad of advertisements) {
       if (!ad.id) {
         return;
       }
 
-      const message = await renderAdvertismentMessage(ad);
+      const formattedAd = await formatAdvertisementMedia(ad);
 
-      if (ad.photos.length) {
-        await ctx.sendMediaGroup(
-          ad.photos.map((photo, i) => ({
-            type: "photo",
-            media: photo,
-            caption: i === 0 ? message : undefined,
-          }))
-        );
+      if (formattedAd.media) {
+        const mediaGroup = await ctx.sendMediaGroup(formattedAd.media);
+        const keyboard = AD_ACTIONS_BUTTONS(ad, mediaGroup[0].message_id);
+
         await ctx.reply(MESSAGES.AD_ACTIONS, {
           reply_markup: {
-            inline_keyboard: HIDE_AD_BUTTONS(ad.id.toString()),
+            inline_keyboard: keyboard,
           },
         });
-      } else {
-        await ctx.reply(message, {
+      } else if (formattedAd.text) {
+        const keyboard = AD_ACTIONS_BUTTONS(ad);
+
+        await ctx.reply(formattedAd.text, {
           reply_markup: {
-            inline_keyboard: HIDE_AD_BUTTONS(ad.id.toString()),
+            inline_keyboard: keyboard,
           },
         });
       }
-    });
+    }
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR);
   }

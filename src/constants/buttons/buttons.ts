@@ -1,4 +1,15 @@
+import { HIDE_REASONS } from "constants/hideReasons";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
+import { IAdvertisement } from "utils/db";
+
+export const CLOSE_BUTTONS = (messageId?: number) => [
+  [
+    {
+      text: "Закрыть ❌",
+      callback_data: messageId ? `close_message:${messageId}` : "close_message",
+    },
+  ],
+];
 
 export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS = [
   [
@@ -11,6 +22,7 @@ export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS = [
       callback_data: "new_ad_draft",
     },
   ],
+  ...CLOSE_BUTTONS()
 ];
 
 export const FINISH_PHOTOS_BUTTONS = [
@@ -79,6 +91,7 @@ export const SEARCH_PARAMETERS_BUTTONS_FILLED = (
       callback_data: "search_reset_parameters",
     },
   ],
+  ...CLOSE_BUTTONS(),
 ];
 
 export const SEARCH_FILTER_RESET_BUTTON = (
@@ -105,28 +118,64 @@ export const PROFILE_BUTTONS = [
       callback_data: "buy_ad_listing",
     },
   ],
+  ...CLOSE_BUTTONS()
 ];
 
-export const HIDE_AD_BUTTONS = (adId: string) => [
-  [
-    {
-      text: "Скрыть объявление 🔒",
-      callback_data: `hide_ad:${adId}`,
-    },
-  ],
-];
+export const AD_ACTIONS_BUTTONS = (
+  ad: IAdvertisement,
+  messageId?: number
+) => {
+  const keyboard = [];
 
-export const CONFIRM_HIDE_AD_BUTTONS = (adId: string) => [
+  if (ad.isActive) {
+    keyboard.push(
+      [
+        {
+          text: ad.isOnHold ? "Убрать с задатка 🔒" : "Под задатком 🔒",
+          callback_data: ad.isOnHold
+            ? `ad_on_hold:remove:${ad.id}:${messageId}`
+            : `ad_on_hold:set:${ad.id}:${messageId}`,
+        },
+        {
+          text: "Редактировать 📝",
+          callback_data: `edit_ad:${ad.id}`,
+        },
+      ],
+      [
+        {
+          text: "Скрыть объявление 🔒",
+          callback_data: `hide_ad:${ad.id}:${messageId}`,
+        },
+      ]
+    );
+  }
+
+  return [...keyboard, ...CLOSE_BUTTONS(messageId)];
+};
+
+export const CONFIRM_HIDE_AD_BUTTONS = (adId: string, messageId?: number) => [
   [
     {
       text: "Да, скрыть объявление 🔒",
       callback_data: `confirm_hide_ad:${adId}`,
     },
   ],
+  ...CLOSE_BUTTONS(messageId)
+];
+
+export const HIDE_AD_REASON_BUTTONS = (adId: string) => [
   [
     {
-      text: "Отмена",
-      callback_data: `cancel_hide_ad`,
+      text: "Продал через бота 💰",
+      callback_data: `hide_ad_reason:${HIDE_REASONS.SOLD_BY_BOT}:${adId}`,
+    },
+  ],
+  [
+    {
+      text: "Продал через другой сервис 💰",
+      callback_data: `hide_ad_reason:${HIDE_REASONS.SOLD_OTHER}:${adId}`,
     },
   ],
 ];
+
+

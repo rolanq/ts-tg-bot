@@ -18,7 +18,9 @@ export const handleProfile = async (ctx: Context) => {
 
     const statistics = await getStatisticsByUserId(ctx.from.id.toString());
 
-    ctx.reply(
+    await ctx.deleteMessage();
+
+    return ctx.reply(
       PROFILE_MESSAGE(
         user.id.toString(),
         user.availableListings,
@@ -27,7 +29,7 @@ export const handleProfile = async (ctx: Context) => {
         statistics.soldCount,
         statistics.totalEarnings
       ),
-      { reply_markup: { inline_keyboard: PROFILE_BUTTONS } }
+      { reply_markup: { inline_keyboard: [...PROFILE_BUTTONS] } }
     );
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR);

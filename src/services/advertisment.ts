@@ -86,3 +86,14 @@ export const getAdvertisementById = async (adId: string) => {
   return advertisement.get({ plain: true });
 };
 
+export const updateAdvertisement = async (adId: string, data: Partial<IAdvertisement>) => {
+  const advertisement = await Advertisement.findByPk(adId);
+
+  if (!advertisement) {
+    return null;
+  }
+
+  await advertisement.update(data);
+
+  return advertisement.get({ plain: true });
+};

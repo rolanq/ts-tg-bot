@@ -1,4 +1,6 @@
-import { EXISTING_ADVERTISEMENT_DRAFT_BUTTONS } from "constants/buttons/buttons";
+import {
+  EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
+} from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { USER_STATE_ENUM } from "constants/userState";
 import {
@@ -37,7 +39,7 @@ export async function handleCreateAd(ctx: Context) {
     if (existingDraft) {
       return ctx.reply(await renderAdvertisementDraftMessage(existingDraft), {
         reply_markup: {
-          inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
+          inline_keyboard: [...EXISTING_ADVERTISEMENT_DRAFT_BUTTONS],
         },
       });
     }
