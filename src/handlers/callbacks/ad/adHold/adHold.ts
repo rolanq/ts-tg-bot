@@ -1,13 +1,13 @@
 import { CallbackQuery } from "@telegraf/types";
 import { AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
+import { editAdInChannel } from "handlers/common/channelMessage";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import {
   getAdvertisementById,
   updateAdvertisement,
 } from "services/advertisment";
 import { Context, Telegraf } from "telegraf";
-import { formatAdvertisementMedia } from "utils/utils";
 
 const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
   try {
@@ -37,6 +37,12 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
 
     if (!updatedAd || !updatedAd.id) {
       return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+    }
+
+    const result = await editAdInChannel(bot, updatedAd);
+
+    if (!result) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_EDIT_CHANNEL_MESSAGE);
     }
 
     const message = await renderAdvertismentMessage(updatedAd);

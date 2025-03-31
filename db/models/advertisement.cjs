@@ -7,9 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       Advertisement.belongsTo(models.Region, { foreignKey: "regionId" });
       Advertisement.belongsTo(models.Brand, { foreignKey: "brandId" });
       Advertisement.belongsTo(models.CarModel, { foreignKey: "modelId" });
-      Advertisement.hasMany(models.ChannelMessage, {
-        foreignKey: "advertisementId",
-      });
     }
   }
 
@@ -19,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      telegramUsername: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       regionId: {
         type: DataTypes.INTEGER,
@@ -34,10 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       engineType: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      horsePower: {
-        type: DataTypes.INTEGER,
         allowNull: false,
       },
       driveType: {
@@ -56,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      horsePower: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       description: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -65,10 +70,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       phoneNumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      telegramUsername: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -88,9 +89,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      userId: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      channelMessageId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
       createdAt: {
         type: DataTypes.DATE,

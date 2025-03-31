@@ -1,5 +1,6 @@
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { USER_STATE_ENUM } from "constants/userState";
+import { sendAdToChannel } from "handlers/common/channelMessage";
 import { createAdvertisement } from "services/advertisment";
 import {
   dropAdvertisementDraft,
@@ -38,7 +39,13 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
         return ctx.reply(ERROR_MESSAGES.ERROR_NEED_MORE_INFO);
       }
 
-      await createAdvertisement(draft);
+      const ad = await createAdvertisement(draft);
+
+      const result = await sendAdToChannel(bot, ad);
+
+      if (!result) {
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_CHANNEL_MESSAGE);
+      }
 
       await dropAdvertisementDraft(ctx.from?.id.toString());
 

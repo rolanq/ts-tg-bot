@@ -1,7 +1,6 @@
 import { PROFILE_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, PROFILE_MESSAGE } from "constants/messages";
-import { getStatisticsByUserId } from "services/advertisment";
-import { getUser } from "services/User";
+import { getStatisticsByUserId, getUser } from "services/User";
 import { Context } from "telegraf";
 
 export const handleProfile = async (ctx: Context) => {

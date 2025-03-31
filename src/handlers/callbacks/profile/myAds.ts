@@ -1,9 +1,7 @@
-import { CallbackQuery, Message } from "@telegraf/types";
+import { CallbackQuery } from "@telegraf/types";
 import { AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { getAdvertisementsByUserId } from "services/advertisment";
-import { getUser } from "services/User";
 import { Context } from "telegraf";
 import { formatAdvertisementMedia } from "utils/utils";
 

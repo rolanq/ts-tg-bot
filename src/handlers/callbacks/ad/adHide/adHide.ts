@@ -5,6 +5,7 @@ import {
 } from "constants/buttons/buttons";
 import { HIDE_REASONS } from "constants/hideReasons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
+import { editAdInChannel } from "handlers/common/channelMessage";
 import {
   getAdvertisementById,
   updateAdvertisement,
@@ -43,7 +44,7 @@ const adHide = async (ctx: Context) => {
   }
 };
 
-const confirmAdHide = async (ctx: Context) => {
+const confirmAdHide = async (ctx: Context, bot: Telegraf) => {
   try {
     const { callbackQuery } = ctx;
 
@@ -51,7 +52,9 @@ const confirmAdHide = async (ctx: Context) => {
       return ctx.reply(ERROR_MESSAGES.ERROR);
     }
 
-    const adId = (callbackQuery as CallbackQuery.DataQuery).data.split(":")[1];
+    const [, adId, messageId] = (
+      callbackQuery as CallbackQuery.DataQuery
+    ).data.split(":");
 
     if (!adId) {
       return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
@@ -62,12 +65,22 @@ const confirmAdHide = async (ctx: Context) => {
     if (!ad) {
       return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
     }
-
+    await ctx.deleteMessage(Number(messageId));
     await ctx.deleteMessage();
 
-    await updateAdvertisement(adId, {
+    const updatedAd = await updateAdvertisement(adId, {
       isActive: false,
     });
+
+    if (!updatedAd || !updatedAd.id) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+    }
+    
+    const result = await editAdInChannel(bot, updatedAd);
+
+    if (!result) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_EDIT_CHANNEL_MESSAGE);
+    }
 
     return ctx.reply(MESSAGES.AD_HIDDEN, {
       reply_markup: { inline_keyboard: HIDE_AD_REASON_BUTTONS(adId) },
@@ -118,6 +131,6 @@ const hideAdReason = async (ctx: Context) => {
 
 export const registerAdHideCallbacks = async (bot: Telegraf) => {
   bot.action(/^hide_ad:/, adHide);
-  bot.action(/^confirm_hide_ad:/, confirmAdHide);
+  bot.action(/^confirm_hide_ad:/, (ctx) => confirmAdHide(ctx, bot));
   bot.action(/^hide_ad_reason:/, hideAdReason);
 };

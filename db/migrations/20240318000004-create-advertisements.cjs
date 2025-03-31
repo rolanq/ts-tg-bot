@@ -94,21 +94,12 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
-      channelMessageId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      channelText: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      channelStatus: {
-        type: Sequelize.STRING,
-        defaultValue: "active",
-        allowNull: false,
-      },
       hideReason: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      channelMessageId: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       createdAt: {
@@ -126,7 +117,6 @@ module.exports = {
     await queryInterface.addIndex("Advertisements", ["brandId"]);
     await queryInterface.addIndex("Advertisements", ["modelId"]);
     await queryInterface.addIndex("Advertisements", ["isActive"]);
-    await queryInterface.addIndex("Advertisements", ["channelStatus"]);
   },
 
   down: async (queryInterface, Sequelize) => {

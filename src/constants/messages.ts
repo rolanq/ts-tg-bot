@@ -53,6 +53,10 @@ export const ERROR_MESSAGES = {
   ERROR_WITH_AD_LISTING:
     "У вас нет доступных размещений. Купите размещение, чтобы создавать объявления.",
   ERROR_AD_NOT_FOUND: "Объявление не найдено. Попробуйте ещё раз.",
+  ERROR_WITH_CHANNEL_MESSAGE:
+    "Произошла ошибка при отправке объявления в канал. Попробуйте снова.",
+  ERROR_WITH_EDIT_CHANNEL_MESSAGE:
+    "Произошла ошибка при редактировании объявления в канале. Попробуйте снова.",
 } as const;
 
 export const SAVED_SEARCH_PARAMETERS = `

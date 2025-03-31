@@ -157,7 +157,7 @@ export const CONFIRM_HIDE_AD_BUTTONS = (adId: string, messageId?: number) => [
   [
     {
       text: "Да, скрыть объявление 🔒",
-      callback_data: `confirm_hide_ad:${adId}`,
+      callback_data: `confirm_hide_ad:${adId}:${messageId}`,
     },
   ],
   ...CLOSE_BUTTONS(messageId)

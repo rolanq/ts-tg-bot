@@ -34,10 +34,14 @@ export const renderAdvertismentMessage = async (
     };
 
     if ("isActive" in ad) {
-      tempAd.adStatus = ad.isActive ? "" : "[ПРОДАНО]";
-
-      if ("isOnHold" in ad) {
-        tempAd.adStatus = ad.isOnHold ? "[ПОД ЗАДАТКОМ]" : "";
+      if (!ad.isActive) {
+        tempAd.adStatus = "[ПРОДАНО]";
+      } else {
+        if ("isOnHold" in ad && ad.isOnHold) {
+          tempAd.adStatus = "[ПОД ЗАДАТКОМ]";
+        } else {
+          tempAd.adStatus = "";
+        }
       }
     }
 

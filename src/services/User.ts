@@ -1,5 +1,6 @@
-import { IUser, User } from "utils/db";
+import { Advertisement, IUser, User } from "utils/db";
 import { USER_STATE_ENUM } from "constants/userState";
+import { HIDE_REASONS } from "constants/hideReasons";
 
 export const createUser = async (userId: string, username: string) => {
   const user = await User.create({
@@ -39,4 +40,23 @@ export const createUserIfNotExists = async (userId: string, username: string) =>
   }
 
   return user;
+};
+
+export const getStatisticsByUserId = async (userId: string) => {
+  const allAdvertisements = await Advertisement.findAll({
+    where: { userId },
+  });
+
+  const formattedAdvertisements = allAdvertisements.map((ad) =>
+    ad.get({ plain: true })
+  );
+
+  return {
+    adCount: formattedAdvertisements.length,
+    activeAdsCount: formattedAdvertisements.filter((ad) => ad.isActive).length,
+    soldCount: formattedAdvertisements.filter((ad) => ad.hideReason === HIDE_REASONS.SOLD_BY_BOT).length,
+    totalEarnings: formattedAdvertisements
+      .filter((ad) => ad.hideReason === HIDE_REASONS.SOLD_BY_BOT)
+      .reduce((acc, ad) => acc + Number(ad.price), 0),
+  };
 };

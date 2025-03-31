@@ -50,26 +50,10 @@ export const getAdvertisements = async (
   );
 };
 
-export const getStatisticsByUserId = async (userId: string) => {
-  const allAdvertisements = await Advertisement.findAll({
-    where: { userId },
-  });
-
-  const formattedAdvertisements = allAdvertisements.map((ad) =>
-    ad.get({ plain: true })
-  );
-
-  return {
-    adCount: formattedAdvertisements.length,
-    activeAdsCount: formattedAdvertisements.filter((ad) => ad.isActive).length,
-    soldCount: formattedAdvertisements.filter((ad) => !ad.isActive).length,
-    totalEarnings: formattedAdvertisements
-      .filter((ad) => ad.hideReason)
-      .reduce((acc, ad) => acc + Number(ad.price), 0),
-  };
-};
-
-export const getAdvertisementsByUserId = async (userId: string, whereCondition?: WhereOptions<IAdvertisement>) => {
+export const getAdvertisementsByUserId = async (
+  userId: string,
+  whereCondition?: WhereOptions<IAdvertisement>
+) => {
   const advertisements = await Advertisement.findAll({
     where: { ...whereCondition, userId },
   });
@@ -86,7 +70,10 @@ export const getAdvertisementById = async (adId: string) => {
   return advertisement.get({ plain: true });
 };
 
-export const updateAdvertisement = async (adId: string, data: Partial<IAdvertisement>) => {
+export const updateAdvertisement = async (
+  adId: string,
+  data: Partial<IAdvertisement>
+) => {
   const advertisement = await Advertisement.findByPk(adId);
 
   if (!advertisement) {
