@@ -1,6 +1,8 @@
 import { PHOTOS_BUTTONS } from "constants/buttons/buttons";
 import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/steps";
+import { USER_STATE_ENUM } from "constants/userState";
+import { checkUserState } from "handlers/common/checkUserState";
 import {
   getAdvertisementDraft,
   updateAdvertisementDraft,
@@ -15,6 +17,15 @@ export const registerPhotosHandler = (bot: Telegraf) => {
       if (!ctx.from?.id) {
         ctx.reply(ERROR_MESSAGES.ERROR);
         return;
+      }
+
+      const isUserInState = await checkUserState(
+        ctx.from.id.toString(),
+        USER_STATE_ENUM.AD_CREATION
+      );
+
+      if (!isUserInState) {
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
       }
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
@@ -59,8 +70,6 @@ export const registerPhotosHandler = (bot: Telegraf) => {
         });
       }
     } catch (error) {
-      console.log(error);
-
       return ctx.reply(ERROR_MESSAGES.ERROR);
     }
   });

@@ -9,22 +9,31 @@ import { engineTypeStep } from "./adCreationSteps/engineTypeStep";
 import { driveTypeStep } from "./adCreationSteps/driveTypeStep";
 import { transmissionTypeStep } from "./adCreationSteps/transmissionTypeStep";
 import { ERROR_MESSAGES } from "constants/messages";
+import { getUser } from "services/User";
+import { USER_STATE_ENUM } from "constants/userState";
 
-export const registerAdCreationCallback = async (ctx: Context) => {
+export const adCreation = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 
-    if (!callbackQuery) {
+    if (!callbackQuery || !ctx.from?.id) {
       return ctx.reply(ERROR_MESSAGES.ERROR);
+    }
+
+    const user = await getUser(ctx.from?.id.toString());
+
+    if (!user) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+    }
+    
+    if (user.state !== USER_STATE_ENUM.AD_CREATION) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
 
     if (data.startsWith("select")) {
-      const stepWithId = data.split("_")[1];
-
-      const step = stepWithId.split(":")[0];
-      const selected = stepWithId.split(":")[1];
+      const [, step, selected] = data.split(":");
 
       switch (step as STEPS_ENUM) {
         case STEPS_ENUM.REGION:

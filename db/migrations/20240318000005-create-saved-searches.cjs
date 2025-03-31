@@ -32,16 +32,6 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
       },
-      modelId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "CarModels",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL",
-      },
       priceFrom: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,

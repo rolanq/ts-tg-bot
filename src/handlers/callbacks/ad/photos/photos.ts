@@ -45,8 +45,6 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         reply_markup: { inline_keyboard: AD_PUBLISH_BUTTONS },
       });
     } catch (error) {
-      console.log(error);
-
       return ctx.reply(ERROR_MESSAGES.ERROR);
     }
   });

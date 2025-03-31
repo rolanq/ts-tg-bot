@@ -27,57 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      modelId: {
+      priceFrom: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      priceMin: {
+      priceTo: {
         type: DataTypes.INTEGER,
         allowNull: true,
-      },
-      priceMax: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      engineType: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      horsePowerMin: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      horsePowerMax: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      driveType: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      transmission: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      yearMin: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      yearMax: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      mileageMin: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      mileageMax: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      notificationsEnabled: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
       },
     },
     {

@@ -9,7 +9,6 @@ export async function getAllBrands(): Promise<IBrand[]> {
 
     return brands.map((brand) => brand.get({ plain: true }));
   } catch (error) {
-    console.error("Ошибка при получении брендов:", error);
     return [];
   }
 }

@@ -9,6 +9,7 @@ import {
   IBrand,
   ICarModel,
   IRegion,
+  ISavedSearch,
 } from "./db";
 import { ADVERTISEMENT_MESSAGE } from "constants/messages";
 import { getRegionsPerPage } from "services/regionService";
@@ -18,7 +19,8 @@ import {
   renderPaginatedBrandButtons,
   renderPaginatedModelButtons,
   renderPaginatedRegionButtons,
-} from "./pagination/renderPaginatedButtons";
+} from "../constants/buttons/renderPaginatedButtons";
+import { Op, WhereOptions } from "sequelize";
 
 export const getInlineKeyboard = (buttons: InlineKeyboardButton[]) => {
   return {
@@ -96,4 +98,39 @@ export const validateAdvertisementDraft = (draft: IAdvertisementDraft) => {
   }
 
   return true;
+};
+
+export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
+  const whereCondition: WhereOptions<IAdvertisement> = {
+    isActive: true,
+  };
+
+  if (savedSearch.regionId) {
+    whereCondition.regionId = savedSearch.regionId;
+  }
+
+  if (savedSearch.brandId) {
+    whereCondition.brandId = savedSearch.brandId;
+  }
+
+  if (
+    savedSearch.priceFrom !== undefined ||
+    savedSearch.priceTo !== undefined
+  ) {
+    const priceConditions = [];
+
+    if (savedSearch.priceFrom !== null) {
+      priceConditions.push({ [Op.gte]: Number(savedSearch.priceFrom) });
+    }
+
+    if (savedSearch.priceTo !== null) {
+      priceConditions.push({ [Op.lte]: Number(savedSearch.priceTo) });
+    }
+
+    if (priceConditions.length > 0) {
+      whereCondition.price = { [Op.and]: priceConditions };
+    }
+  }
+
+  return whereCondition;
 };

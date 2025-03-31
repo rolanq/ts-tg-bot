@@ -68,34 +68,4 @@ export const dropAdvertisementDraft = async (userId: string) => {
     price: null,
     photos: [],
   });
-}
-
-export const createAdvertisement = async (
-  draft: IAdvertisementDraft,
-) => {
-  const advertisement = await Advertisement.create({
-    regionId: draft.regionId!,
-    brandId: draft.brandId!,
-    modelId: draft.modelId!,
-    year: draft.year!,
-    engineType: draft.engineType!,
-    driveType: draft.driveType!,
-    transmission: draft.transmission!,
-
-    horsePower: draft.horsePower!,
-    mileage: draft.mileage!,
-    description: draft.description!,
-    price: draft.price!,
-    phoneNumber: draft.phoneNumber!,
-    photos: draft.photos!,
-
-    isActive: true,
-    isOnHold: false,
-    hideReason: null,
-    channelStatus: "active",
-    userId: draft.userId,
-    telegramUsername: draft.telegramUsername,
-  });
-
-  return advertisement.get({ plain: true });
 };

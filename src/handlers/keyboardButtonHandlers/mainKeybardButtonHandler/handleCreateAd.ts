@@ -1,19 +1,29 @@
-import { Context } from "telegraf";
-import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
-import { getFirstPageForRegions } from "utils/pagination/getFirstPages";
-import {
-  createAdvertisementDraft,
-  getAdvertisementDraft,
-} from "services/advertismentDraft";
 import { EXISTING_ADVERTISEMENT_DRAFT_BUTTONS } from "constants/buttons/buttons";
-import { renderAdvertisementDraftMessage } from "./helpers";
-import { updateUser } from "services/User";
+import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { USER_STATE_ENUM } from "constants/userState";
+import {
+  getAdvertisementDraft,
+  createAdvertisementDraft,
+} from "services/advertismentDraft";
+import { getUser, updateUser } from "services/User";
+import { getFirstPageForRegions } from "utils/pagination/getFirstPages";
+import { Context } from "telegraf";
+import { renderAdvertisementDraftMessage } from "./helpers";
 
 export async function handleCreateAd(ctx: Context) {
   try {
     if (!ctx.from?.id) {
       return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_CREATION);
+    }
+
+    const user = await getUser(ctx.from.id.toString());
+
+    if (!user) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+    }
+
+    if (user.availableListings === 0) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_LISTING);
     }
 
     await updateUser(ctx.from.id.toString(), {

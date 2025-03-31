@@ -2,6 +2,7 @@ import { STEPS_ENUM } from "constants/steps";
 import * as dbModule from "../../db/models/index.cjs";
 import { Model, ModelStatic } from "sequelize";
 import { USER_STATE_ENUM } from "constants/userState";
+import { HIDE_REASONS } from "constants/hideReasons";
 
 const db = (dbModule as any).default || dbModule;
 
@@ -32,14 +33,7 @@ export interface IUser {
   id: number;
   username: string;
   state: USER_STATE_ENUM;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface ISavedSearch {
-  id?: number;
-  userId: number;
-  filters: Record<string, any>;
+  availableListings: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -62,7 +56,7 @@ export interface IAdvertisement {
   photos: string[];
   isActive: boolean;
   isOnHold: boolean;
-  hideReason: string | null;
+  hideReason: HIDE_REASONS | null;
   userId: string;
   channelMessageId: number | null;
   channelText: string | null;
@@ -89,6 +83,17 @@ export interface IAdvertisementDraft {
   currentStep: STEPS_ENUM;
   telegramUsername: string;
   userId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ISavedSearch {
+  id?: number;
+  userId: string;
+  brandId: number | null;
+  regionId: number | null;
+  priceFrom: number | null;
+  priceTo: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

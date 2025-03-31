@@ -19,8 +19,7 @@ export const handleAdCreationMessage = async (ctx: Context) => {
     const user = await getUser(ctx.from.id.toString());
 
     if (!user) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
-      return;
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
     }
 
     const draft = await getAdvertisementDraft(ctx.from.id.toString());

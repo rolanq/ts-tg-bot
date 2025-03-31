@@ -9,9 +9,13 @@ import {
   renderPaginatedEngineTypeButtons,
   renderPaginatedDriveTypeButtons,
   renderPaginatedTransmissionTypeButtons,
-} from "./renderPaginatedButtons";
+} from "../../constants/buttons/renderPaginatedButtons";
 import { getYearsPerPage } from "utils/utils";
-import { ENGINE_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES } from "constants/engine";
+import {
+  ENGINE_TYPES,
+  TRANSMISSION_TYPES,
+  DRIVE_TYPES,
+} from "constants/engine";
 
 export const getFirstPageForRegions = async () => {
   const regions = await getRegionsPerPage(1);
@@ -70,25 +74,31 @@ export const getFirstPageForYears = () => {
 };
 
 export const getFirstPageForEngineTypes = () => {
-  return getPaginatedInlineKeyboard(ENGINE_TYPES, renderPaginatedEngineTypeButtons, {
-    buttonCallback: "page_enginetypes",
-  });
+  return getPaginatedInlineKeyboard(
+    ENGINE_TYPES,
+    renderPaginatedEngineTypeButtons,
+    {
+      buttonCallback: "page_enginetypes",
+    }
+  );
 };
 
 export const getFirstPageForTransmissionTypes = () => {
-  return getPaginatedInlineKeyboard(TRANSMISSION_TYPES, renderPaginatedTransmissionTypeButtons, {
-    buttonCallback: "page_transmissiontypes",
-  });
+  return getPaginatedInlineKeyboard(
+    TRANSMISSION_TYPES,
+    renderPaginatedTransmissionTypeButtons,
+    {
+      buttonCallback: "page_transmissiontypes",
+    }
+  );
 };
 
 export const getFirstPageForDriveTypes = () => {
-  return getPaginatedInlineKeyboard(DRIVE_TYPES, renderPaginatedDriveTypeButtons, {
-    buttonCallback: "page_drivetypes",
-  });
+  return getPaginatedInlineKeyboard(
+    DRIVE_TYPES,
+    renderPaginatedDriveTypeButtons,
+    {
+      buttonCallback: "page_drivetypes",
+    }
+  );
 };
-
-
-
-
-
-

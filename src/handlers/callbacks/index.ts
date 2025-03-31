@@ -1,15 +1,12 @@
 import { Telegraf } from "telegraf";
 import { registerAllPaginations } from "./paginations";
-import { registerAdCreationCallbacks } from "./paginations";
-import { registerAdDraftCallbacks } from "./adDraft";
-import { registerPhotosCallbacks } from "./photos";
-import { registerAdPublishCallbacks } from "./adPublish";
+import { registerAdCallbacks } from "./ad";
+import { registerSearchCallbacks } from "./search";
+import { registerProfileCallbacks } from "./profile";
 export const registerAllCallbacks = (bot: Telegraf) => {
   registerAllPaginations(bot);
 
-  registerAdCreationCallbacks(bot);
-  registerAdDraftCallbacks(bot);
-  registerAdPublishCallbacks(bot);
-
-  registerPhotosCallbacks(bot);
+  registerAdCallbacks(bot);
+  registerSearchCallbacks(bot);
+  registerProfileCallbacks(bot);
 };

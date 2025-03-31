@@ -6,6 +6,10 @@ type PaginationOptions = {
   buttonCallback?: string;
   totalItems?: number;
   isLastPage?: boolean;
+  resetButton?: {
+    text: string;
+    callback_data: string;
+  };
 };
 
 export function getPaginatedInlineKeyboard<T>(
@@ -19,6 +23,7 @@ export function getPaginatedInlineKeyboard<T>(
     buttonCallback = "page",
     totalItems = 0,
     isLastPage = false,
+    resetButton,
   } = options;
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -62,6 +67,10 @@ export function getPaginatedInlineKeyboard<T>(
 
   if (navigationRow.length > 0) {
     keyboard.push(navigationRow);
+  }
+
+  if (resetButton) {
+    keyboard.push([resetButton]);
   }
 
   return keyboard;

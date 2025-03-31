@@ -17,9 +17,6 @@ export async function addWatermark(imageBuffer: Buffer) {
   try {
     // Получаем метаданные изображения
     const metadata = await sharp(imageBuffer).metadata();
-    console.log(
-      `Изображение загружено: ${metadata.width}x${metadata.height} пикселей`
-    );
 
     const watermarkText = `
         <svg width="${metadata.width}" height="${metadata.height}">
@@ -32,7 +29,7 @@ export async function addWatermark(imageBuffer: Buffer) {
               font-family: Arial, sans-serif;
             }
           </style>
-          <text x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" class="text">ВОДЯНОЙ ЗНАК</text>
+          <text x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" class="text">WATERMARK</text>
         </svg>
       `;
 

@@ -4,6 +4,8 @@ import { getUser, updateUser } from "services/User";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { handleAdCreationMessage } from "./adCreation";
+import { checkUserState } from "handlers/common/checkUserState";
+import { handleSearchPrice } from "./search/handleSearchPrice";
 
 export const registerMessageHandlers = (bot: Telegraf) => {
   bot.on(message("text"), async (ctx) => {
@@ -16,8 +18,7 @@ export const registerMessageHandlers = (bot: Telegraf) => {
       const user = await getUser(ctx.from.id.toString());
 
       if (!user) {
-        ctx.reply(ERROR_MESSAGES.ERROR);
-        return;
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
       }
 
       if (
@@ -38,9 +39,16 @@ export const registerMessageHandlers = (bot: Telegraf) => {
         case USER_STATE_ENUM.AD_CREATION:
           await handleAdCreationMessage(ctx);
           break;
+        case USER_STATE_ENUM.SEARCH_PRICE_FROM:
+          await handleSearchPrice(ctx);
+          break;
+        case USER_STATE_ENUM.SEARCH_PRICE_TO:
+          await handleSearchPrice(ctx);
+          break;
+        default:
+          return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
       }
     } catch (error) {
-      console.log(error);
       return ctx.reply(ERROR_MESSAGES.ERROR);
     }
   });

@@ -4,11 +4,11 @@ export const MAIN_MENU_BUTTONS_TEXT = {
   SEARCH: "Поиск 🔎📋",
 } as const;
 
-export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS_TEXT = {
-  CONTINUE: "Продолжить 📝",
-  NEW: "Начать заново 🔄",
-} as const;
-
 export const COMMANDS_TEXT = {
   START: "start",
+} as const;
+
+export const SEARCH_FILTER_RESET_BUTTON_TEXT = {
+  region: "Сбросить регион 🌎",
+  brand: "Сбросить бренд 🚙",
 } as const;

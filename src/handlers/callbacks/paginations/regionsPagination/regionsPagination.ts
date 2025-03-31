@@ -2,7 +2,7 @@ import { Context } from "telegraf";
 import { CallbackQuery } from "@telegraf/types";
 import { getRegionsPerPage } from "services/regionService";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
-import { renderPaginatedRegionButtons } from "utils/pagination/renderPaginatedButtons";
+import { renderPaginatedRegionButtons } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
 
 export const registerRegionPagination = async (ctx: Context) => {

@@ -2,7 +2,7 @@ import { CallbackQuery } from "@telegraf/types";
 import { ERROR_MESSAGES } from "constants/messages";
 import { Context } from "telegraf";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
-import { renderPaginatedYearButtons } from "utils/pagination/renderPaginatedButtons";
+import { renderPaginatedYearButtons } from "constants/buttons/renderPaginatedButtons";
 import { getYearsPerPage } from "utils/utils";
 
 export const registerYearsPagination = async (ctx: Context) => {

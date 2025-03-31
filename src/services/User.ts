@@ -6,6 +6,7 @@ export const createUser = async (userId: string, username: string) => {
     id: Number(userId),
     username: username,
     state: USER_STATE_ENUM.MENU,
+    availableListings: 0,
   });
 
   return user;

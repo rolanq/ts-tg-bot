@@ -2,7 +2,7 @@ import { getAllBrands, getBrandsPerPage } from "services/brandService";
 import { Context } from "telegraf";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
 import { CallbackQuery } from "@telegraf/types";
-import { renderPaginatedBrandButtons } from "utils/pagination/renderPaginatedButtons";
+import { renderPaginatedBrandButtons } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
 export const registerMarksPaginations = async (ctx: Context) => {
   try {
