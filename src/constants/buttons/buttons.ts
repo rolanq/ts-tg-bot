@@ -179,4 +179,12 @@ export const HIDE_AD_REASON_BUTTONS = (adId: string) => [
   ],
 ];
 
-
+export const ACCEPT_RULES_BUTTONS = [
+  [
+    {
+      text: "Принять правила 📝",
+      callback_data: "accept_rules",
+    },
+  ],
+  ...CLOSE_BUTTONS(),
+];

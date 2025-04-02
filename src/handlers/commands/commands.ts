@@ -1,7 +1,8 @@
 import { Context } from "telegraf";
-import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
+import { ERROR_MESSAGES, MESSAGES, RULES_MESSAGE } from "constants/messages";
 import { getMainKeyboard } from "keyboards/main";
-import { createUserIfNotExists } from "services/User";
+import { createUserIfNotExists, getUserById } from "services/User";
+import { ACCEPT_RULES_BUTTONS } from "constants/buttons/buttons";
 
 export async function handleStart(ctx: Context) {
   try {
@@ -10,12 +11,13 @@ export async function handleStart(ctx: Context) {
       return;
     }
 
-    await createUserIfNotExists(
-      ctx.from?.id.toString(),
-      ctx.from?.username || ""
-    );
+    const user = await getUserById(ctx.from?.id.toString());
 
-    await ctx.deleteMessage();
+    if (!user) {
+      return ctx.reply(RULES_MESSAGE, {
+        reply_markup: { inline_keyboard: ACCEPT_RULES_BUTTONS },
+      });
+    }
 
     return ctx.reply(MESSAGES.WELCOME, {
       reply_markup: getMainKeyboard(),
