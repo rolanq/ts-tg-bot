@@ -3,27 +3,31 @@ import { STEPS_ENUM } from "constants/config";
 import {
   dropAdvertisementDraft,
   getAdvertisementDraft,
-  updateAdvertisementDraft,
 } from "services/advertismentDraft";
 import { Context, Telegraf } from "telegraf";
-import {
-  getFirstPageForRegions,
-} from "utils/pagination/getFirstPages";
+import { getFirstPageForRegions } from "utils/pagination/getFirstPages";
 import { getKeyboardForStep } from "./helpers";
-import { FINISH_PHOTOS_BUTTONS } from "constants/buttons/buttons";
+import {
+  FINISH_PHOTOS_BUTTONS,
+  CLOSE_BUTTONS,
+} from "constants/buttons/buttons";
 
 const adDraftContinue = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const draft = await getAdvertisementDraft(ctx.from?.id.toString());
 
     if (!draft) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const keyboard = await getKeyboardForStep(draft);
@@ -51,7 +55,9 @@ const adDraftContinue = async (ctx: Context) => {
       reply_markup: { inline_keyboard: keyboard },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 
@@ -60,7 +66,9 @@ const adDraftNew = async (ctx: Context) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     await dropAdvertisementDraft(ctx.from?.id.toString());
@@ -73,7 +81,9 @@ const adDraftNew = async (ctx: Context) => {
       reply_markup: { inline_keyboard: keyboard },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 

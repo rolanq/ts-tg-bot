@@ -8,27 +8,34 @@ import { handleMileAgeStep } from "./adCreationSteps/mileAgeStep";
 import { handleDescriptionStep } from "./adCreationSteps/descriptionStep";
 import { handlePriceStep } from "./adCreationSteps/priceStep";
 import { handlePhoneNumberStep } from "./adCreationSteps/phoneNumberStep";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+
 export const handleAdCreationMessage = async (ctx: Context) => {
   try {
     if (!ctx.from?.id) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
-      return;
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const user = await getUser(ctx.from.id.toString());
 
     if (!user) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const draft = await getAdvertisementDraft(ctx.from.id.toString());
 
     if (!draft) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
       await updateUser(ctx.from.id.toString(), {
         state: USER_STATE_ENUM.MENU,
       });
-      return;
+
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     switch (draft.currentStep) {
@@ -49,6 +56,8 @@ export const handleAdCreationMessage = async (ctx: Context) => {
         break;
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

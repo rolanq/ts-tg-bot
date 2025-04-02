@@ -4,19 +4,24 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { getBrandById } from "services/brandService";
 import { Context } from "telegraf";
 import { getFirstPageForModels } from "utils/pagination/getFirstPages";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const brandStep = async (ctx: Context, selectedBrandId: string) => {
   try {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_BRANDS);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const brand = await getBrandById(Number(selectedBrandId));
 
     if (!brand) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_BRAND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_BRAND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     await updateAdvertisementDraft(ctx.from?.id.toString(), {
@@ -32,6 +37,8 @@ export const brandStep = async (ctx: Context, selectedBrandId: string) => {
       reply_markup: { inline_keyboard: keyboard },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

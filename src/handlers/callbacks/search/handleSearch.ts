@@ -5,17 +5,22 @@ import { Context } from "telegraf";
 import { getAdvertismentWhereCondition } from "utils/utils";
 import { renderAdsNotFoundMessage } from "./helpers";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const handleSearch = async (ctx: Context) => {
   try {
     if (!ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const savedSearch = await getSavedSearch(ctx.from.id.toString());
 
     if (!savedSearch) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_SAVED_SEARCH);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_SAVED_SEARCH, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const whereCondition = getAdvertismentWhereCondition(savedSearch);
@@ -44,6 +49,8 @@ export const handleSearch = async (ctx: Context) => {
       }
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

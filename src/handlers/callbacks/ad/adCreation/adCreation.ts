@@ -10,23 +10,36 @@ import { driveTypeStep } from "./adCreationSteps/driveTypeStep";
 import { transmissionTypeStep } from "./adCreationSteps/transmissionTypeStep";
 import { ERROR_MESSAGES } from "constants/messages";
 import { getUser } from "services/User";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { checkUserState } from "handlers/common/checkUserState";
 
 export const adCreation = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const user = await getUser(ctx.from?.id.toString());
 
     if (!user) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
-    
-    if (user.state !== USER_STATE_ENUM.AD_CREATION) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
+
+    const isAdCreationStep = await checkUserState(
+      ctx.from?.id.toString(),
+      USER_STATE_ENUM.AD_CREATION
+    );
+
+    if (!isAdCreationStep) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
@@ -59,6 +72,8 @@ export const adCreation = async (ctx: Context) => {
       }
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

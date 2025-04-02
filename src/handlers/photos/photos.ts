@@ -69,7 +69,9 @@ export const registerPhotosHandler = (bot: Telegraf) => {
         });
       }
     } catch (error) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
   });
 };

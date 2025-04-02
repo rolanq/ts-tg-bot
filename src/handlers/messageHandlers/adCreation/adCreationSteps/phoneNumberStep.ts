@@ -1,5 +1,5 @@
 import { Message } from "@telegraf/types";
-import { FINISH_PHOTOS_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, FINISH_PHOTOS_BUTTONS } from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
@@ -8,8 +8,9 @@ import { Context } from "telegraf";
 export const handlePhoneNumberStep = async (ctx: Context) => {
   try {
     if (!ctx.from?.id || !ctx.message) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
-      return;
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const text = (ctx.message as Message.TextMessage).text;
@@ -25,6 +26,8 @@ export const handlePhoneNumberStep = async (ctx: Context) => {
       reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

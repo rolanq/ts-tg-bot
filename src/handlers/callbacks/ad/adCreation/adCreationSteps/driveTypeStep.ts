@@ -3,6 +3,7 @@ import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { getFirstPageForTransmissionTypes } from "utils/pagination/getFirstPages";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const driveTypeStep = async (
   ctx: Context,
@@ -12,7 +13,9 @@ export const driveTypeStep = async (
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     await updateAdvertisementDraft(ctx.from?.id.toString(), {
@@ -28,6 +31,8 @@ export const driveTypeStep = async (
       reply_markup: { inline_keyboard: keyboard },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

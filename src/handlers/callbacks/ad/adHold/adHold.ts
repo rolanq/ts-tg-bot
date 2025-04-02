@@ -1,5 +1,5 @@
 import { CallbackQuery } from "@telegraf/types";
-import { AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
+import { AD_ACTIONS_BUTTONS, CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { editAdInChannel } from "handlers/common/channelMessage";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
@@ -14,7 +14,9 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const [, action, adId, messageId] = (
@@ -22,13 +24,17 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
     ).data.split(":");
 
     if (!adId) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const ad = await getAdvertisementById(adId);
 
     if (!ad || !ad.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const updatedAd = await updateAdvertisement(adId, {
@@ -36,13 +42,17 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
     });
 
     if (!updatedAd || !updatedAd.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const result = await editAdInChannel(bot, updatedAd);
 
     if (!result) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_EDIT_CHANNEL_MESSAGE);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_EDIT_CHANNEL_MESSAGE, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const message = await renderAdvertismentMessage(updatedAd);
@@ -69,7 +79,9 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
       });
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 

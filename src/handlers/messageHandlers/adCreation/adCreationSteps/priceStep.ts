@@ -4,12 +4,14 @@ import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { parseNumberWithAbbreviations } from "utils/utils";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const handlePriceStep = async (ctx: Context) => {
   try {
     if (!ctx.from?.id || !ctx.message) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
-      return;
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const text = (ctx.message as Message.TextMessage).text;
@@ -23,6 +25,8 @@ export const handlePriceStep = async (ctx: Context) => {
 
     return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER);
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
