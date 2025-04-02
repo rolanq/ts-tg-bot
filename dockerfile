@@ -11,9 +11,9 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-RUN npm run migrate
-RUN npm run seed
 
 EXPOSE 3000
 
+CMD ["npm", "run", "migrate"]
+CMD ["npm", "run", "seed"]
 CMD ["npm", "start"]
