@@ -1,9 +1,9 @@
 import { Message } from "@telegraf/types";
+import { USER_STATE_ENUM } from "constants/config";
 import { ERROR_MESSAGES } from "constants/messages";
-import { USER_STATE_ENUM } from "constants/userState";
 import { getTextAndKeyboardSearch } from "handlers/common/getTextAndKeyboardSearch";
 import { updateSavedSearch } from "services/savedSearches";
-import { getUser } from "services/User";
+import { getUser, updateUser } from "services/User";
 import { Context } from "telegraf";
 import { parseNumberWithAbbreviations } from "utils/utils";
 
@@ -25,6 +25,10 @@ export const handleSearchPrice = async (ctx: Context) => {
 
     await updateSavedSearch(ctx.from.id.toString(), {
       [filter]: price,
+    });
+
+    await updateUser(ctx.from.id.toString(), {
+      state: USER_STATE_ENUM.MENU,
     });
 
     const searchParameters = await getTextAndKeyboardSearch(
