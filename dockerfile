@@ -14,6 +14,6 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "migrate"]
-CMD ["npm", "run", "seed"]
-CMD ["npm", "start"]
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
