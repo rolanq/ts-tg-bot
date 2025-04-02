@@ -32,3 +32,8 @@ export enum USER_STATE_ENUM {
   SEARCH_PRICE_FROM = "search_priceFrom",
   SEARCH_PRICE_TO = "search_priceTo",
 }
+
+export const HORSE_POWER = {
+  MIN: 0,
+  MAX: 2500,
+};
