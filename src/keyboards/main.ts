@@ -5,5 +5,6 @@ export function getMainKeyboard() {
   return Markup.keyboard([
     [MAIN_MENU_BUTTONS_TEXT.CREATE_AD],
     [MAIN_MENU_BUTTONS_TEXT.PROFILE, MAIN_MENU_BUTTONS_TEXT.SEARCH],
+    [MAIN_MENU_BUTTONS_TEXT.SUPPORT, MAIN_MENU_BUTTONS_TEXT.RULES],
   ]).resize().reply_markup;
 }

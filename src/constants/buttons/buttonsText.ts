@@ -2,6 +2,8 @@ export const MAIN_MENU_BUTTONS_TEXT = {
   CREATE_AD: "Разместить объявление 🚙📝",
   PROFILE: "Профиль 👤🛠️",
   SEARCH: "Поиск 🔎📋",
+  SUPPORT: "Поддержать проект",
+  RULES: "Правила",
 } as const;
 
 export const COMMANDS_TEXT = {

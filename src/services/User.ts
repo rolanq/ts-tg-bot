@@ -40,6 +40,13 @@ export const createUserIfNotExists = async (userId: string, username: string) =>
 
   return user;
 };
+export const getUserById = async (userId: string) => {
+  const user = await User.findOne({
+    where: { id: Number(userId) },
+  });
+
+  return user?.get({ plain: true });
+};
 
 export const getStatisticsByUserId = async (userId: string) => {
   const allAdvertisements = await Advertisement.findAll({
