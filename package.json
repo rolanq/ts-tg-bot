@@ -5,11 +5,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_OPTIONS=--loader tsconfig-paths/register && tsx src/index.ts",
+    "start": "npm run migrate && npm run seed && npm run start:production",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "migrate": "npx sequelize-cli db:migrate",
-    "seed": "npx sequelize-cli db:seed:all"
+    "seed": "npx sequelize-cli db:seed:all",
+    "start:production": "set NODE_OPTIONS=--loader tsconfig-paths/register && tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
