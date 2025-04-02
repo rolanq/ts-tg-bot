@@ -1,8 +1,6 @@
-import { STEPS_ENUM } from "constants/steps";
+import { STEPS_ENUM, USER_STATE_ENUM, HIDE_REASONS } from "constants/config";
 import * as dbModule from "../../db/models/index.cjs";
 import { Model, ModelStatic } from "sequelize";
-import { USER_STATE_ENUM } from "constants/userState";
-import { HIDE_REASONS } from "constants/hideReasons";
 
 const db = (dbModule as any).default || dbModule;
 

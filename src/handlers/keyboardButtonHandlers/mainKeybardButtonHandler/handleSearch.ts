@@ -1,7 +1,5 @@
 import { ERROR_MESSAGES } from "constants/messages";
-import { USER_STATE_ENUM } from "constants/userState";
 import { getTextAndKeyboardSearch } from "handlers/common/getTextAndKeyboardSearch";
-import { updateUser } from "services/User";
 import { Context } from "telegraf";
 
 export const handleSearch = async (ctx: Context) => {
