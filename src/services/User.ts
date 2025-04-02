@@ -3,7 +3,7 @@ import { Advertisement, IUser, User } from "utils/db";
 
 export const createUser = async (userId: string, username: string) => {
   const user = await User.create({
-    id: Number(userId),
+    id: userId,
     username: username,
     state: USER_STATE_ENUM.MENU,
     availableListings: 0,
@@ -15,11 +15,11 @@ export const createUser = async (userId: string, username: string) => {
 export const getUser = async (userId: string) => {
   const user = await User.findOne({
     where: {
-      id: Number(userId),
+      id: userId,
     },
   });
 
-  return user?.get({plain: true});
+  return user?.get({ plain: true });
 };
 
 export const updateUser = async (userId: string, user: Partial<IUser>) => {
@@ -32,17 +32,22 @@ export const updateUser = async (userId: string, user: Partial<IUser>) => {
   return updatedUser;
 };
 
-export const createUserIfNotExists = async (userId: string, username: string) => {
+export const createUserIfNotExists = async (
+  userId: string,
+  username: string
+) => {
   const user = await getUser(userId);
+
   if (!user) {
-    await createUser(userId, username);
+    const newUser = await createUser(userId, username);
+    return newUser;
   }
 
   return user;
 };
 export const getUserById = async (userId: string) => {
   const user = await User.findOne({
-    where: { id: Number(userId) },
+    where: { id: userId },
   });
 
   return user?.get({ plain: true });
@@ -60,7 +65,9 @@ export const getStatisticsByUserId = async (userId: string) => {
   return {
     adCount: formattedAdvertisements.length,
     activeAdsCount: formattedAdvertisements.filter((ad) => ad.isActive).length,
-    soldCount: formattedAdvertisements.filter((ad) => ad.hideReason === HIDE_REASONS.SOLD_BY_BOT).length,
+    soldCount: formattedAdvertisements.filter(
+      (ad) => ad.hideReason === HIDE_REASONS.SOLD_BY_BOT
+    ).length,
     totalEarnings: formattedAdvertisements
       .filter((ad) => ad.hideReason === HIDE_REASONS.SOLD_BY_BOT)
       .reduce((acc, ad) => acc + Number(ad.price), 0),

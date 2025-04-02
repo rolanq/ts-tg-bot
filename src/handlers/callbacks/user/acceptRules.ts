@@ -12,10 +12,14 @@ export const acceptRules = async (ctx: Context) => {
 
     await ctx.deleteMessage();
 
-    await createUserIfNotExists(
+    const user = await createUserIfNotExists(
       ctx.from?.id.toString(),
       ctx.from?.username || ""
     );
+
+    if (!user) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+    }
 
     return ctx.reply(MESSAGES.WELCOME, {
       reply_markup: getMainKeyboard(),

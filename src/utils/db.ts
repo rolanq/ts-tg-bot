@@ -28,7 +28,7 @@ export interface IChannelMessage {
 }
 
 export interface IUser {
-  id: number;
+  id: string;
   username: string;
   state: USER_STATE_ENUM;
   availableListings: number;
