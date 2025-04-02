@@ -71,8 +71,6 @@ export const editAdInChannel = async (bot: Telegraf, ad: IAdvertisement) => {
 
     return true;
   } catch (error) {
-    console.log(error);
-
     return false;
   }
 };

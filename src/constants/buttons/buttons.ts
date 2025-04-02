@@ -134,8 +134,8 @@ export const AD_ACTIONS_BUTTONS = (
         {
           text: ad.isOnHold ? "Убрать с задатка 🔒" : "Под задатком 🔒",
           callback_data: ad.isOnHold
-            ? `ad_on_hold:remove:${ad.id}:${messageId}`
-            : `ad_on_hold:set:${ad.id}:${messageId}`,
+            ? `ad_on_hold:remove:${ad.id}:${messageId ? messageId : ""}`
+            : `ad_on_hold:set:${ad.id}:${messageId ? messageId : ""}`,
         },
         {
           text: "Редактировать 📝",
@@ -145,7 +145,7 @@ export const AD_ACTIONS_BUTTONS = (
       [
         {
           text: "Скрыть объявление 🔒",
-          callback_data: `hide_ad:${ad.id}:${messageId}`,
+          callback_data: `hide_ad:${ad.id}:${messageId ? messageId : ""}`,
         },
       ]
     );
@@ -158,7 +158,7 @@ export const CONFIRM_HIDE_AD_BUTTONS = (adId: string, messageId?: number) => [
   [
     {
       text: "Да, скрыть объявление 🔒",
-      callback_data: `confirm_hide_ad:${adId}:${messageId}`,
+      callback_data: `confirm_hide_ad:${adId}:${messageId ? messageId : ""}`,
     },
   ],
   ...CLOSE_BUTTONS(messageId)

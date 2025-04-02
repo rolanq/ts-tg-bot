@@ -37,7 +37,12 @@ const adHide = async (ctx: Context) => {
     await ctx.deleteMessage();
 
     return ctx.reply(MESSAGES.AD_HIDDEN_CONFIRMATION, {
-      reply_markup: { inline_keyboard: CONFIRM_HIDE_AD_BUTTONS(adId, Number(messageId)) },
+      reply_markup: {
+        inline_keyboard: CONFIRM_HIDE_AD_BUTTONS(
+          adId,
+          messageId ? Number(messageId) : undefined
+        ),
+      },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR);
@@ -65,7 +70,11 @@ const confirmAdHide = async (ctx: Context, bot: Telegraf) => {
     if (!ad) {
       return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
     }
-    await ctx.deleteMessage(Number(messageId));
+
+    if (!!messageId) {
+      await ctx.deleteMessage(Number(messageId));
+    }
+
     await ctx.deleteMessage();
 
     const updatedAd = await updateAdvertisement(adId, {
@@ -75,7 +84,7 @@ const confirmAdHide = async (ctx: Context, bot: Telegraf) => {
     if (!updatedAd || !updatedAd.id) {
       return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
     }
-    
+
     const result = await editAdInChannel(bot, updatedAd);
 
     if (!result) {
