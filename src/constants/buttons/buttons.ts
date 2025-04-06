@@ -1,7 +1,6 @@
-
 import { HIDE_REASONS } from "constants/config";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
-import { IAdvertisement } from "utils/db";
+import { IAdvertisement, INotification } from "utils/db";
 
 export const CLOSE_BUTTONS = (messageId?: number) => [
   [
@@ -23,7 +22,7 @@ export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS = [
       callback_data: "new_ad_draft",
     },
   ],
-  ...CLOSE_BUTTONS()
+  ...CLOSE_BUTTONS(),
 ];
 
 export const FINISH_PHOTOS_BUTTONS = [
@@ -91,6 +90,10 @@ export const SEARCH_PARAMETERS_BUTTONS_FILLED = (
       text: "Сбросить фильтры 🔄",
       callback_data: "search_reset_parameters",
     },
+    {
+      text: "Сохранить поиск 💾",
+      callback_data: "save_search",
+    },
   ],
   ...CLOSE_BUTTONS(),
 ];
@@ -115,17 +118,21 @@ export const PROFILE_BUTTONS = [
   ],
   [
     {
-      text: "Купить размещение 💰",
-      callback_data: "buy_ad_listing",
+      text: "Уведомления 🔔",
+      callback_data: "notifications",
     },
   ],
-  ...CLOSE_BUTTONS()
+  // TODO: Добавить если понадобится покупка
+  // [
+  //   {
+  //     text: "Купить размещение 💰",
+  //     callback_data: "buy_ad_listing",
+  //   },
+  // ],
+  ...CLOSE_BUTTONS(),
 ];
 
-export const AD_ACTIONS_BUTTONS = (
-  ad: IAdvertisement,
-  messageId?: number
-) => {
+export const AD_ACTIONS_BUTTONS = (ad: IAdvertisement, messageId?: number) => {
   const keyboard = [];
 
   if (ad.isActive) {
@@ -161,7 +168,7 @@ export const CONFIRM_HIDE_AD_BUTTONS = (adId: string, messageId?: number) => [
       callback_data: `confirm_hide_ad:${adId}:${messageId ? messageId : ""}`,
     },
   ],
-  ...CLOSE_BUTTONS(messageId)
+  ...CLOSE_BUTTONS(messageId),
 ];
 
 export const HIDE_AD_REASON_BUTTONS = (adId: string) => [
@@ -184,6 +191,31 @@ export const ACCEPT_RULES_BUTTONS = [
     {
       text: "Принять правила 📝",
       callback_data: "accept_rules",
+    },
+  ],
+  ...CLOSE_BUTTONS(),
+];
+
+export const NOTIFICATION_BUTTONS = (
+  notification: INotification,
+  brandName: string,
+  regionName: string
+) => [
+  {
+    text: `${brandName ? brandName : "Любой бренд"} в ${
+      regionName ? regionName : "Любой регион"
+    }. ${notification.priceFrom ? `От ${notification.priceFrom}` : ""} ${
+      notification.priceTo ? `до ${notification.priceTo}` : ""
+    }`,
+    callback_data: `notification_delete:${notification.id}`,
+  },
+];
+
+export const NOTIFICATIONS_LIST_BUTTONS = [
+  [
+    {
+      text: "Удалить все уведомления 🗑️",
+      callback_data: "delete_all_notifications",
     },
   ],
   ...CLOSE_BUTTONS(),

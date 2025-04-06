@@ -22,6 +22,12 @@ export const MESSAGES = {
   AD_HIDE_REASON: "Укажите причину скрытия объявления:",
   SUPPORT_MESSAGE:
     "Если хотите поддержать проект, отправьте денюжку сюда {cardNumber}",
+  NOTIFICATION_LIST: "Ваш список поисков. Нажмите на поиск, чтобы удалить его.",
+  NEW_CAR_IN_YOUR_SEARCH:
+    "Новое объявление в вашем поиске!\n\n{advertisement}",
+  NOTIFICATION_CREATED: "Поиск успешно сохранен!\nТеперь вы будете получать уведомления о новых машинах с заданными параметрами",
+  NOTIFICATION_DELETED: "Поиск успешно удален!",
+  NOTIFICATION_DELETED_ALL: "Все поиски успешно удалены!",
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -59,6 +65,9 @@ export const ERROR_MESSAGES = {
     "Произошла ошибка при отправке объявления в канал. Попробуйте снова.",
   ERROR_WITH_EDIT_CHANNEL_MESSAGE:
     "Произошла ошибка при редактировании объявления в канале. Попробуйте снова.",
+  ERROR_WITH_SAVING_SEARCH:
+    "Произошла ошибка при сохранении поиска.\nНеобходимо выбрать хотя бы один параметр поиска.",
+  ERROR_NO_NOTIFICATIONS: "У вас нет сохраненных поисков для уведомлений.",
 } as const;
 
 export const SAVED_SEARCH_PARAMETERS = `

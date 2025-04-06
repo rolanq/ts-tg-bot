@@ -2,14 +2,20 @@ import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { USER_STATE_ENUM } from "constants/config";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { sendAdToChannel } from "handlers/common/channelMessage";
+import { getWhereConditionForNotifications } from "handlers/common/createWhereCondition";
+import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { createAdvertisement } from "services/advertisment";
 import {
   dropAdvertisementDraft,
   getAdvertisementDraft,
 } from "services/advertismentDraft";
+import { getNotifications } from "services/notification";
 import { getUser, updateUser } from "services/User";
 import { Telegraf } from "telegraf";
-import { validateAdvertisementDraft } from "utils/utils";
+import {
+  formatAdvertisementMedia,
+  validateAdvertisementDraft,
+} from "utils/utils";
 
 export const registerAdPublishCallbacks = async (bot: Telegraf) => {
   bot.action("publish_ad", async (ctx) => {
@@ -59,6 +65,36 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
           reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
         });
       }
+
+      const whereCondition = getWhereConditionForNotifications(ad);
+
+      const notifications = await getNotifications(
+        ctx.from.id.toString(),
+        whereCondition
+      );
+
+      notifications.forEach(async (notification) => {
+        const { text, media } = await formatAdvertisementMedia(ad);
+
+        if (media) {
+          const mediaGroup = await ctx.sendMediaGroup(media);
+          const keyboard = CLOSE_BUTTONS(mediaGroup[0].message_id);
+          await ctx.reply(MESSAGES.AD_ACTIONS, {
+            reply_markup: {
+              inline_keyboard: keyboard,
+            },
+          });
+        } else if (text) {
+          await ctx.reply(
+            MESSAGES.NEW_CAR_IN_YOUR_SEARCH.replace("{advertisement}", text),
+            {
+              reply_markup: {
+                inline_keyboard: CLOSE_BUTTONS(),
+              },
+            }
+          );
+        }
+      });
 
       await dropAdvertisementDraft(ctx.from?.id.toString());
 
