@@ -59,6 +59,8 @@ export async function addWatermark(imageBuffer: Buffer) {
     await promisify(fs.unlink)(svgPath);
     return result;
   } catch (error) {
+    console.log(error);
+
     return imageBuffer;
   }
 }
