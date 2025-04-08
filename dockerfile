@@ -1,7 +1,8 @@
 FROM node:18-alpine
 
-# Установка минимально необходимых пакетов
-RUN apk add --no-cache fontconfig ttf-dejavu
+# Установка шрифтов
+RUN apk add --no-cache fontconfig ttf-liberation
+RUN update-ms-fonts && fc-cache -f
 
 WORKDIR /app
 
