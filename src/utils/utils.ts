@@ -6,6 +6,7 @@ import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "./db";
 import { Op, WhereOptions } from "sequelize";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { MediaGroup } from "telegraf/typings/telegram-types";
+import { BAD_WORDS } from "constants/config";
 
 export const getInlineKeyboard = (buttons: InlineKeyboardButton[]) => {
   return {
@@ -17,13 +18,13 @@ export const getInlineKeyboard = (buttons: InlineKeyboardButton[]) => {
 
 export const getYearsPerPage = (page: number) => {
   const currentYear = new Date().getFullYear();
-  const countedYear = currentYear - (page * 8 - 8);
-  const years = Array.from({ length: 8 }, (_, i) => countedYear - i);
+  const countedYear = currentYear - (page * 15 - 15);
+  const years = Array.from({ length: 15 }, (_, i) => countedYear - i);
 
   return {
     years,
     total: 50,
-    isLastPage: 50 <= page * 8,
+    isLastPage: 50 <= page * 15,
   };
 };
 
@@ -136,4 +137,20 @@ export const formatAdvertisementMedia = async (
   }));
 
   return { text: null, media };
+};
+
+export const checkBadWords = (text: string) => {
+  const badWords = BAD_WORDS;
+  const textLower = text.toLowerCase();
+  return badWords.some((word) => textLower.includes(word));
+};
+
+export const parsePhoneNumber = (phoneNumber: string) => {
+  const cleaned = phoneNumber.replace(/\s+/g, "");
+  const match = cleaned.match(/^(\+?7|8)(\d{10})$/);
+  if (!match) {
+    return null;
+  }
+
+  return `+7${match[2]}`;
 };

@@ -1,5 +1,5 @@
 import { CallbackQuery } from "@telegraf/types";
-import { AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
+import { AD_ACTIONS_BUTTONS, CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { getAdvertisementsByUserId } from "services/advertisment";
 import { Context } from "telegraf";
@@ -10,7 +10,9 @@ export const handleMyAds = async (ctx: Context) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
@@ -59,6 +61,8 @@ export const handleMyAds = async (ctx: Context) => {
       }
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

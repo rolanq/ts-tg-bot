@@ -1,30 +1,53 @@
 import { Message } from "@telegraf/types";
-import { FINISH_PHOTOS_BUTTONS } from "constants/buttons/buttons";
+import {
+  CLOSE_BUTTONS,
+  FINISH_PHOTOS_BUTTONS,
+} from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
+import { parsePhoneNumber } from "utils/utils";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
-export const handlePhoneNumberStep = async (ctx: Context) => {
+export const handlePhoneNumberStep = async (
+  ctx: Context,
+  isEdit: boolean = false
+) => {
   try {
     if (!ctx.from?.id || !ctx.message) {
-      ctx.reply(ERROR_MESSAGES.ERROR);
-      return;
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const text = (ctx.message as Message.TextMessage).text;
 
+    const phoneNumber = parsePhoneNumber(text);
+
+    if (!phoneNumber || !phoneNumber.startsWith("+7")) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_PHONE_NUMBER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
     await updateAdvertisementDraft(ctx.from.id.toString(), {
       currentStep: STEPS_ENUM.PHOTOS,
-      phoneNumber: text,
+      phoneNumber: phoneNumber,
     });
 
     await ctx.deleteMessage();
+
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
 
     return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
       reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

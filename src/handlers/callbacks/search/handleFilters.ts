@@ -13,14 +13,19 @@ import {
 import { getBrandsPerPage } from "services/brandService";
 import { updateSavedSearch } from "services/savedSearches";
 import { getTextAndKeyboardSearch } from "handlers/common/getTextAndKeyboardSearch";
-import { SEARCH_FILTER_RESET_BUTTON } from "constants/buttons/buttons";
+import {
+  CLOSE_BUTTONS,
+  SEARCH_FILTER_RESET_BUTTON,
+} from "constants/buttons/buttons";
 
 export const handleSelectSearchFilter = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
@@ -29,7 +34,9 @@ export const handleSelectSearchFilter = async (ctx: Context) => {
     const user = await getUser(ctx.from?.id.toString());
 
     if (!user) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER);
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     await ctx.deleteMessage();
@@ -83,7 +90,9 @@ export const handleSelectSearchFilter = async (ctx: Context) => {
         return ctx.reply(CHOOSE_MESSAGES.PRICE_TO);
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 
@@ -92,7 +101,9 @@ export const handleSaveSearchFilter = async (ctx: Context) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
@@ -108,15 +119,17 @@ export const handleSaveSearchFilter = async (ctx: Context) => {
     const message = await getTextAndKeyboardSearch(ctx.from?.id.toString());
 
     if (!message) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     return ctx.reply(message.text, {
       reply_markup: { inline_keyboard: message.keyboard },
     });
-
-    return ctx.reply(ERROR_MESSAGES.ERROR);
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

@@ -1,9 +1,5 @@
 import { STEPS_ENUM } from "constants/config";
-import {
-  IAdvertisementDraft,
-  AdvertisementDraft,
-  Advertisement,
-} from "utils/db";
+import { IAdvertisementDraft, AdvertisementDraft } from "utils/db";
 
 export const getAdvertisementDraft = async (
   userId: string
@@ -68,4 +64,19 @@ export const dropAdvertisementDraft = async (userId: string) => {
     price: null,
     photos: [],
   });
-};  
+};
+
+export const createIfNotExistsAndZeroOut = async (
+  userId: string,
+  username: string
+) => {
+  const draft = await getAdvertisementDraft(userId);
+
+  if (!draft) {
+    return await createAdvertisementDraft(userId, username);
+  }
+
+  await dropAdvertisementDraft(userId);
+  const newDraft = await getAdvertisementDraft(userId);
+  return newDraft;
+};

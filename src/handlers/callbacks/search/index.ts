@@ -8,6 +8,7 @@ import {
   handleSelectSearchFilter,
 } from "./handleFilters";
 import { handleSearch } from "./handleSearch";
+import { handleSaveSearch } from "./handleSaveSearch";
 
 export const registerSearchCallbacks = (bot: Telegraf) => {
   bot.action(/^search_ads/, handleSearch);
@@ -17,4 +18,6 @@ export const registerSearchCallbacks = (bot: Telegraf) => {
 
   bot.action(/^search_reset_parameters/, handleSearchResetAllFilters);
   bot.action(/^search_reset_filter/, handleSearchResetFilter);
+
+  bot.action(/^save_search/, handleSaveSearch);
 };

@@ -22,7 +22,7 @@ module.exports = {
         allowNull: true,
       },
       price: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(12, 0),
         allowNull: true,
       },
       engineType: {

@@ -10,33 +10,40 @@ type PaginationOptions = {
     text: string;
     callback_data: string;
   };
+  isEdit?: boolean;
 };
 
 export function getPaginatedInlineKeyboard<T>(
   items: T[],
-  renderButton: (item: T) => InlineKeyboardButton,
+  renderButton: (item: T, isEdit?: boolean) => InlineKeyboardButton,
   options: PaginationOptions = {}
 ) {
   const {
-    itemsPerPage = 8,
+    itemsPerPage = 15,
     currentPage = 1,
     buttonCallback = "page",
     totalItems = 0,
     isLastPage = false,
     resetButton,
+    isEdit = false,
   } = options;
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const keyboard: InlineKeyboardButton[][] = [];
 
-  for (let i = 0; i < items.length; i += 2) {
+  for (let i = 0; i < items.length; i += 3) {
+    const currentItems = items.slice(i, i + 3);
     const row: InlineKeyboardButton[] = [];
 
-    row.push(renderButton(items[i]));
+    row.push(renderButton(currentItems[0], isEdit));
 
     if (i + 1 < items.length) {
-      row.push(renderButton(items[i + 1]));
+      row.push(renderButton(currentItems[1], isEdit));
+    }
+
+    if (i + 2 < items.length) {
+      row.push(renderButton(currentItems[2], isEdit));
     }
 
     keyboard.push(row);

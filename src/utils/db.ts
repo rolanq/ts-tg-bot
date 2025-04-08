@@ -96,6 +96,17 @@ export interface ISavedSearch {
   updatedAt?: Date;
 }
 
+export interface INotification {
+  id?: number;
+  userId: string;
+  brandId: number | null;
+  regionId: number | null;
+  priceFrom: number | null;
+  priceTo: number | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export const Brand: ModelStatic<Model<IBrand>> = db.Brand;
 export const CarModel: ModelStatic<Model<ICarModel>> = db.CarModel;
 export const Region: ModelStatic<Model<IRegion>> = db.Region;
@@ -107,3 +118,4 @@ export const Advertisement: ModelStatic<Model<IAdvertisement>> =
 export const AdvertisementDraft: ModelStatic<Model<IAdvertisementDraft>> =
   db.AdvertisementDraft;
 export const User: ModelStatic<Model<IUser>> = db.User;
+export const Notification: ModelStatic<Model<INotification>> = db.Notification;

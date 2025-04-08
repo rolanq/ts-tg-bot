@@ -1,4 +1,5 @@
 import { CallbackQuery } from "@telegraf/types";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES } from "constants/messages";
 import { Telegraf } from "telegraf";
 
@@ -18,7 +19,9 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
       }
       await ctx.deleteMessage();
     } catch (error) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
   });
 };
