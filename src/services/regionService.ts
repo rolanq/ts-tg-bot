@@ -2,8 +2,8 @@ import { IRegion, Region } from "utils/db";
 
 export const getRegionsPerPage = async (page: number) => {
   const regions = await Region.findAll({
-    limit: 8,
-    offset: (page - 1) * 8,
+    limit: 15,
+    offset: (page - 1) * 15,
   });
 
   const regionsCount = await Region.count();
@@ -11,7 +11,7 @@ export const getRegionsPerPage = async (page: number) => {
   return {
     regions: regions.map((region) => region.get({ plain: true })),
     total: regionsCount,
-    isLastPage: regionsCount <= page * 8,
+    isLastPage: regionsCount <= page * 15,
   };
 };
 

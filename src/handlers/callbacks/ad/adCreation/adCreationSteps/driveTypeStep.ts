@@ -4,10 +4,12 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { getFirstPageForTransmissionTypes } from "utils/pagination/getFirstPages";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const driveTypeStep = async (
   ctx: Context,
-  selectedDriveType: string
+  selectedDriveType: string,
+  isEdit: boolean = false
 ) => {
   try {
     const { callbackQuery } = ctx;
@@ -23,9 +25,13 @@ export const driveTypeStep = async (
       currentStep: STEPS_ENUM.TRANSMISSIONTYPE,
     });
 
-    const keyboard = getFirstPageForTransmissionTypes();
-
     await ctx.deleteMessage();
+
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
+
+    const keyboard = getFirstPageForTransmissionTypes();
 
     return ctx.reply(CHOOSE_MESSAGES.TRANSMISSION, {
       reply_markup: { inline_keyboard: keyboard },

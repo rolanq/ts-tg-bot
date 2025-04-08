@@ -29,11 +29,11 @@ export async function handleCreateAd(ctx: Context) {
       });
     }
 
-    if (user.availableListings === 0) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_LISTING, {
-        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
-      });
-    }
+    // if (user.availableListings === 0) {
+    //   return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_LISTING, {
+    //     reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    //   });
+    // }
 
     await updateUser(ctx.from.id.toString(), {
       state: USER_STATE_ENUM.AD_CREATION,
@@ -62,6 +62,8 @@ export async function handleCreateAd(ctx: Context) {
       reply_markup: { inline_keyboard: keyboard },
     });
   } catch (error) {
+    console.log(error);
+    
     return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_CREATION, {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
     });

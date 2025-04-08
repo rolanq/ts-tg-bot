@@ -43,31 +43,35 @@ export const adCreation = async (ctx: Context) => {
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
-
+    console.log(data);
+    
     if (data.startsWith("select")) {
-      const [, step, selected] = data.split(":");
+      const [, step, selected, isEdit] = data.split(":");
+      const edit = isEdit === "edit";
+
+      console.log(step);
 
       switch (step as STEPS_ENUM) {
         case STEPS_ENUM.REGION:
-          await regionStep(ctx, selected);
+          await regionStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.BRAND:
-          await brandStep(ctx, selected);
+          await brandStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.MODEL:
-          await modelStep(ctx, selected);
+          await modelStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.YEAR:
-          await yearStep(ctx, selected);
+          await yearStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.ENGINETYPE:
-          await engineTypeStep(ctx, selected);
+          await engineTypeStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.DRIVETYPE:
-          await driveTypeStep(ctx, selected);
+          await driveTypeStep(ctx, selected, edit);
           break;
         case STEPS_ENUM.TRANSMISSIONTYPE:
-          await transmissionTypeStep(ctx, selected);
+          await transmissionTypeStep(ctx, selected, edit);
           break;
       }
     }

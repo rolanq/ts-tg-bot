@@ -33,11 +33,11 @@ module.exports = {
         onDelete: "SET NULL",
       },
       priceFrom: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(12, 0),
         allowNull: true,
       },
       priceTo: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(12, 0),
         allowNull: true,
       },
       createdAt: {

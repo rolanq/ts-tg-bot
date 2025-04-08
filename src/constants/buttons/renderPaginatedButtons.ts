@@ -2,52 +2,59 @@ import { InlineKeyboardButton } from "@telegraf/types";
 import { IBrand, IRegion, ICarModel } from "../../utils/db";
 
 export const renderPaginatedBrandButtons = (
-  brand: IBrand
+  brand: IBrand,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: brand.name,
-  callback_data: `select_adCreation:brand:${brand.id}`,
+  callback_data: `select_adCreation:brand:${brand.id}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedRegionButtons = (
-  region: IRegion
+  region: IRegion,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: region.name,
-  callback_data: `select_adCreation:region:${region.id}`,
+  callback_data: `select_adCreation:region:${region.id}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedModelButtons = (
-  model: ICarModel
+  model: ICarModel,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: model.name,
-  callback_data: `select_adCreation:model:${model.id}`,
+  callback_data: `select_adCreation:model:${model.id}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedYearButtons = (
-  year: number
+  year: number,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: year.toString(),
-  callback_data: `select_adCreation:year:${year}`,
+  callback_data: `select_adCreation:year:${year}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedEngineTypeButtons = (
-  engineType: string
+  engineType: string,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: engineType,
-  callback_data: `select_adCreation:enginetype:${engineType}`,
+  callback_data: `select_adCreation:enginetype:${engineType}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedTransmissionTypeButtons = (
-  transmissionType: string
+  transmissionType: string,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: transmissionType,
-  callback_data: `select_adCreation:transmissiontype:${transmissionType}`,
+  callback_data: `select_adCreation:transmissiontype:${transmissionType}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedDriveTypeButtons = (
-  driveType: string
+  driveType: string,
+  isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: driveType,
-  callback_data: `select_adCreation:drivetype:${driveType}`,
+  callback_data: `select_adCreation:drivetype:${driveType}:${isEdit ? "edit" : ""}`,
 });
 
 export const renderPaginatedRegionsSearchButtons = (

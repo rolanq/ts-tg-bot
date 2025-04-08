@@ -1,4 +1,8 @@
-import { CLOSE_BUTTONS, NOTIFICATION_BUTTONS, NOTIFICATIONS_LIST_BUTTONS } from "constants/buttons/buttons";
+import {
+  CLOSE_BUTTONS,
+  NOTIFICATION_BUTTONS,
+  NOTIFICATIONS_LIST_BUTTONS,
+} from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { getBrandById } from "services/brandService";
 import { getNotifications } from "services/notification";
@@ -18,8 +22,8 @@ export const handleNotifications = async (ctx: Context) => {
     const notifications = await getNotifications(from.id.toString());
 
     if (notifications.length === 0) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_NO_NOTIFICATIONS, {
-        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      return ctx.answerCbQuery(ERROR_MESSAGES.ERROR_NO_NOTIFICATIONS, {
+        show_alert: true,
       });
     }
 
@@ -45,7 +49,9 @@ export const handleNotifications = async (ctx: Context) => {
     await ctx.deleteMessage();
 
     return ctx.reply(MESSAGES.NOTIFICATION_LIST, {
-      reply_markup: { inline_keyboard: [...keyboard, ...NOTIFICATIONS_LIST_BUTTONS] },
+      reply_markup: {
+        inline_keyboard: [...keyboard, ...NOTIFICATIONS_LIST_BUTTONS],
+      },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

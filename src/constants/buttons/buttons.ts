@@ -1,4 +1,4 @@
-import { HIDE_REASONS } from "constants/config";
+import { HIDE_REASONS, STEPS_ENUM } from "constants/config";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
 import { IAdvertisement, INotification } from "utils/db";
 
@@ -20,6 +20,82 @@ export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS = [
     {
       text: "Начать заново 🔄",
       callback_data: "new_ad_draft",
+    },
+  ],
+  [
+    {
+      text: "Редактировать 📝",
+      callback_data: "edit_ad_draft",
+    },
+  ],
+  ...CLOSE_BUTTONS(),
+];
+
+export const EDIT_AD_DRAFT_BUTTONS = [
+  [
+    {
+      text: "Регион 🌎",
+      callback_data: `edit_field_draft:${STEPS_ENUM.REGION}`,
+    },
+    {
+      text: "Год 🚙",
+      callback_data: `edit_field_draft:${STEPS_ENUM.YEAR}`,
+    },
+  ],
+  [
+    {
+      text: "Бренд 🚙",
+      callback_data: `edit_field_draft:${STEPS_ENUM.BRAND}`,
+    },
+    {
+      text: "Модель 🚙",
+      callback_data: `edit_field_draft:${STEPS_ENUM.MODEL}`,
+    },
+  ],
+  [
+    {
+      text: "Тип двигателя 🚙",
+      callback_data: `edit_field_draft:${STEPS_ENUM.ENGINETYPE}`,
+    },
+    {
+      text: "Тип привода 🚙",
+      callback_data: `edit_field_draft:${STEPS_ENUM.DRIVETYPE}`,
+    },
+  ],
+  [
+    {
+      text: "Тип коробки передач 🕹️",
+      callback_data: `edit_field_draft:${STEPS_ENUM.TRANSMISSIONTYPE}`,
+    },
+    {
+      text: "Мощность двигателя 🐎",
+      callback_data: `edit_field_draft:${STEPS_ENUM.HORSEPOWER}`,
+    },
+  ],
+  [
+    {
+      text: "Пробег 🛣️",
+      callback_data: `edit_field_draft:${STEPS_ENUM.MILEAGE}`,
+    },
+    {
+      text: "Описание 📝",
+      callback_data: `edit_field_draft:${STEPS_ENUM.DESCRIPTION}`,
+    },
+  ],
+  [
+    {
+      text: "Цена 💰",
+      callback_data: `edit_field_draft:${STEPS_ENUM.PRICE}`,
+    },
+    {
+      text: "Номер телефона 📱",
+      callback_data: `edit_field_draft:${STEPS_ENUM.PHONENUMBER}`,
+    },
+  ],
+  [
+    {
+      text: "Фотографии 🖼️",
+      callback_data: `edit_field_draft:${STEPS_ENUM.PHOTOS}`,
     },
   ],
   ...CLOSE_BUTTONS(),
@@ -143,10 +219,6 @@ export const AD_ACTIONS_BUTTONS = (ad: IAdvertisement, messageId?: number) => {
           callback_data: ad.isOnHold
             ? `ad_on_hold:remove:${ad.id}:${messageId ? messageId : ""}`
             : `ad_on_hold:set:${ad.id}:${messageId ? messageId : ""}`,
-        },
-        {
-          text: "Редактировать 📝",
-          callback_data: `edit_ad:${ad.id}`,
         },
       ],
       [

@@ -1,4 +1,4 @@
-import { PHOTOS_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, PHOTOS_BUTTONS } from "constants/buttons/buttons";
 import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { checkUserState } from "handlers/common/checkUserState";
@@ -10,7 +10,7 @@ import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { addWatermark } from "utils/addWatermark";
 
-export const registerPhotosHandler = (bot: Telegraf) => {
+export const registerPhotosHandler = (bot: Telegraf, isEdit: boolean = false) => {
   bot.on(message("photo"), async (ctx) => {
     try {
       if (!ctx.from?.id) {
@@ -29,7 +29,7 @@ export const registerPhotosHandler = (bot: Telegraf) => {
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
 
-      if (draft && draft.currentStep === STEPS_ENUM.PHOTOS) {
+      if (draft) {
         const photos = [...(draft.photos || [])];
 
         if (draft.photos && draft.photos?.length >= 10) {

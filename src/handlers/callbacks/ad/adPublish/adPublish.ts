@@ -34,11 +34,11 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
         });
       }
 
-      if (user.availableListings === 0) {
-        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_LISTING, {
-          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
-        });
-      }
+      // if (user.availableListings === 0) {
+      //   return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_LISTING, {
+      //     reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      //   });
+      // }
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
 
@@ -73,7 +73,7 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
         whereCondition
       );
 
-      notifications.forEach(async (notification) => {
+      notifications.forEach(async () => {
         const { text, media } = await formatAdvertisementMedia(ad);
 
         if (media) {
@@ -100,7 +100,7 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
 
       await updateUser(ctx.from.id.toString(), {
         state: USER_STATE_ENUM.MENU,
-        availableListings: user.availableListings - 1,
+        // availableListings: user.availableListings - 1,
       });
 
       await ctx.deleteMessage();

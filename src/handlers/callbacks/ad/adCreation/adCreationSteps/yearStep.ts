@@ -4,8 +4,13 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { getFirstPageForEngineTypes } from "utils/pagination/getFirstPages";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
-export const yearStep = async (ctx: Context, selectedYear: string) => {
+export const yearStep = async (
+  ctx: Context,
+  selectedYear: string,
+  isEdit: boolean = false
+) => {
   try {
     const { callbackQuery } = ctx;
 
@@ -20,10 +25,13 @@ export const yearStep = async (ctx: Context, selectedYear: string) => {
       currentStep: STEPS_ENUM.ENGINETYPE,
     });
 
-    const keyboard = getFirstPageForEngineTypes();
-
     await ctx.deleteMessage();
 
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
+
+    const keyboard = getFirstPageForEngineTypes();
     return ctx.reply(CHOOSE_MESSAGES.ENGINE_TYPE, {
       reply_markup: { inline_keyboard: keyboard },
     });

@@ -5,8 +5,13 @@ import { getFirstPageForYears } from "utils/pagination/getFirstPages";
 import { Context } from "telegraf";
 import { getCarModelById } from "services/brandService";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
-export const modelStep = async (ctx: Context, selectedModelId: string) => {
+export const modelStep = async (
+  ctx: Context,
+  selectedModelId: string,
+  isEdit: boolean = false
+) => {
   try {
     const { callbackQuery } = ctx;
 
@@ -29,10 +34,13 @@ export const modelStep = async (ctx: Context, selectedModelId: string) => {
       currentStep: STEPS_ENUM.YEAR,
     });
 
-    const keyboard = getFirstPageForYears();
-
     await ctx.deleteMessage();
 
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
+
+    const keyboard = getFirstPageForYears();
     return ctx.reply(CHOOSE_MESSAGES.YEAR, {
       reply_markup: { inline_keyboard: keyboard },
     });

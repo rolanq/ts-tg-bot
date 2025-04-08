@@ -5,8 +5,13 @@ import { getBrandById } from "services/brandService";
 import { Context } from "telegraf";
 import { getFirstPageForModels } from "utils/pagination/getFirstPages";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
-export const brandStep = async (ctx: Context, selectedBrandId: string) => {
+export const brandStep = async (
+  ctx: Context,
+  selectedBrandId: string,
+  isEdit: boolean = false
+) => {
   try {
     const { callbackQuery } = ctx;
 
@@ -29,10 +34,13 @@ export const brandStep = async (ctx: Context, selectedBrandId: string) => {
       currentStep: STEPS_ENUM.MODEL,
     });
 
-    const keyboard = await getFirstPageForModels(brand.id);
-
     await ctx.deleteMessage();
 
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
+
+    const keyboard = await getFirstPageForModels(brand.id);
     return ctx.reply(CHOOSE_MESSAGES.MODEL, {
       reply_markup: { inline_keyboard: keyboard },
     });

@@ -3,10 +3,12 @@ import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const transmissionTypeStep = async (
   ctx: Context,
-  selectedTransmissionType: string
+  selectedTransmissionType: string,
+  isEdit: boolean = false
 ) => {
   try {
     const { callbackQuery } = ctx;
@@ -23,6 +25,10 @@ export const transmissionTypeStep = async (
     });
 
     await ctx.deleteMessage();
+
+    if (isEdit) {
+      return await sendDraftMessage(ctx);
+    }
 
     return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER);
   } catch (error) {

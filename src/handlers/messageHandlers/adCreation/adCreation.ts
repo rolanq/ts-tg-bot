@@ -40,19 +40,34 @@ export const handleAdCreationMessage = async (ctx: Context) => {
 
     switch (draft.currentStep) {
       case STEPS_ENUM.HORSEPOWER:
-        await handleHorsePowerStep(ctx);
+        await handleHorsePowerStep(ctx, false);
+        break;
+      case STEPS_ENUM.HORSEPOWER_EDIT:
+        await handleHorsePowerStep(ctx, true);
         break;
       case STEPS_ENUM.MILEAGE:
-        await handleMileAgeStep(ctx);
+        await handleMileAgeStep(ctx, false);
+        break;
+      case STEPS_ENUM.MILEAGE_EDIT:
+        await handleMileAgeStep(ctx, true);
         break;
       case STEPS_ENUM.DESCRIPTION:
-        await handleDescriptionStep(ctx);
+        await handleDescriptionStep(ctx, false);
+        break;
+      case STEPS_ENUM.DESCRIPTION_EDIT:
+        await handleDescriptionStep(ctx, true);
         break;
       case STEPS_ENUM.PRICE:
-        await handlePriceStep(ctx);
+        await handlePriceStep(ctx, false);
+        break;
+      case STEPS_ENUM.PRICE_EDIT:
+        await handlePriceStep(ctx, true);
         break;
       case STEPS_ENUM.PHONENUMBER:
-        await handlePhoneNumberStep(ctx);
+        await handlePhoneNumberStep(ctx, false);
+        break;
+      case STEPS_ENUM.PHONENUMBER_EDIT:
+        await handlePhoneNumberStep(ctx, true);
         break;
     }
   } catch (error) {
