@@ -6,6 +6,7 @@ import { message } from "telegraf/filters";
 import { handleAdCreationMessage } from "./adCreation";
 import { checkUserState } from "handlers/common/checkUserState";
 import { handleSearchPrice } from "./search/handleSearchPrice";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const registerMessageHandlers = (bot: Telegraf) => {
   bot.on(message("text"), async (ctx) => {
