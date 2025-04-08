@@ -1,8 +1,8 @@
 FROM node:18-alpine
 
-# Установка шрифтов
-RUN apk add --no-cache fontconfig msttcorefonts-installer
-RUN update-ms-fonts && fc-cache -f
+# Установка шрифтов и зависимостей
+RUN apk add --no-cache fontconfig freetype ttf-dejavu
+RUN mkdir -p /usr/share/fonts /etc/fonts/conf.d
 
 WORKDIR /app
 
