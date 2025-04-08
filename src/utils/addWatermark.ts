@@ -30,7 +30,7 @@ export async function addWatermark(imageBuffer: Buffer) {
         <text 
           x="640" 
           y="480" 
-          font-family="DejaVu Sans"
+          font-family="Liberation Sans"
           font-size="120px"
           fill="white"
           text-anchor="middle"

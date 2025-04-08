@@ -1,10 +1,13 @@
 FROM node:18-alpine
 
-# Установка шрифтов и зависимостей
-RUN apk add --no-cache fontconfig freetype ttf-dejavu
-RUN mkdir -p /usr/share/fonts /etc/fonts/conf.d
+# Установка шрифтов
+RUN apk add --no-cache fontconfig font-liberation
 
 WORKDIR /app
+
+# Копируем шрифты
+COPY fonts /usr/share/fonts/
+RUN fc-cache -f -v
 
 COPY package*.json ./
 COPY tsconfig*.json ./
