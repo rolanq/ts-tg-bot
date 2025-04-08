@@ -29,7 +29,7 @@ export async function addWatermark(imageBuffer: Buffer) {
               font-family: Arial, sans-serif;
             }
           </style>
-          <text x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" class="text">WATERMARK</text>
+          <text x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" class="text">${process.env.WATERMARK}</text>
         </svg>
       `;
 
