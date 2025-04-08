@@ -17,7 +17,7 @@ import {
   DRIVE_TYPES,
 } from "constants/config";
 
-export const getFirstPageForRegions = async () => {
+export const getFirstPageForRegions = async (isEdit: boolean = false) => {
   const regions = await getRegionsPerPage(1);
 
   return getPaginatedInlineKeyboard(
@@ -28,11 +28,13 @@ export const getFirstPageForRegions = async () => {
       totalItems: regions.total,
       currentPage: 1,
       isLastPage: regions.isLastPage,
+      itemsPerPage: 15,
+      isEdit: isEdit,
     }
   );
 };
 
-export const getFirstPageForBrands = async () => {
+export const getFirstPageForBrands = async (isEdit: boolean = false) => {
   const brands = await getBrandsPerPage(1);
 
   return getPaginatedInlineKeyboard(
@@ -43,11 +45,13 @@ export const getFirstPageForBrands = async () => {
       totalItems: brands.total,
       currentPage: 1,
       isLastPage: brands.isLastPage,
+      itemsPerPage: 15,
+      isEdit: isEdit,
     }
   );
 };
 
-export const getFirstPageForModels = async (brandId: number) => {
+export const getFirstPageForModels = async (brandId: number, isEdit: boolean = false) => {
   const models = await getModelsPerPage(1, brandId);
 
   return getPaginatedInlineKeyboard(
@@ -58,11 +62,13 @@ export const getFirstPageForModels = async (brandId: number) => {
       totalItems: models.total,
       currentPage: 1,
       isLastPage: models.isLastPage,
+      itemsPerPage: 15,
+      isEdit: isEdit,
     }
   );
 };
 
-export const getFirstPageForYears = () => {
+export const getFirstPageForYears = (isEdit: boolean = false) => {
   const years = getYearsPerPage(1);
 
   return getPaginatedInlineKeyboard(years.years, renderPaginatedYearButtons, {
@@ -70,35 +76,40 @@ export const getFirstPageForYears = () => {
     totalItems: years.total,
     currentPage: 1,
     isLastPage: years.isLastPage,
+    itemsPerPage: 15,
+    isEdit: isEdit,
   });
 };
 
-export const getFirstPageForEngineTypes = () => {
+export const getFirstPageForEngineTypes = (isEdit: boolean = false) => {
   return getPaginatedInlineKeyboard(
     ENGINE_TYPES,
     renderPaginatedEngineTypeButtons,
     {
       buttonCallback: "page_enginetypes",
+      isEdit: isEdit,
     }
   );
 };
 
-export const getFirstPageForTransmissionTypes = () => {
+export const getFirstPageForTransmissionTypes = (isEdit: boolean = false) => {
   return getPaginatedInlineKeyboard(
     TRANSMISSION_TYPES,
     renderPaginatedTransmissionTypeButtons,
     {
       buttonCallback: "page_transmissiontypes",
+      isEdit: isEdit,
     }
   );
 };
 
-export const getFirstPageForDriveTypes = () => {
+export const getFirstPageForDriveTypes = (isEdit: boolean = false) => {
   return getPaginatedInlineKeyboard(
     DRIVE_TYPES,
     renderPaginatedDriveTypeButtons,
     {
       buttonCallback: "page_drivetypes",
+      isEdit: isEdit,
     }
   );
 };

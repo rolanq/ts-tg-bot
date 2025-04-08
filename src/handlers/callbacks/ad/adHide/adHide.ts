@@ -1,5 +1,6 @@
 import { CallbackQuery } from "@telegraf/types";
 import {
+  CLOSE_BUTTONS,
   CONFIRM_HIDE_AD_BUTTONS,
   HIDE_AD_REASON_BUTTONS,
 } from "constants/buttons/buttons";
@@ -17,7 +18,9 @@ const adHide = async (ctx: Context) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const [, adId, messageId] = (
@@ -45,7 +48,9 @@ const adHide = async (ctx: Context) => {
       },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 
@@ -54,7 +59,9 @@ const confirmAdHide = async (ctx: Context, bot: Telegraf) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const [, adId, messageId] = (
@@ -95,7 +102,9 @@ const confirmAdHide = async (ctx: Context, bot: Telegraf) => {
       reply_markup: { inline_keyboard: HIDE_AD_REASON_BUTTONS(adId) },
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 
@@ -104,7 +113,9 @@ const hideAdReason = async (ctx: Context) => {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery || !ctx.from?.id) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const [, hideReason, adId] = (
@@ -112,13 +123,17 @@ const hideAdReason = async (ctx: Context) => {
     ).data.split(":");
 
     if (!adId) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const ad = await getAdvertisementById(adId);
 
     if (!ad) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND);
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     await ctx.deleteMessage();
@@ -134,7 +149,9 @@ const hideAdReason = async (ctx: Context) => {
 
     return ctx.reply(MESSAGES.AD_HIDDEN_THANKS);
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
 

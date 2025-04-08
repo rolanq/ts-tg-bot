@@ -1,10 +1,17 @@
 import {
+  CLOSE_BUTTONS,
+  EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
+} from "constants/buttons/buttons";
+import {
   ADVERTISEMENT_MESSAGE,
   ADVERTISEMENT_MESSAGE_DRAFT,
+  ERROR_MESSAGES,
   MESSAGES,
 } from "constants/messages";
+import { getAdvertisementDraft } from "services/advertismentDraft";
 import { getBrandById, getCarModelById } from "services/brandService";
 import { getRegionById } from "services/regionService";
+import { Context } from "telegraf";
 
 import { IAdvertisement, IAdvertisementDraft } from "utils/db";
 
@@ -66,7 +73,7 @@ export const renderAdvertismentMessage = async (
       tempAd.regionName = "Регион не выбран";
     }
 
-    return (isDraft ? ADVERTISEMENT_MESSAGE_DRAFT : ADVERTISEMENT_MESSAGE)
+    return (isDraft ? ADVERTISEMENT_MESSAGE_DRAFT(tempAd.adPhotosCount) : ADVERTISEMENT_MESSAGE)
       .replace(/{brandName}/g, tempAd.brandName)
       .replace(/{carModel}/g, tempAd.carModelName)
       .replace(/{year}/g, tempAd.adYear)
@@ -100,5 +107,33 @@ export const renderAdvertisementDraftMessage = async (
     );
   } catch (error) {
     return "";
+  }
+};
+
+export const sendDraftMessage = async (ctx: Context) => {
+  try {
+    if (!ctx.from?.id) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_USER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
+    const existingDraft = await getAdvertisementDraft(ctx.from.id.toString());
+
+    if (!existingDraft) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
+    return ctx.reply(await renderAdvertisementDraftMessage(existingDraft), {
+      reply_markup: {
+        inline_keyboard: [...EXISTING_ADVERTISEMENT_DRAFT_BUTTONS],
+      },
+    });
+  } catch (error) {
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

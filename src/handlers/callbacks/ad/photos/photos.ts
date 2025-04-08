@@ -1,5 +1,6 @@
 import {
   AD_PUBLISH_BUTTONS,
+  CLOSE_BUTTONS,
   FINISH_PHOTOS_BUTTONS,
 } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
@@ -14,7 +15,9 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
   bot.action("done_photos", async (ctx) => {
     try {
       if (!ctx.from?.id) {
-        return ctx.reply(ERROR_MESSAGES.ERROR);
+        return ctx.reply(ERROR_MESSAGES.ERROR, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
       }
 
       await ctx.deleteMessage();
@@ -22,7 +25,9 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
 
       if (!draft) {
-        return ctx.reply(ERROR_MESSAGES.ERROR);
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
       }
 
       const message = await renderAdvertismentMessage(draft);
@@ -45,7 +50,9 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         reply_markup: { inline_keyboard: AD_PUBLISH_BUTTONS },
       });
     } catch (error) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
   });
 
@@ -63,7 +70,9 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
       });
     } catch (error) {
-      return ctx.reply(ERROR_MESSAGES.ERROR);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
   });
 };

@@ -2,18 +2,20 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class SavedSearch extends Model {
-    static associate(models) {
-      // определяем связи здесь если нужно
-    }
+  class Notification extends Model {
+    static associate(models) {}
   }
 
-  SavedSearch.init(
+  Notification.init(
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       userId: {
         type: DataTypes.STRING,
@@ -35,12 +37,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(12, 0),
         allowNull: true,
       },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,
-      modelName: "SavedSearch",
+      modelName: "Notification",
+      tableName: "Notifications",
     }
   );
 
-  return SavedSearch;
+  return Notification;
 };

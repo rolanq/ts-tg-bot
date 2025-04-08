@@ -4,13 +4,16 @@ import { getRegionsPerPage } from "services/regionService";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
 import { renderPaginatedRegionButtons } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 
 export const registerRegionPagination = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 
     if (!callbackQuery) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_REGIONS);
+      return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
     }
 
     const page = (callbackQuery as CallbackQuery.DataQuery).data.split(":")[1];
@@ -32,6 +35,8 @@ export const registerRegionPagination = async (ctx: Context) => {
       inline_keyboard: keyboard,
     });
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };
