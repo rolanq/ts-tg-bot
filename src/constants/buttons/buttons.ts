@@ -14,6 +14,12 @@ export const CLOSE_BUTTONS = (messageId?: number) => [
 export const EXISTING_ADVERTISEMENT_DRAFT_BUTTONS = [
   [
     {
+      text: "Опубликовать 🚀",
+      callback_data: "publish_ad",
+    },
+  ],
+  [
+    {
       text: "Продолжить 📝",
       callback_data: "continue_ad_draft",
     },
@@ -116,15 +122,6 @@ export const PHOTOS_BUTTONS = [
     {
       text: "Удалить все фото 🗑️",
       callback_data: "delete_all_photos",
-    },
-  ],
-];
-
-export const AD_PUBLISH_BUTTONS = [
-  [
-    {
-      text: "Опубликовать 🚀",
-      callback_data: "publish_ad",
     },
   ],
 ];

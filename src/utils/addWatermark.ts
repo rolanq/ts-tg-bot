@@ -15,32 +15,41 @@ if (!fs.existsSync(tempDir)) {
 
 export async function addWatermark(imageBuffer: Buffer) {
   try {
-    // Получаем метаданные изображения
     const metadata = await sharp(imageBuffer).metadata();
-    const fontSize = Math.min(metadata.width!, metadata.height!) / 10;
+    const fontSize = Math.min(metadata.width!, metadata.height!) / 6;
 
     const watermarkText = `
-    <svg width="${metadata.width}" height="${metadata.height}">
-      <style>
-        .text {
-          fill: white;
-          font-size: ${fontSize}px;
-          font-family: sans-serif;
-          opacity: 0.4;
-          transform: rotate(-45deg);
-        }
-      </style>
-      <defs>
-        <pattern id="watermark" x="0" y="0" width="${
-          metadata.width! / 2
-        }" height="${metadata.height! / 2}" patternUnits="userSpaceOnUse">
-          <text x="50%" y="50%" text-anchor="middle" class="text" dominant-baseline="middle">${
-            process.env.WATERMARK
-          }</text>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#watermark)"/>
-    </svg>
+    <svg width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${metadata.width} ${metadata.height}">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:white;stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:white;stop-opacity:0.7" />
+          </linearGradient>
+        </defs>
+        <style>
+          .text {
+            fill: white;
+            font-size: ${fontSize}px;
+            font-family: sans-serif;
+            font-weight: bold;
+            opacity: 0.5;
+            paint-order: stroke;
+            stroke: rgba(0,0,0,0.5);
+            stroke-width: 2px;
+          }
+        </style>
+        <g transform="translate(${metadata.width! / 2} ${metadata.height! / 2})">
+          <g transform="rotate(-30)">
+            <text 
+              x="0" 
+              y="0" 
+              text-anchor="middle" 
+              dominant-baseline="middle"
+              class="text"
+            >${process.env.BOT_TITLE}</text>
+          </g>
+        </g>
+      </svg>
   `;
 
     const svgPath = path.join(tempDir, `watermark-${Date.now()}.svg`);
@@ -51,6 +60,7 @@ export async function addWatermark(imageBuffer: Buffer) {
         {
           input: svgPath,
           gravity: "center",
+          blend: "over",
         },
       ])
       .jpeg({ quality: 90 })

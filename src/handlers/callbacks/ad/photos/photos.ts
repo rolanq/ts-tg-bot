@@ -1,6 +1,6 @@
 import {
-  AD_PUBLISH_BUTTONS,
   CLOSE_BUTTONS,
+  EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
   FINISH_PHOTOS_BUTTONS,
 } from "constants/buttons/buttons";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
@@ -42,12 +42,12 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         );
 
         return ctx.reply(MESSAGES.AD_READY, {
-          reply_markup: { inline_keyboard: AD_PUBLISH_BUTTONS },
+          reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
         });
       }
 
       await ctx.reply(message, {
-        reply_markup: { inline_keyboard: AD_PUBLISH_BUTTONS },
+        reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
       });
     } catch (error) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {
@@ -63,8 +63,6 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
       await updateAdvertisementDraft(ctx.from.id.toString(), {
         photos: [],
       });
-
-      await ctx.deleteMessage();
 
       await ctx.reply(MESSAGES.PHOTOS_DELETED, {
         reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
