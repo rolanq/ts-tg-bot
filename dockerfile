@@ -1,7 +1,21 @@
 FROM node:18-alpine
 
-# Установка шрифтов
-RUN apk add --no-cache fontconfig font-liberation
+# Установка шрифтов и зависимостей
+RUN apk add --no-cache \
+    fontconfig \
+    freetype \
+    freetype-dev \
+    font-liberation \
+    ttf-liberation \
+    && mkdir -p /usr/share/fonts \
+    && fc-cache -fv
+
+# Создаем базовую конфигурацию fontconfig
+RUN mkdir -p /etc/fonts && echo '<?xml version="1.0"?>\
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">\
+<fontconfig>\
+  <dir>/usr/share/fonts</dir>\
+</fontconfig>' > /etc/fonts/fonts.conf
 
 WORKDIR /app
 
