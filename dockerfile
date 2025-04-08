@@ -1,5 +1,9 @@
 FROM node:18-alpine
 
+# Установка шрифтов
+RUN apk add --no-cache fontconfig msttcorefonts-installer
+RUN update-ms-fonts && fc-cache -f
+
 WORKDIR /app
 
 COPY package*.json ./

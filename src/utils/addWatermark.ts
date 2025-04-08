@@ -2,8 +2,8 @@ import sharp from "sharp";
 import fs from "fs";
 import path from "path";
 import { promisify } from "util";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,61 +15,61 @@ if (!fs.existsSync(tempDir)) {
 
 export async function addWatermark(imageBuffer: Buffer) {
   try {
-    // Проверяем входной буфер
-    if (!imageBuffer || imageBuffer.length === 0) {
-      console.error('Empty image buffer received');
-      return imageBuffer;
-    }
-
-    // Получаем метаданные изображения и логируем их
     const metadata = await sharp(imageBuffer).metadata();
-    console.log('Image metadata:', metadata);
+    const fontSize = Math.min(metadata.width!, metadata.height!) / 6;
 
     const watermarkText = `
-      <svg width="1280" height="960">
-        <text 
-          x="640" 
-          y="480" 
-          font-family="sans-serif"
-          font-size="120px"
-          fill="white"
-          text-anchor="middle"
-          dominant-baseline="middle"
-          style="opacity: 0.5;"
-        >${process.env.WATERMARK || '@channel'}</text>
+    <svg width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${
+      metadata.width
+    } ${metadata.height}">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:white;stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:white;stop-opacity:0.7" />
+          </linearGradient>
+        </defs>
+        <style>
+          .text {
+            fill: white;
+            font-size: ${fontSize}px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            opacity: 0.4;
+          }
+        </style>
+        <g transform="translate(${metadata.width! / 2} ${
+      metadata.height! / 2
+    })">
+          <g transform="rotate(-30)">
+            <text 
+              x="0" 
+              y="0" 
+              text-anchor="middle" 
+              dominant-baseline="middle"
+              class="text"
+            >${process.env.BOT_TITLE}</text>
+          </g>
+        </g>
       </svg>
-    `;
-
-    // Логируем SVG для проверки
-    console.log('Generated SVG:', watermarkText);
+  `;
 
     const svgPath = path.join(tempDir, `watermark-${Date.now()}.svg`);
     await promisify(fs.writeFile)(svgPath, watermarkText);
 
-    // Проверяем, что файл создался
-    console.log('SVG file created at:', svgPath);
-    console.log('SVG file exists:', fs.existsSync(svgPath));
-
-    // Применяем водяной знак
     const result = await sharp(imageBuffer)
       .composite([
         {
           input: svgPath,
-          gravity: 'center',
-        }
+          gravity: "center",
+          blend: "over",
+        },
       ])
-      .jpeg()
+      .jpeg({ quality: 90 })
       .toBuffer();
 
-    // Удаляем временный файл
     await promisify(fs.unlink)(svgPath);
-    
     return result;
   } catch (error) {
-    // Подробное логирование ошибки
-    console.error('Error in addWatermark:', error);
-    // @ts-ignore
-    console.error('Error stack:', error.stack);
     return imageBuffer;
   }
 }
