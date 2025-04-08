@@ -1,8 +1,11 @@
 FROM node:18-alpine
 
-# Установка шрифтов
-RUN apk add --no-cache fontconfig ttf-liberation
-RUN update-ms-fonts && fc-cache -f
+# Настройка зеркал и установка шрифтов
+RUN echo "https://mirror.yandex.ru/mirrors/alpine/v3.21/main" > /etc/apk/repositories && \
+    echo "https://mirror.yandex.ru/mirrors/alpine/v3.21/community" >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache fontconfig ttf-liberation && \
+    fc-cache -f
 
 WORKDIR /app
 
