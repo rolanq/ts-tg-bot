@@ -131,7 +131,9 @@ export const ADVERTISEMENT_MESSAGE = `
 
 📱 Контакты:
 Телефон: {phoneNumber}
-Telegram: @{telegramUsername}`;
+Telegram: @{telegramUsername}
+ID Лота: {lotId}
+`;
 
 export const PLURAL_PHOTOS_FORM = (count: number) =>
   count === 1

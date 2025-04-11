@@ -38,6 +38,7 @@ export const renderAdvertismentMessage = async (
       adPhoneNumber: ad.phoneNumber || "Не указано",
       adTelegramUsername: ad.telegramUsername || "Не указано",
       adPhotosCount: ad.photos?.length || 0,
+      adLotId: ad.id ? ad.id.toString() : "",
     };
 
     if ("isActive" in ad) {
@@ -89,7 +90,8 @@ export const renderAdvertismentMessage = async (
       .replace(/{status}/g, tempAd.adStatus)
       .replace(/{telegramUsername}/g, tempAd.adTelegramUsername)
       .replace(/{photosCount}/g, tempAd.adPhotosCount.toString())
-      .replace(/{phoneNumber}/g, tempAd.adPhoneNumber);
+      .replace(/{phoneNumber}/g, tempAd.adPhoneNumber)
+      .replace(/{lotId}/g, tempAd.adLotId);
   } catch (error) {
     return "";
   }

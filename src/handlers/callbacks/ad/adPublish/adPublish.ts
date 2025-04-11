@@ -3,7 +3,6 @@ import { USER_STATE_ENUM } from "constants/config";
 import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { sendAdToChannel } from "handlers/common/channelMessage";
 import { getWhereConditionForNotifications } from "handlers/common/createWhereCondition";
-import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { createAdvertisement } from "services/advertisment";
 import {
   dropAdvertisementDraft,
