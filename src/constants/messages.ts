@@ -116,6 +116,8 @@ export const CHOOSE_MESSAGES = {
 };
 
 export const ADVERTISEMENT_MESSAGE = `
+Объявление №: {lotId}
+
 🚗 {brandName} {carModel} {year} {status}
 
 📍 Регион: {region}
@@ -132,7 +134,6 @@ export const ADVERTISEMENT_MESSAGE = `
 📱 Контакты:
 Телефон: {phoneNumber}
 Telegram: @{telegramUsername}
-ID Лота: {lotId}
 `;
 
 export const PLURAL_PHOTOS_FORM = (count: number) =>
