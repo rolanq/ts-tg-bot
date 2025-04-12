@@ -36,6 +36,13 @@ export const createAdvertisement = async (draft: IAdvertisementDraft) => {
   return advertisement.get({ plain: true });
 };
 
+export const getAllAdvertisements = async () => {
+  const advertisements = await Advertisement.findAll();
+  return advertisements.map((advertisement) =>
+    advertisement.get({ plain: true })
+  );
+};
+
 export const getAdvertisements = async (
   whereCondition: WhereOptions<IAdvertisement>
 ) => {

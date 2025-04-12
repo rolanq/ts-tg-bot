@@ -35,6 +35,8 @@ export async function addWatermark(imageBuffer: Buffer) {
             font-family: "Liberation Sans", sans-serif;
             font-weight: bold;
             opacity: 0.4;
+            stroke: gray;
+            stroke-width: 1px;
           }
         </style>
         <g transform="translate(${metadata.width! / 2} ${

@@ -7,6 +7,8 @@ export const createUser = async (userId: string, username: string) => {
     username: username,
     state: USER_STATE_ENUM.MENU,
     availableListings: 0,
+    isAdmin: false,
+    isBanned: false,
   });
 
   return user;
@@ -73,3 +75,9 @@ export const getStatisticsByUserId = async (userId: string) => {
       .reduce((acc, ad) => acc + Number(ad.price), 0),
   };
 };
+
+export const getAllUsers = async () => {
+  const users = await User.findAll();
+  return users.map((user) => user.get({ plain: true }));
+};
+

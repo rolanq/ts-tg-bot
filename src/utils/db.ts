@@ -32,6 +32,8 @@ export interface IUser {
   username: string;
   state: USER_STATE_ENUM;
   availableListings: number;
+  isAdmin: boolean;
+  isBanned: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
