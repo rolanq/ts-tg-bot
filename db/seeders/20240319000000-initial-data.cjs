@@ -2,6 +2,34 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    // Проверяем наличие данных в таблицах
+    const regionsCount = await queryInterface.sequelize.query(
+      'SELECT COUNT(*) FROM "Regions"',
+      { type: queryInterface.sequelize.QueryTypes.SELECT }
+    );
+
+    const brandsCount = await queryInterface.sequelize.query(
+      'SELECT COUNT(*) FROM "Brands"',
+      { type: queryInterface.sequelize.QueryTypes.SELECT }
+    );
+
+    const carModelsCount = await queryInterface.sequelize.query(
+      'SELECT COUNT(*) FROM "CarModels"',
+      { type: queryInterface.sequelize.QueryTypes.SELECT }
+    );
+
+    // Если в любой из таблиц уже есть данные, пропускаем сиды
+    if (
+      regionsCount[0].count > 0 ||
+      brandsCount[0].count > 0 ||
+      carModelsCount[0].count > 0
+    ) {
+      console.log(
+        "База данных уже содержит начальные данные. Пропускаем сиды."
+      );
+      return;
+    }
+
     // Добавление регионов
     await queryInterface.bulkInsert(
       "Regions",
