@@ -39,8 +39,8 @@ export async function getModelsPerPage(page: number, brandId: number): Promise<{
   const models = await CarModel.findAll({ 
     attributes: ["id", "name"],
     order: [["name", "ASC"]],
-    limit: 8,
-    offset: (page - 1) * 8,
+    limit: 15,
+    offset: (page - 1) * 15,
     where: {
       brandId,
     },
@@ -55,7 +55,7 @@ export async function getModelsPerPage(page: number, brandId: number): Promise<{
   return {
     models: models.map((model) => model.get({ plain: true })),
     total: modelsCount,
-    isLastPage: modelsCount <= page * 8,
+    isLastPage: modelsCount <= page * 15,
   };
 }
 

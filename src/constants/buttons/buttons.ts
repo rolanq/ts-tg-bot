@@ -50,7 +50,7 @@ export const EDIT_AD_DRAFT_BUTTONS = [
   ],
   [
     {
-      text: "Бренд 🚙",
+      text: "Марка 🚙",
       callback_data: `edit_field_draft:${STEPS_ENUM.BRAND}`,
     },
     {
@@ -138,7 +138,7 @@ export const SEARCH_PARAMETERS_BUTTONS_FILLED = (
       callback_data: "select_search_filter:region",
     },
     {
-      text: brand ? `Бренд: ${brand} 🚙` : "Выберите бренд 🚙",
+      text: brand ? `Марка: ${brand} 🚙` : "Выберите марку 🚙",
       callback_data: "select_search_filter:brand",
     },
   ],
@@ -271,7 +271,7 @@ export const NOTIFICATION_BUTTONS = (
   regionName: string
 ) => [
   {
-    text: `${brandName ? brandName : "Любой бренд"} в ${
+    text: `${brandName ? brandName : "Любая марка"} в ${
       regionName ? regionName : "Любой регион"
     }. ${notification.priceFrom ? `От ${notification.priceFrom}` : ""} ${
       notification.priceTo ? `до ${notification.priceTo}` : ""

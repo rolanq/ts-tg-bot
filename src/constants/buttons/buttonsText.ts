@@ -19,5 +19,5 @@ export const COMMANDS_TEXT = {
 
 export const SEARCH_FILTER_RESET_BUTTON_TEXT = {
   region: "Сбросить регион 🌎",
-  brand: "Сбросить бренд 🚙",
+  brand: "Сбросить марку 🚙",
 } as const;

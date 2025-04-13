@@ -29,12 +29,12 @@ export const handleNotifications = async (ctx: Context) => {
 
     const keyboard = await Promise.all(
       notifications.map(async (notification) => {
-        let brandName = "Любой бренд";
+        let brandName = "Любая марка";
         let regionName = "Любой регион";
 
         if (notification.brandId) {
           const brand = await getBrandById(notification.brandId);
-          brandName = brand?.name || "Любой бренд";
+          brandName = brand?.name || "Любая марка";
         }
 
         if (notification.regionId) {

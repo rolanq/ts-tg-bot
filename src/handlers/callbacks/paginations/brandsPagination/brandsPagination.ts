@@ -5,7 +5,7 @@ import { CallbackQuery } from "@telegraf/types";
 import { renderPaginatedBrandButtons } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
-export const registerMarksPaginations = async (ctx: Context) => {
+export const registerBrandsPaginations = async (ctx: Context) => {
   try {
     const { callbackQuery } = ctx;
 

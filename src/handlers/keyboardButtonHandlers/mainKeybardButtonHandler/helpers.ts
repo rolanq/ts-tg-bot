@@ -55,9 +55,9 @@ export const renderAdvertismentMessage = async (
 
     if (ad.brandId) {
       const brand = await getBrandById(ad.brandId);
-      tempAd.brandName = brand?.name || "Имя бренда не найдено";
+      tempAd.brandName = brand?.name || "Имя марки не найдено";
     } else {
-      tempAd.brandName = "Бренд не выбран";
+      tempAd.brandName = "Марка не выбрана";
     }
 
     if (ad.modelId) {
