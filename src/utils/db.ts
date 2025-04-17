@@ -52,7 +52,7 @@ export interface IAdvertisement {
   description: string;
   price: number;
   phoneNumber: string;
-  telegramUsername: string;
+  telegramUsername?: string;
   autotekaLink: string | null;
   photos: string[];
   isActive: boolean;
