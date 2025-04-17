@@ -36,7 +36,9 @@ export const renderAdvertismentMessage = async (
       adDescription: ad.description || "Не указано",
       adPrice: ad.price ? ad.price.toString() : "Не указано",
       adPhoneNumber: ad.phoneNumber || "Не указано",
-      adTelegramUsername: ad.telegramUsername || "Не указано",
+      adTelegramUsername: ad.telegramUsername
+        ? `@${ad.telegramUsername}`
+        : "Не указано",
       adPhotosCount: ad.photos?.length || 0,
       adLotId: ad.id ? ad.id.toString() : "",
     };
@@ -74,7 +76,11 @@ export const renderAdvertismentMessage = async (
       tempAd.regionName = "Регион не выбран";
     }
 
-    return (isDraft ? ADVERTISEMENT_MESSAGE_DRAFT(tempAd.adPhotosCount) : ADVERTISEMENT_MESSAGE)
+    let message = (
+      isDraft
+        ? ADVERTISEMENT_MESSAGE_DRAFT(tempAd.adPhotosCount)
+        : ADVERTISEMENT_MESSAGE
+    )
       .replace(/{brandName}/g, tempAd.brandName)
       .replace(/{carModel}/g, tempAd.carModelName)
       .replace(/{year}/g, tempAd.adYear)
@@ -92,6 +98,19 @@ export const renderAdvertismentMessage = async (
       .replace(/{photosCount}/g, tempAd.adPhotosCount.toString())
       .replace(/{phoneNumber}/g, tempAd.adPhoneNumber)
       .replace(/{lotId}/g, tempAd.adLotId);
+
+    if (ad.autotekaLink) {
+      message = message.replace(
+        /{autotekaLink}/g,
+        `🔗 Автотека: ${ad.autotekaLink}\n`
+      );
+    } else {
+      message = message.replace(
+        /{autotekaLink}/g,
+        isDraft ? "Автотека не указана\n" : ""
+      );
+    }
+    return message;
   } catch (error) {
     return "";
   }

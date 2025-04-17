@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       telegramUsername: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       regionId: {
         type: DataTypes.INTEGER,
@@ -72,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      autotekaLink: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       photos: {
         type: DataTypes.ARRAY(DataTypes.STRING),

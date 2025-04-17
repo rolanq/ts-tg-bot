@@ -43,13 +43,10 @@ export const adCreation = async (ctx: Context) => {
     }
 
     const data = (callbackQuery as CallbackQuery.DataQuery).data;
-    console.log(data);
     
     if (data.startsWith("select")) {
       const [, step, selected, isEdit] = data.split(":");
       const edit = isEdit === "edit";
-
-      console.log(step);
 
       switch (step as STEPS_ENUM) {
         case STEPS_ENUM.REGION:

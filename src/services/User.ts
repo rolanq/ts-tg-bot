@@ -1,4 +1,5 @@
 import { HIDE_REASONS, USER_STATE_ENUM } from "constants/config";
+import { Op } from "sequelize";
 import { Advertisement, IUser, User } from "utils/db";
 
 export const createUser = async (userId: string, username: string) => {
@@ -48,9 +49,7 @@ export const createUserIfNotExists = async (
   return user;
 };
 export const getUserById = async (userId: string) => {
-  const user = await User.findOne({
-    where: { id: userId },
-  });
+  const user = await User.findByPk(userId);
 
   return user?.get({ plain: true });
 };
@@ -79,5 +78,20 @@ export const getStatisticsByUserId = async (userId: string) => {
 export const getAllUsers = async () => {
   const users = await User.findAll();
   return users.map((user) => user.get({ plain: true }));
+};
+
+export const getUserByIdOrUsername = async (parameter: string) => {
+  const user = await User.findOne({
+    where: { [Op.or]: [{ id: parameter }, { username: parameter }] },
+  });
+
+  return user?.get({ plain: true });
+};
+
+export const getAdmins = async () => {
+  const admins = await User.findAll({
+    where: { isAdmin: true },
+  });
+  return admins.map((admin) => admin.get({ plain: true }));
 };
 

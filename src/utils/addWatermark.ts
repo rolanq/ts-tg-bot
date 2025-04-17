@@ -13,12 +13,12 @@ if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir, { recursive: true });
 }
 
-export async function addWatermark(imageBuffer: Buffer) {
+export async function addWatermark(imageBuffer: Buffer, watermarkText: string) {
   try {
     const metadata = await sharp(imageBuffer).metadata();
     const fontSize = Math.min(metadata.width!, metadata.height!) / 6;
 
-    const watermarkText = `
+    const watermarkTextSvg = `
     <svg width="${metadata.width}" height="${metadata.height}" viewBox="0 0 ${
       metadata.width
     } ${metadata.height}">
@@ -49,14 +49,14 @@ export async function addWatermark(imageBuffer: Buffer) {
               text-anchor="middle" 
               dominant-baseline="middle"
               class="text"
-            >${process.env.BOT_TITLE}</text>
+            >${watermarkText}</text>
           </g>
         </g>
       </svg>
   `;
 
     const svgPath = path.join(tempDir, `watermark-${Date.now()}.svg`);
-    await promisify(fs.writeFile)(svgPath, watermarkText);
+    await promisify(fs.writeFile)(svgPath, watermarkTextSvg);
 
     const result = await sharp(imageBuffer)
       .composite([

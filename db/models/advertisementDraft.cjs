@@ -65,6 +65,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      autotekaLink: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       photos: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],

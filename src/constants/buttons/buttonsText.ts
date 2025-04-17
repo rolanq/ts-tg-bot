@@ -10,6 +10,7 @@ export const ADMIN_PANEL_BUTTONS_TEXT = {
   STATISTIC: "Статистика 📊",
   USERS: "Пользователи 🧑‍💻",
   MAIN_MENU: "Главное меню 🔙",
+  BOT_SETTINGS: "Настройки бота 🔧",
 } as const;
 
 export const COMMANDS_TEXT = {

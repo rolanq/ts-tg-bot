@@ -9,12 +9,6 @@ export const handleStatistic = async (ctx: Context) => {
       return;
     }
 
-    const user = await getUserById(ctx.from?.id.toString());
-
-    if (!user || !user.isAdmin) {
-      return;
-    }
-
     const botStatistics = await getBotStatistics();
     const message = ADMIN_STATISTIC_MESSAGE(
       ctx.from?.id.toString(),

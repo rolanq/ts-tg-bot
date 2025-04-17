@@ -2,11 +2,13 @@ import {
   InlineKeyboardButton,
   InputMediaPhoto,
 } from "telegraf/typings/core/types/typegram";
-import { IAdvertisement, IAdvertisementDraft, ISavedSearch } from "./db";
+import { IAdvertisement, IAdvertisementDraft, ISavedSearch, IUser } from "./db";
 import { Op, WhereOptions } from "sequelize";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { MediaGroup } from "telegraf/typings/telegram-types";
 import { BAD_WORDS } from "constants/config";
+import { getAdvertisementById } from "services/advertisment";
+import { getUserById, getUserByIdOrUsername } from "services/User";
 
 export const getInlineKeyboard = (buttons: InlineKeyboardButton[]) => {
   return {
@@ -153,4 +155,31 @@ export const parsePhoneNumber = (phoneNumber: string) => {
   }
 
   return `+7${match[2]}`;
+};
+
+export const parseAutotekaLink = (link: string) => {
+  const cleaned = link.replace(/\s+/g, "");
+
+  const match = cleaned.match(/^https?:\/\/(www\.)?autoteka\.ru/);
+  if (!match) {
+    return null;
+  }
+
+  return cleaned;
+};
+
+export const searchUser = async (
+  search: string
+): Promise<{ user?: IUser; byAd: boolean } | undefined> => {
+  try {
+    const ad = await getAdvertisementById(search);
+
+    if (ad) {
+      return { user: await getUserById(ad.userId), byAd: true };
+    }
+
+    return undefined;
+  } catch (error) {
+    return { user: await getUserByIdOrUsername(search), byAd: false };
+  }
 };

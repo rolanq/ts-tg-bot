@@ -20,6 +20,8 @@ import {
   FINISH_PHOTOS_BUTTONS,
   CLOSE_BUTTONS,
   EDIT_AD_DRAFT_BUTTONS,
+  SKIP_BUTTON,
+  DELETE_AUTOTEKA_LINK_BUTTON,
 } from "constants/buttons/buttons";
 import { CallbackQuery } from "@telegraf/types";
 import { updateUser } from "services/User";
@@ -57,6 +59,12 @@ const adDraftContinue = async (ctx: Context) => {
         return ctx.reply(CHOOSE_MESSAGES.PRICE);
       case STEPS_ENUM.PHONENUMBER:
         return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER);
+      case STEPS_ENUM.AUTOTEKA_LINK:
+        return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK, {
+          reply_markup: {
+            inline_keyboard: SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
+          },
+        });
       case STEPS_ENUM.PHOTOS:
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
           reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
@@ -128,7 +136,6 @@ const adDraftEditField = async (ctx: Context) => {
     }
 
     await ctx.deleteMessage();
-    console.log(field);
 
     switch (field as STEPS_ENUM) {
       case STEPS_ENUM.REGION:
@@ -163,8 +170,6 @@ const adDraftEditField = async (ctx: Context) => {
         });
       case STEPS_ENUM.DRIVETYPE:
         const keyboardDriveTypes = getFirstPageForDriveTypes(true);
-        console.log(keyboardDriveTypes);
-
         return ctx.reply(CHOOSE_MESSAGES.DRIVE_TYPE, {
           reply_markup: { inline_keyboard: keyboardDriveTypes },
         });
@@ -199,6 +204,13 @@ const adDraftEditField = async (ctx: Context) => {
           currentStep: STEPS_ENUM.PHONENUMBER_EDIT,
         });
         return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER);
+      case STEPS_ENUM.AUTOTEKA_LINK:
+        await updateAdvertisementDraft(ctx.from?.id.toString(), {
+          currentStep: STEPS_ENUM.AUTOTEKA_LINK_EDIT,
+        });
+        return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK_EDIT, {
+          reply_markup: { inline_keyboard: DELETE_AUTOTEKA_LINK_BUTTON },
+        });
       case STEPS_ENUM.PHOTOS:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.PHOTOS_EDIT,

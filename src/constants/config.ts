@@ -28,6 +28,8 @@ export enum STEPS_ENUM {
   PRICE_EDIT = "price_edit",
   PHONENUMBER = "phonenumber",
   PHONENUMBER_EDIT = "phonenumber_edit",
+  AUTOTEKA_LINK = "autoteka_link",
+  AUTOTEKA_LINK_EDIT = "autoteka_link_edit",
   PHOTOS = "photos",
   PHOTOS_EDIT = "photos_edit",
 }
@@ -37,6 +39,16 @@ export enum USER_STATE_ENUM {
   AD_CREATION = "adCreation",
   SEARCH_PRICE_FROM = "search_priceFrom",
   SEARCH_PRICE_TO = "search_priceTo",
+  SEARCHING_USER = "searching_user",
+  EDIT_SUPPORT_USERNAME = "edit_support_username",
+  EDIT_SUPPORT_TEXT = "edit_support_text",
+  EDIT_WATERMARK = "edit_watermark",
+}
+
+export enum BOT_SETTINGS_EDIT_STATE {
+  SUPPORT_USERNAME = "support_username",
+  SUPPORT_TEXT = "support_text",
+  WATERMARK = "watermark",
 }
 
 export const RESTRICTIONS = {

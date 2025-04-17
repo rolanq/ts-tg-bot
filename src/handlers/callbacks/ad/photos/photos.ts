@@ -42,7 +42,9 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         );
 
         return ctx.reply(MESSAGES.AD_READY, {
-          reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
+          reply_markup: {
+            inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
+          },
         });
       }
 
@@ -50,6 +52,8 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
       });
     } catch (error) {
+      console.log(error);
+      
       return ctx.reply(ERROR_MESSAGES.ERROR, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });

@@ -9,11 +9,22 @@ import {
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { addWatermark } from "utils/addWatermark";
+import { getBotSettings } from "services/botSettings";
 
-export const registerPhotosHandler = (bot: Telegraf, isEdit: boolean = false) => {
+export const registerPhotosHandler = (
+  bot: Telegraf,
+  isEdit: boolean = false
+) => {
   bot.on(message("photo"), async (ctx) => {
     try {
       if (!ctx.from?.id) {
+        ctx.reply(ERROR_MESSAGES.ERROR);
+        return;
+      }
+
+      const botSettings = await getBotSettings();
+
+      if (!botSettings) {
         ctx.reply(ERROR_MESSAGES.ERROR);
         return;
       }
@@ -29,6 +40,10 @@ export const registerPhotosHandler = (bot: Telegraf, isEdit: boolean = false) =>
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
 
+      if (draft?.currentStep !== STEPS_ENUM.PHOTOS) {
+        return;
+      }
+
       if (draft) {
         const photos = [...(draft.photos || [])];
 
@@ -43,7 +58,8 @@ export const registerPhotosHandler = (bot: Telegraf, isEdit: boolean = false) =>
         const response = await fetch(fileUrl);
         const imageBuffer = await response.arrayBuffer();
         const processedImageBuffer = await addWatermark(
-          Buffer.from(imageBuffer)
+          Buffer.from(imageBuffer),
+          botSettings.WatermarkText
         );
 
         const sentPhoto = await ctx.telegram.sendPhoto(ctx.chat.id, {

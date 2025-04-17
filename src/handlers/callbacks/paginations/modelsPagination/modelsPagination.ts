@@ -43,8 +43,6 @@ export const registerMarksPaginations = async (ctx: Context) => {
       inline_keyboard: keyboard,
     });
   } catch (error) {
-    console.log(error);
-
     return ctx.reply(ERROR_MESSAGES.ERROR, {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
     });

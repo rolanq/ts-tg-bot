@@ -31,6 +31,7 @@ export const createAdvertisement = async (draft: IAdvertisementDraft) => {
     channelStatus: "active",
     userId: draft.userId,
     telegramUsername: draft.telegramUsername,
+    autotekaLink: draft.autotekaLink,
   });
 
   return advertisement.get({ plain: true });

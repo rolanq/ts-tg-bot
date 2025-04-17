@@ -9,6 +9,7 @@ import { handleDescriptionStep } from "./adCreationSteps/descriptionStep";
 import { handlePriceStep } from "./adCreationSteps/priceStep";
 import { handlePhoneNumberStep } from "./adCreationSteps/phoneNumberStep";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { handleAutotekaLinkStep } from "./adCreationSteps/autotekaStep";
 
 export const handleAdCreationMessage = async (ctx: Context) => {
   try {
@@ -68,6 +69,12 @@ export const handleAdCreationMessage = async (ctx: Context) => {
         break;
       case STEPS_ENUM.PHONENUMBER_EDIT:
         await handlePhoneNumberStep(ctx, true);
+        break;
+      case STEPS_ENUM.AUTOTEKA_LINK:
+        await handleAutotekaLinkStep(ctx, false);
+        break;
+      case STEPS_ENUM.AUTOTEKA_LINK_EDIT:
+        await handleAutotekaLinkStep(ctx, true);
         break;
     }
   } catch (error) {

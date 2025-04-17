@@ -49,6 +49,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      autotekaLink: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       driveType: {
         type: Sequelize.STRING,
         allowNull: true,

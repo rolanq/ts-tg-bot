@@ -19,7 +19,7 @@ export const getAdvertisementDraft = async (
 
 export const createAdvertisementDraft = async (
   userId: string,
-  username: string
+  username: string | undefined
 ): Promise<IAdvertisementDraft | null> => {
   const draft = await AdvertisementDraft.create({
     userId: userId,
@@ -48,21 +48,10 @@ export const updateAdvertisementDraft = async (
 };
 
 export const dropAdvertisementDraft = async (userId: string) => {
-  await updateAdvertisementDraft(userId, {
-    currentStep: STEPS_ENUM.REGION,
-    brandId: null,
-    description: null,
-    modelId: null,
-    engineType: null,
-    driveType: null,
-    horsePower: null,
-    mileage: null,
-    phoneNumber: null,
-    transmission: null,
-    regionId: null,
-    year: null,
-    price: null,
-    photos: [],
+  await AdvertisementDraft.destroy({
+    where: {
+      userId: userId,
+    },
   });
 };
 

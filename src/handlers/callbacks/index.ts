@@ -5,6 +5,7 @@ import { registerSearchCallbacks } from "./search";
 import { registerProfileCallbacks } from "./profile";
 import { registerCommonCallbacks } from "./common";
 import { registerUserCallbacks } from "./user";
+import { registerAdminCallbacks } from "./admin/handleAllAdminCallbacks";
 
 export const registerAllCallbacks = (bot: Telegraf) => {
   registerAllPaginations(bot);
@@ -15,4 +16,6 @@ export const registerAllCallbacks = (bot: Telegraf) => {
   registerAdCallbacks(bot);
   registerSearchCallbacks(bot);
   registerProfileCallbacks(bot);
+
+  registerAdminCallbacks(bot);
 };

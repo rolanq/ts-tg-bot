@@ -1,13 +1,16 @@
 import { Message } from "@telegraf/types";
-import { CLOSE_BUTTONS, SKIP_BUTTON } from "constants/buttons/buttons";
+import {
+  CLOSE_BUTTONS,
+  FINISH_PHOTOS_BUTTONS,
+} from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
-import { parsePhoneNumber } from "utils/utils";
+import { parseAutotekaLink, parsePhoneNumber } from "utils/utils";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
-export const handlePhoneNumberStep = async (
+export const handleAutotekaLinkStep = async (
   ctx: Context,
   isEdit: boolean = false
 ) => {
@@ -20,17 +23,17 @@ export const handlePhoneNumberStep = async (
 
     const text = (ctx.message as Message.TextMessage).text;
 
-    const phoneNumber = parsePhoneNumber(text);
+    const autotekaLink = parseAutotekaLink(text);
 
-    if (!phoneNumber || !phoneNumber.startsWith("+7")) {
-      return ctx.reply(ERROR_MESSAGES.ERROR_PHONE_NUMBER, {
+    if (!autotekaLink) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_AUTOTEKA_LINK, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
     }
 
     await updateAdvertisementDraft(ctx.from.id.toString(), {
-      currentStep: STEPS_ENUM.AUTOTEKA_LINK,
-      phoneNumber: phoneNumber,
+      currentStep: STEPS_ENUM.PHOTOS,
+      autotekaLink: autotekaLink,
     });
 
     await ctx.deleteMessage();
@@ -39,10 +42,8 @@ export const handlePhoneNumberStep = async (
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK, {
-      reply_markup: {
-        inline_keyboard: SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
-      },
+    return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
+      reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

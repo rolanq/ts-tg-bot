@@ -1,4 +1,4 @@
-import { HIDE_REASONS, STEPS_ENUM } from "constants/config";
+import { BOT_SETTINGS_EDIT_STATE, HIDE_REASONS, STEPS_ENUM } from "constants/config";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
 import { IAdvertisement, INotification } from "utils/db";
 
@@ -94,11 +94,15 @@ export const EDIT_AD_DRAFT_BUTTONS = [
       callback_data: `edit_field_draft:${STEPS_ENUM.PRICE}`,
     },
     {
-      text: "Номер телефона 📱",
-      callback_data: `edit_field_draft:${STEPS_ENUM.PHONENUMBER}`,
+      text: "Ссылка на автотеку 🔗",
+      callback_data: `edit_field_draft:${STEPS_ENUM.AUTOTEKA_LINK}`,
     },
   ],
   [
+    {
+      text: "Номер телефона 📱",
+      callback_data: `edit_field_draft:${STEPS_ENUM.PHONENUMBER}`,
+    },
     {
       text: "Фотографии 🖼️",
       callback_data: `edit_field_draft:${STEPS_ENUM.PHOTOS}`,
@@ -289,3 +293,52 @@ export const NOTIFICATIONS_LIST_BUTTONS = [
   ],
   ...CLOSE_BUTTONS(),
 ];
+
+export const SKIP_BUTTON = (callbackData: string) => [
+  [
+    {
+      text: "Пропустить 🔄",
+      callback_data: `skip:${callbackData}`,
+    },
+  ],
+];
+
+export const DELETE_AUTOTEKA_LINK_BUTTON = [
+  [
+    {
+      text: "Удалить ссылку на автотеку 🔄",
+      callback_data: `delete_autoteka_link`,
+    },
+  ],
+];
+
+export const ADMIN_USER_BUTTONS = (userId: string, action: "ban" | "unban") => [
+  [
+    {
+      text: action === "ban" ? "Заблокировать 🚫" : "Разблокировать 🔓",
+      callback_data: `admin_user_ban:${userId}:${action}`,
+    },
+  ],
+  ...CLOSE_BUTTONS(),
+];
+
+export const ADMIN_BOT_SETTINGS_BUTTONS = [
+  [
+    {
+      text: "Изменить поддержку 📞",
+      callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.SUPPORT_USERNAME}`,
+    },
+    {
+      text: "Изменить текст поддержки 📝",
+      callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.SUPPORT_TEXT}`,
+    },
+  ],
+  [
+    {
+      text: "Изменить водяной знак 🖼️",
+      callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.WATERMARK}`,
+    },
+  ],
+  ...CLOSE_BUTTONS(),
+];
+

@@ -53,6 +53,7 @@ export interface IAdvertisement {
   price: number;
   phoneNumber: string;
   telegramUsername: string;
+  autotekaLink: string | null;
   photos: string[];
   isActive: boolean;
   isOnHold: boolean;
@@ -81,8 +82,9 @@ export interface IAdvertisementDraft {
   phoneNumber: string | null;
   photos: string[] | null;
   currentStep: STEPS_ENUM;
-  telegramUsername: string;
+  telegramUsername?: string;
   userId: string;
+  autotekaLink: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -109,6 +111,23 @@ export interface INotification {
   updatedAt?: Date;
 }
 
+export interface IMessageToDelete {
+  id?: number;
+  userId: string;
+  messagesToDelete: number[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IBotSettings {
+  id?: number;
+  WatermarkText: string;
+  SupportUsername: string;
+  SupportText: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export const Brand: ModelStatic<Model<IBrand>> = db.Brand;
 export const CarModel: ModelStatic<Model<ICarModel>> = db.CarModel;
 export const Region: ModelStatic<Model<IRegion>> = db.Region;
@@ -121,3 +140,6 @@ export const AdvertisementDraft: ModelStatic<Model<IAdvertisementDraft>> =
   db.AdvertisementDraft;
 export const User: ModelStatic<Model<IUser>> = db.User;
 export const Notification: ModelStatic<Model<INotification>> = db.Notification;
+export const MessageToDelete: ModelStatic<Model<IMessageToDelete>> =
+  db.MessageToDelete;
+export const BotSettings: ModelStatic<Model<IBotSettings>> = db.BotSettings;

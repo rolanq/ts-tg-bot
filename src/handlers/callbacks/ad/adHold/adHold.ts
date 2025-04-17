@@ -62,7 +62,7 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
         ctx.chat?.id,
         Number(messageId),
         undefined,
-        message
+        message,
       );
       const keyboard = AD_ACTIONS_BUTTONS(updatedAd, Number(messageId));
 

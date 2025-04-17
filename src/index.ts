@@ -3,8 +3,11 @@ dotenv.config();
 
 import { Telegraf } from "telegraf";
 import { registerAllHandlers } from "handlers";
+import { isUserBannedMiddleware } from "middleware/isUserBanned";
 
 const bot = new Telegraf(process.env.BOT_TOKEN || "");
+
+bot.use(isUserBannedMiddleware);
 
 bot.catch((err: unknown, ctx) => {
   console.error(`Ошибка для ${ctx.updateType}:`, err);

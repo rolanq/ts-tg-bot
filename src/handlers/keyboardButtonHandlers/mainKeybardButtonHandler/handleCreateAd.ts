@@ -53,7 +53,7 @@ export async function handleCreateAd(ctx: Context) {
 
     await createAdvertisementDraft(
       ctx.from.id.toString(),
-      ctx.from?.username || "Анонимно"
+      ctx.from?.username
     );
 
     const keyboard = await getFirstPageForRegions();
@@ -63,7 +63,7 @@ export async function handleCreateAd(ctx: Context) {
     });
   } catch (error) {
     console.log(error);
-    
+
     return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_CREATION, {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
     });
