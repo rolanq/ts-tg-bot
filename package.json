@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "npm run migrate && npm run seed && npm run start:production",
+    "start": "npm run start:production",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "migrate": "npx sequelize-cli db:migrate",
