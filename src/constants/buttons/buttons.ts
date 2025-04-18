@@ -1,4 +1,8 @@
-import { BOT_SETTINGS_EDIT_STATE, HIDE_REASONS, STEPS_ENUM } from "constants/config";
+import {
+  BOT_SETTINGS_EDIT_STATE,
+  HIDE_REASONS,
+  STEPS_ENUM,
+} from "constants/config";
 import { SEARCH_FILTER_RESET_BUTTON_TEXT } from "./buttonsText";
 import { IAdvertisement, INotification } from "utils/db";
 
@@ -342,3 +346,11 @@ export const ADMIN_BOT_SETTINGS_BUTTONS = [
   ...CLOSE_BUTTONS(),
 ];
 
+export const CHANNEL_BUTTON = [
+  [
+    {
+      text: "Перейти в канал 📺",
+      url: "https://t.me/prodaisam",
+    },
+  ],
+];
