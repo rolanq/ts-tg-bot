@@ -9,6 +9,9 @@ import {
   renderPaginatedEngineTypeButtons,
   renderPaginatedDriveTypeButtons,
   renderPaginatedTransmissionTypeButtons,
+  renderPaginatedBrandButtonsAdmin,
+  renderPaginatedModelButtonsAdmin,
+  renderPaginatedBrandModelButtonsAdmin,
 } from "../../constants/buttons/renderPaginatedButtons";
 import { getYearsPerPage } from "utils/utils";
 import {
@@ -51,7 +54,26 @@ export const getFirstPageForBrands = async (isEdit: boolean = false) => {
   );
 };
 
-export const getFirstPageForModels = async (brandId: number, isEdit: boolean = false) => {
+export const getFirstPageForBrandsAdmin = async () => {
+  const brands = await getBrandsPerPage(1);
+
+  return getPaginatedInlineKeyboard(
+    brands.brands,
+    renderPaginatedBrandButtonsAdmin,
+    {
+      buttonCallback: "page_brands",
+      totalItems: brands.total,
+      currentPage: 1,
+      isLastPage: brands.isLastPage,
+      itemsPerPage: 15,
+    }
+  );
+};
+
+export const getFirstPageForModels = async (
+  brandId: number,
+  isEdit: boolean = false
+) => {
   const models = await getModelsPerPage(1, brandId);
 
   return getPaginatedInlineKeyboard(
@@ -64,6 +86,22 @@ export const getFirstPageForModels = async (brandId: number, isEdit: boolean = f
       isLastPage: models.isLastPage,
       itemsPerPage: 15,
       isEdit: isEdit,
+    }
+  );
+};
+
+export const getFirstPageForBrandsModelsAdmin = async (name: string) => {
+  const brands = await getBrandsPerPage(1);
+
+  return getPaginatedInlineKeyboard(
+    brands.brands,
+    (brand) => renderPaginatedBrandModelButtonsAdmin(brand, name),
+    {
+      buttonCallback: "page_brands",
+      totalItems: brands.total,
+      currentPage: 1,
+      isLastPage: brands.isLastPage,
+      itemsPerPage: 15,
     }
   );
 };

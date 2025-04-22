@@ -41,12 +41,16 @@ export const MESSAGES = {
     "Вы были заблокированы.\nОбратитесь в поддержку за более подробной информацией.\nТехническая поддержка: @{supportUsername}",
   CHANNEL_MESSAGE:
     "У нас есть канал, куда мы публикуем все объявления и новости.",
+  ADVERTISEMENTS_ADMIN:
+    "Всего объявлений: {advertisementsCount}\nЧтобы найти конкретное объявление, введите id объявления",
 } as const;
 
 export const ADMIN_MESSAGES = {
   USER_BANNED: "Пользователь успешно заблокирован!",
   USER_UNBANNED: "Пользователь успешно разблокирован!",
   BOT_SETTINGS_UPDATED: "Настройки бота успешно обновлены!",
+  AD_HIDDEN: "Объявление успешно скрыто!",
+  AD_UNHIDDEN: "Объявление успешно восстановлено!",
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -103,6 +107,15 @@ export const ERROR_MESSAGES = {
     "Ссылка на автотеку должна вести на официальный сайт autoteka.ru\n\nВведите ссылку заново:",
   ERROR_USER_NOT_FOUND: "Пользователь не найден. Попробуйте ещё раз.",
   ERROR_ADMIN_BAN: "Администратор не может быть заблокирован.",
+  ERROR_CANT_PARSE_NUMBER: "Не удалось распознать число. Попробуйте ещё раз.",
+
+  ERROR_BRAND_NOT_FOUND: "Марка не найдена. Попробуйте ещё раз.",
+  ERROR_MODEL_NOT_FOUND: "Модель не найдена. Попробуйте ещё раз.",
+
+  ERROR_DELETING_BRAND:
+    "Нельзя удалить марку, к которой прикреплены объявления.",
+  ERROR_MODEL_HAS_ADS:
+    "Нельзя удалить модель, к которой прикреплены объявления.",
 } as const;
 
 export const SAVED_SEARCH_PARAMETERS = `
@@ -290,4 +303,15 @@ export const ADMIN_EDIT_BOT_SETTINGS_MESSAGES = {
   SUPPORT_USERNAME: "Введите новый username поддержки:",
   SUPPORT_TEXT: "Введите новый текст поддержки:",
   WATERMARK: "Введите новый текст водяного знака:",
+  BRANDS:
+    "Всего марок: {brandsCount}\n\nДля добавления новой марки, введите название марки \nДля удаления марки, выберите марку и она удалится из списка",
+  MODELS:
+    "Всего моделей: {modelsCount}\nВведите название модели, она будет добавлена или найдена в списке всех марок",
+  ADDED_BRAND: 'Марка с названием "{brandName}" успешно добавлена!',
+  DELETED_BRAND: 'Марка с названием "{brandName}" успешно удалена!',
+  ADDED_MODEL:
+    'Модель с названием "{modelName}" успешно добавлена и прикреплена к марке "{brandName}"!',
+  DELETED_MODEL: 'Модель с названием "{modelName}" успешно удалена!',
+  CHOOSE_BRAND:
+    'Выберите марку, к которой будет добавлена модель с названием "{modelName}"',
 } as const;

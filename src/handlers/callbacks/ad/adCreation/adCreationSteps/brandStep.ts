@@ -23,7 +23,7 @@ export const brandStep = async (
 
     const brand = await getBrandById(Number(selectedBrandId));
 
-    if (!brand) {
+    if (!brand || !brand.id) {
       return ctx.reply(ERROR_MESSAGES.ERROR_WITH_BRAND, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });

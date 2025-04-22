@@ -6,6 +6,8 @@ import { getMainKeyboard } from "keyboards/main";
 import { checkIsAdmin } from "handlers/common/checkIsUser";
 import { handleUsers } from "./handleUsers";
 import { handleBotSettings } from "./handleBotSettings";
+import { handleAdvertismentsAdmin } from "./handleAdvertismentsAdmin";
+import { handlePhoneNumbers } from "./handlePhoneNumbers";
 
 export const registerAdminKeyboardButtonHandler = (bot: Telegraf) => {
   bot.hears(Object.values(ADMIN_PANEL_BUTTONS_TEXT), async (ctx) => {
@@ -22,6 +24,11 @@ export const registerAdminKeyboardButtonHandler = (bot: Telegraf) => {
         return handleUsers(ctx);
       case ADMIN_PANEL_BUTTONS_TEXT.BOT_SETTINGS:
         return handleBotSettings(ctx);
+      case ADMIN_PANEL_BUTTONS_TEXT.ADVERTISEMENTS:
+        return handleAdvertismentsAdmin(ctx);
+      case ADMIN_PANEL_BUTTONS_TEXT.NUMBERS:
+        return handlePhoneNumbers(ctx);
+
       case ADMIN_PANEL_BUTTONS_TEXT.MAIN_MENU:
         return ctx.reply(MESSAGES.WELCOME, {
           reply_markup: getMainKeyboard(),

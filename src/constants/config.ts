@@ -7,6 +7,7 @@ export const DRIVE_TYPES = ["Передний", "Задний", "Полный"];
 export enum HIDE_REASONS {
   SOLD_BY_BOT = `sold_by_bot`,
   SOLD_OTHER = "sold_other",
+  ADMIN_REASON = "admin_reason",
 }
 
 export enum STEPS_ENUM {
@@ -43,12 +44,17 @@ export enum USER_STATE_ENUM {
   EDIT_SUPPORT_USERNAME = "edit_support_username",
   EDIT_SUPPORT_TEXT = "edit_support_text",
   EDIT_WATERMARK = "edit_watermark",
+  ADVERTISEMENTS_ADMIN = "advertisements_admin",
+  EDIT_BRANDS = "edit_brands",
+  EDIT_MODELS = "edit_models",
 }
 
 export enum BOT_SETTINGS_EDIT_STATE {
   SUPPORT_USERNAME = "support_username",
   SUPPORT_TEXT = "support_text",
   WATERMARK = "watermark",
+  BRANDS = "brands",
+  MODELS = "models",
 }
 
 export const RESTRICTIONS = {

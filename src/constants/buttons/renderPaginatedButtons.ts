@@ -9,12 +9,35 @@ export const renderPaginatedBrandButtons = (
   callback_data: `select_adCreation:brand:${brand.id}:${isEdit ? "edit" : ""}`,
 });
 
+export const renderPaginatedBrandButtonsAdmin = (
+  brand: IBrand
+): InlineKeyboardButton => ({
+  text: brand.name,
+  callback_data: `delete_brand:${brand.id}`,
+});
+
+export const renderPaginatedBrandModelButtonsAdmin = (
+  brand: IBrand,
+  name: string
+): InlineKeyboardButton => ({
+  text: brand.name,
+  callback_data: `add_model:${name}:${brand.id}`,
+});
+
+export const renderPaginatedModelButtonsAdmin = (
+  model: ICarModel
+): InlineKeyboardButton => ({
+  text: model.name,
+  callback_data: `delete_model:${model.id}`,
+});
 export const renderPaginatedRegionButtons = (
   region: IRegion,
   isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: region.name,
-  callback_data: `select_adCreation:region:${region.id}:${isEdit ? "edit" : ""}`,
+  callback_data: `select_adCreation:region:${region.id}:${
+    isEdit ? "edit" : ""
+  }`,
 });
 
 export const renderPaginatedModelButtons = (
@@ -38,7 +61,9 @@ export const renderPaginatedEngineTypeButtons = (
   isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: engineType,
-  callback_data: `select_adCreation:enginetype:${engineType}:${isEdit ? "edit" : ""}`,
+  callback_data: `select_adCreation:enginetype:${engineType}:${
+    isEdit ? "edit" : ""
+  }`,
 });
 
 export const renderPaginatedTransmissionTypeButtons = (
@@ -46,7 +71,9 @@ export const renderPaginatedTransmissionTypeButtons = (
   isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: transmissionType,
-  callback_data: `select_adCreation:transmissiontype:${transmissionType}:${isEdit ? "edit" : ""}`,
+  callback_data: `select_adCreation:transmissiontype:${transmissionType}:${
+    isEdit ? "edit" : ""
+  }`,
 });
 
 export const renderPaginatedDriveTypeButtons = (
@@ -54,7 +81,9 @@ export const renderPaginatedDriveTypeButtons = (
   isEdit: boolean = false
 ): InlineKeyboardButton => ({
   text: driveType,
-  callback_data: `select_adCreation:drivetype:${driveType}:${isEdit ? "edit" : ""}`,
+  callback_data: `select_adCreation:drivetype:${driveType}:${
+    isEdit ? "edit" : ""
+  }`,
 });
 
 export const renderPaginatedRegionsSearchButtons = (

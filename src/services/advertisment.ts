@@ -92,3 +92,36 @@ export const updateAdvertisement = async (
 
   return advertisement.get({ plain: true });
 };
+
+export const countAdvertisements = async () => {
+  const advertisements = await Advertisement.count();
+  return advertisements;
+};
+
+export const getPhoneNumbers = async () => {
+  const advertisements = await Advertisement.findAll({
+    attributes: ["phoneNumber"],
+  });
+
+  return advertisements.map((ad) => ad.get({ plain: true }).phoneNumber);
+};
+
+export const getUniquePhoneNumbers = async () => {
+  const phoneNumbers = await getPhoneNumbers();
+  return [...new Set(phoneNumbers)];
+};
+
+export const getFirstAdvertisementByBrandId = async (brandId: number) => {
+  const advertisement = await Advertisement.findOne({
+    where: { brandId },
+  });
+  return advertisement?.get({ plain: true });
+};
+
+export const getFirstAdvertisementByModelId = async (modelId: number) => {
+  const advertisement = await Advertisement.findOne({
+    where: { modelId },
+  });
+  return advertisement?.get({ plain: true });
+};
+

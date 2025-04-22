@@ -238,6 +238,27 @@ export const AD_ACTIONS_BUTTONS = (ad: IAdvertisement, messageId?: number) => {
   return [...keyboard, ...CLOSE_BUTTONS(messageId)];
 };
 
+export const ADMIN_AD_ACTIONS_BUTTONS = (
+  ad: IAdvertisement,
+  messageId?: number
+) => {
+  const isHiddenByAdmin = ad.hideReason === HIDE_REASONS.ADMIN_REASON;
+  const keyboard = [
+    [
+      {
+        text: isHiddenByAdmin
+          ? "Вернуть объявление 🔓"
+          : "Скрыть объявление 🔒",
+        callback_data: isHiddenByAdmin
+          ? `admin_unhide_ad:${ad.id}:${messageId ? messageId : ""}`
+          : `admin_hide_ad:${ad.id}:${messageId ? messageId : ""}`,
+      },
+    ],
+  ];
+
+  return [...keyboard, ...CLOSE_BUTTONS(messageId)];
+};
+
 export const CONFIRM_HIDE_AD_BUTTONS = (adId: string, messageId?: number) => [
   [
     {
@@ -339,6 +360,16 @@ export const ADMIN_BOT_SETTINGS_BUTTONS = [
   ],
   [
     {
+      text: "Марки 🚙",
+      callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.BRANDS}`,
+    },
+    {
+      text: "Модели 🚙",
+      callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.MODELS}`,
+    },
+  ],
+  [
+    {
       text: "Изменить водяной знак 🖼️",
       callback_data: `edit_bot_settings:${BOT_SETTINGS_EDIT_STATE.WATERMARK}`,
     },
@@ -351,6 +382,15 @@ export const CHANNEL_BUTTON = [
     {
       text: "Перейти в канал 📺",
       url: "https://t.me/prodaisam",
+    },
+  ],
+];
+
+export const ADMIN_BRAND_BUTTONS = [
+  [
+    {
+      text: "Добавить марку 🚙",
+      callback_data: `add_brand`,
     },
   ],
 ];

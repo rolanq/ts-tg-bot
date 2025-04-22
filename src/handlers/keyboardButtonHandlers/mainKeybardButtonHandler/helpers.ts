@@ -2,6 +2,7 @@ import {
   CLOSE_BUTTONS,
   EXISTING_ADVERTISEMENT_DRAFT_BUTTONS,
 } from "constants/buttons/buttons";
+import { HIDE_REASONS } from "constants/config";
 import {
   ADVERTISEMENT_MESSAGE,
   ADVERTISEMENT_MESSAGE_DRAFT,
@@ -44,14 +45,16 @@ export const renderAdvertismentMessage = async (
     };
 
     if ("isActive" in ad) {
-      if (!ad.isActive) {
+      const isHiddenByAdmin = ad.hideReason === HIDE_REASONS.ADMIN_REASON;
+
+      if (isHiddenByAdmin) {
+        tempAd.adStatus = "[Скрыто администратором]";
+      } else if ("isOnHold" in ad && ad.isOnHold) {
+        tempAd.adStatus = "[ПОД ЗАДАТКОМ]";
+      } else if (!ad.isActive && !isHiddenByAdmin) {
         tempAd.adStatus = "[ПРОДАНО]";
       } else {
-        if ("isOnHold" in ad && ad.isOnHold) {
-          tempAd.adStatus = "[ПОД ЗАДАТКОМ]";
-        } else {
-          tempAd.adStatus = "";
-        }
+        tempAd.adStatus = "";
       }
     }
 

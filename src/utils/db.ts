@@ -5,12 +5,12 @@ import { Model, ModelStatic } from "sequelize";
 const db = (dbModule as any).default || dbModule;
 
 export interface IBrand {
-  id: number;
+  id?: number;
   name: string;
 }
 
 export interface ICarModel {
-  id: number;
+  id?: number;
   name: string;
   brandId: number;
 }

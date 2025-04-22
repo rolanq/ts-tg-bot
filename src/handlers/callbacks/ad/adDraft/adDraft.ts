@@ -1,6 +1,7 @@
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import {
+  createAdvertisementDraft,
   dropAdvertisementDraft,
   getAdvertisementDraft,
   updateAdvertisementDraft,
@@ -92,6 +93,7 @@ const adDraftNew = async (ctx: Context) => {
     }
 
     await dropAdvertisementDraft(ctx.from?.id.toString());
+    await createAdvertisementDraft(ctx.from?.id.toString(), ctx.from?.username);
 
     const keyboard = await getFirstPageForRegions();
 

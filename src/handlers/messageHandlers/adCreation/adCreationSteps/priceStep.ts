@@ -22,6 +22,12 @@ export const handlePriceStep = async (
 
     const price = parseNumberWithAbbreviations(text);
 
+    if (isNaN(price)) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_CANT_PARSE_NUMBER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
     if (price > RESTRICTIONS.PRICE.MAX || price < RESTRICTIONS.PRICE.MIN) {
       return ctx.reply(ERROR_MESSAGES.ERROR_PRICE, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },

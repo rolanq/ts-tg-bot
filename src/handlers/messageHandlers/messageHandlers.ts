@@ -9,6 +9,9 @@ import { handleSearchPrice } from "./search/handleSearchPrice";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { handleSearchingUser } from "./admin/searchingUser";
 import { handleEditBotSettings } from "./admin/editBotSettings";
+import { handleAdvertisementsAdmin } from "./admin/advertisment";
+import { handleAddBrand } from "./admin/handleAddBrand";
+import { handleEditModel } from "./admin/handleEditModel";
 
 export const registerMessageHandlers = (bot: Telegraf) => {
   bot.on(message("text"), async (ctx) => {
@@ -52,13 +55,28 @@ export const registerMessageHandlers = (bot: Telegraf) => {
           await handleSearchingUser(ctx);
           break;
         case USER_STATE_ENUM.EDIT_SUPPORT_USERNAME:
-          await handleEditBotSettings(ctx, BOT_SETTINGS_EDIT_STATE.SUPPORT_USERNAME);
+          await handleEditBotSettings(
+            ctx,
+            BOT_SETTINGS_EDIT_STATE.SUPPORT_USERNAME
+          );
           break;
         case USER_STATE_ENUM.EDIT_SUPPORT_TEXT:
-          await handleEditBotSettings(ctx, BOT_SETTINGS_EDIT_STATE.SUPPORT_TEXT);
+          await handleEditBotSettings(
+            ctx,
+            BOT_SETTINGS_EDIT_STATE.SUPPORT_TEXT
+          );
           break;
         case USER_STATE_ENUM.EDIT_WATERMARK:
           await handleEditBotSettings(ctx, BOT_SETTINGS_EDIT_STATE.WATERMARK);
+          break;
+        case USER_STATE_ENUM.ADVERTISEMENTS_ADMIN:
+          await handleAdvertisementsAdmin(ctx);
+          break;
+        case USER_STATE_ENUM.EDIT_BRANDS:
+          await handleAddBrand(ctx);
+          break;
+        case USER_STATE_ENUM.EDIT_MODELS:
+          await handleEditModel(ctx);
           break;
         default:
           return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);

@@ -22,6 +22,12 @@ export const handleMileAgeStep = async (
 
     const mileage = parseNumberWithAbbreviations(text);
 
+    if (isNaN(mileage)) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_CANT_PARSE_NUMBER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
     if (
       mileage >= RESTRICTIONS.MILEAGE.MAX ||
       mileage <= RESTRICTIONS.MILEAGE.MIN

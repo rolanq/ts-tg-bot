@@ -8,7 +8,6 @@ import {
 import { Context } from "telegraf";
 import { parseNumberWithAbbreviations } from "utils/utils";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
-import { handleCreateAd } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/handleCreateAd";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const handleHorsePowerStep = async (ctx: Context, isEdit: boolean = false) => {
@@ -22,6 +21,12 @@ export const handleHorsePowerStep = async (ctx: Context, isEdit: boolean = false
     const text = (ctx.message as Message.TextMessage).text;
 
     const horsePower = parseNumberWithAbbreviations(text);
+
+    if (isNaN(horsePower)) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_CANT_PARSE_NUMBER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
 
     if (
       horsePower >= RESTRICTIONS.HORSEPOWER.MAX ||

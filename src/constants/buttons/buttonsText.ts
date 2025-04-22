@@ -12,6 +12,9 @@ export const ADMIN_PANEL_BUTTONS_TEXT = {
   USERS: "Пользователи 🧑‍💻",
   MAIN_MENU: "Главное меню 🔙",
   BOT_SETTINGS: "Настройки бота 🔧",
+
+  ADVERTISEMENTS: "Объявления 📝",
+  NUMBERS: "Номера телефонов 📞",
 } as const;
 
 export const COMMANDS_TEXT = {

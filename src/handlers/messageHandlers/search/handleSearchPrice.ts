@@ -28,6 +28,12 @@ export const handleSearchPrice = async (ctx: Context) => {
     const [, filter] = user.state.split("_");
     const price = parseNumberWithAbbreviations(text);
 
+    if (isNaN(price)) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_CANT_PARSE_NUMBER, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
     await updateSavedSearch(ctx.from.id.toString(), {
       [filter]: price,
     });
