@@ -25,6 +25,7 @@ export const createAdvertisementDraft = async (
     userId: userId,
     currentStep: STEPS_ENUM.REGION,
     telegramUsername: username,
+    photos: [],
   });
 
   return draft.get({ plain: true });
@@ -68,4 +69,16 @@ export const createIfNotExistsAndZeroOut = async (
   await dropAdvertisementDraft(userId);
   const newDraft = await getAdvertisementDraft(userId);
   return newDraft;
+};
+
+export const addPhotoToDraft = async (userId: string, photo: string) => {
+  const draft = await AdvertisementDraft.findOne({ where: { userId: userId } });
+  if (!draft) {
+    return null;
+  }
+
+  draft.set("photos", [...draft.getDataValue("photos"), photo]);
+  await draft.save();
+
+  return draft.get({ plain: true });
 };

@@ -3,13 +3,13 @@ import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { checkUserState } from "handlers/common/checkUserState";
 import {
+  addPhotoToDraft,
   getAdvertisementDraft,
-  updateAdvertisementDraft,
 } from "services/advertismentDraft";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
-import { addWatermark } from "utils/addWatermark";
 import { getBotSettings } from "services/botSettings";
+import { getPhotoAndAddWatermark } from "./helpers";
 
 export const registerPhotosHandler = (
   bot: Telegraf,
@@ -21,70 +21,66 @@ export const registerPhotosHandler = (
         ctx.reply(ERROR_MESSAGES.ERROR);
         return;
       }
-
       const botSettings = await getBotSettings();
-
       if (!botSettings) {
         ctx.reply(ERROR_MESSAGES.ERROR);
         return;
       }
-
       const isUserInState = await checkUserState(
         ctx.from.id.toString(),
         USER_STATE_ENUM.AD_CREATION
       );
-
       if (!isUserInState) {
         return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
       }
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
+      if (
+        !draft ||
+        !draft.currentStep ||
+        draft.currentStep !== STEPS_ENUM.PHOTOS
+      ) {
+        return ctx.reply(ERROR_MESSAGES.ERROR);
+      }
 
-      if (draft?.currentStep !== STEPS_ENUM.PHOTOS) {
+      const { photos } = draft;
+
+      if (photos && photos?.length >= 10) {
+        await ctx.reply(MESSAGES.PHOTOS_LIMIT_REACHED);
         return;
       }
 
-      if (draft) {
-        const photos = [...(draft.photos || [])];
+      const photo = ctx.message.photo[ctx.message.photo.length - 1];
+      const fileInfo = await ctx.telegram.getFile(photo.file_id);
+      const processedImageBuffer = await getPhotoAndAddWatermark(
+        fileInfo,
+        botSettings
+      );
+      const sentPhoto = await ctx.telegram.sendPhoto(ctx.chat.id, {
+        source: processedImageBuffer,
+      });
+      await ctx.telegram.deleteMessage(ctx.chat.id, sentPhoto.message_id);
 
-        if (draft.photos && draft.photos?.length >= 10) {
-          await ctx.reply(MESSAGES.PHOTOS_LIMIT_REACHED);
-          return;
-        }
+      const newDraft = await addPhotoToDraft(
+        ctx.from.id.toString(),
+        sentPhoto.photo[0].file_id
+      );
 
-        const photo = ctx.message.photo[ctx.message.photo.length - 1];
-        const fileInfo = await ctx.telegram.getFile(photo.file_id);
-        const fileUrl = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${fileInfo.file_path}`;
-        const response = await fetch(fileUrl);
-        const imageBuffer = await response.arrayBuffer();
-        const processedImageBuffer = await addWatermark(
-          Buffer.from(imageBuffer),
-          botSettings.WatermarkText
-        );
-
-        const sentPhoto = await ctx.telegram.sendPhoto(ctx.chat.id, {
-          source: processedImageBuffer,
-        });
-        await ctx.telegram.deleteMessage(ctx.chat.id, sentPhoto.message_id);
-
-        photos.push(sentPhoto.photo[sentPhoto.photo.length - 1].file_id);
-
-        await updateAdvertisementDraft(ctx.from.id.toString(), {
-          photos,
-        });
-
-        const message = MESSAGES.PHOTOS_RECEIVED.replace(
-          "{photoNumber}",
-          photos.length.toString()
-        );
-
-        await ctx.deleteMessage();
-
-        await ctx.reply(message, {
-          reply_markup: { inline_keyboard: PHOTOS_BUTTONS },
-        });
+      if (!newDraft) {
+        return ctx.reply(ERROR_MESSAGES.ERROR);
       }
+
+      const message = MESSAGES.PHOTOS_RECEIVED.replace(
+        "{photoNumber}",
+        newDraft.photos.length.toString()
+      );
+      await ctx.deleteMessage();
+      await ctx.reply(message, {
+        reply_markup: { inline_keyboard: PHOTOS_BUTTONS },
+      });
     } catch (error) {
+      console.log(error);
+
       return ctx.reply(ERROR_MESSAGES.ERROR, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });

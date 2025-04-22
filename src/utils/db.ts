@@ -80,7 +80,7 @@ export interface IAdvertisementDraft {
   description: string | null;
   price: number | null;
   phoneNumber: string | null;
-  photos: string[] | null;
+  photos: string[];
   currentStep: STEPS_ENUM;
   telegramUsername?: string;
   userId: string;
