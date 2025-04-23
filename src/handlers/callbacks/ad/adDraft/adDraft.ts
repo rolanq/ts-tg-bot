@@ -68,7 +68,9 @@ const adDraftContinue = async (ctx: Context) => {
         });
       case STEPS_ENUM.PHOTOS:
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
-          reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
+          reply_markup: {
+            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+          },
         });
     }
 
@@ -218,7 +220,9 @@ const adDraftEditField = async (ctx: Context) => {
           currentStep: STEPS_ENUM.PHOTOS_EDIT,
         });
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
-          reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
+          reply_markup: {
+            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+          },
         });
     }
   } catch (error) {

@@ -1,14 +1,6 @@
 import { Message } from "@telegraf/types";
-import {
-  AD_ACTIONS_BUTTONS,
-  ADMIN_AD_ACTIONS_BUTTONS,
-  CLOSE_BUTTONS,
-} from "constants/buttons/buttons";
-import { ERROR_MESSAGES, ADMIN_MESSAGES, MESSAGES } from "constants/messages";
-import {
-  renderAdvertisementDraftMessage,
-  renderAdvertismentMessage,
-} from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
+import { ADMIN_AD_ACTIONS_BUTTONS } from "constants/buttons/buttons";
+import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { getAdvertisementById } from "services/advertisment";
 import { Context } from "telegraf";
 import { formatAdvertisementMedia } from "utils/utils";
@@ -59,6 +51,8 @@ export const handleAdvertisementsAdmin = async (ctx: Context) => {
       });
     }
   } catch (error) {
+    console.log(error);
+
     return ctx.reply(ERROR_MESSAGES.ERROR);
   }
 };

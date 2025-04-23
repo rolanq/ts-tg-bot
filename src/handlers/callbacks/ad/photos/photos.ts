@@ -30,7 +30,7 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         });
       }
 
-      const message = await renderAdvertismentMessage(draft);
+      const message = await renderAdvertismentMessage(draft, true);
 
       if (draft.photos?.length) {
         await ctx.sendMediaGroup(
@@ -52,8 +52,6 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
         reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
       });
     } catch (error) {
-      console.log(error);
-      
       return ctx.reply(ERROR_MESSAGES.ERROR, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
@@ -69,7 +67,7 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
       });
 
       await ctx.reply(MESSAGES.PHOTOS_DELETED, {
-        reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
     } catch (error) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {

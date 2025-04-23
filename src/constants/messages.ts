@@ -5,9 +5,9 @@ export const MESSAGES = {
   CREATE_AD_CLICKED: "Переходим к созданию объявления.",
   CREATE_AD_CLICKED_FOR_DRAFT: "Продолжаем создание объявления.",
   CREATE_AD_CLICKED_DRAFT_EXIST:
-    "У вас есть черновик объявления.\n {advertisement} \nВы можете его продолжить или начать заново.",
+    "У вас есть черновик объявления.\nВы можете его продолжить или начать заново.\n {advertisement}",
   PHOTOS_LIMIT_REACHED: `Достигнут лимит фотографий (10 штук). Нажмите "Готово 🆗" для просмотра черновика`,
-  PHOTOS_RECEIVED: `Фотография {photoNumber}/10 добавлена. Отправьте еще или нажмите "Готово 🆗"`,
+  PHOTOS_RECEIVED: `Фотография добавлена`,
   PHOTOS_DELETED: `Все фотографии удалены. Отправьте новые фотографии или нажмите "Готово 🆗" для просмотра черновика`,
   AD_READY: `Объявление готово к публикации. Нажмите "Опубликовать 🚀" для публикации`,
   AD_PUBLISHED:
@@ -153,9 +153,7 @@ export const CHOOSE_MESSAGES = {
 };
 
 export const ADVERTISEMENT_MESSAGE = `
-Объявление №: {lotId} {status}
-
-🚗 {brandName} {carModel} {year} г.
+🚗 {brandName} {carModel} {year} г. {status}
 
 📍 Регион: {region}
 🛠 Двигатель: {engineType}, {horsePower} л.с.
@@ -171,7 +169,8 @@ export const ADVERTISEMENT_MESSAGE = `
 📱 Контакты:
 Телефон: {phoneNumber}
 Telegram: {telegramUsername}
-`;
+
+{lotId}`;
 
 export const PLURAL_PHOTOS_FORM = (count: number) =>
   count === 1
@@ -181,10 +180,7 @@ export const PLURAL_PHOTOS_FORM = (count: number) =>
     : "фотографий";
 
 export const ADVERTISEMENT_MESSAGE_DRAFT = (photosCount: number) =>
-  ADVERTISEMENT_MESSAGE +
-  `
-${photosCount} ${PLURAL_PHOTOS_FORM(photosCount)}
-`;
+  ADVERTISEMENT_MESSAGE + `${photosCount} ${PLURAL_PHOTOS_FORM(photosCount)}`;
 
 export const PROFILE_MESSAGE = (
   userId: string,

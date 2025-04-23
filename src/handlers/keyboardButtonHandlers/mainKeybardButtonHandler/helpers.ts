@@ -41,7 +41,7 @@ export const renderAdvertismentMessage = async (
         ? `@${ad.telegramUsername}`
         : "Не указано",
       adPhotosCount: ad.photos?.length || 0,
-      adLotId: ad.id ? ad.id.toString() : "",
+      adLotId: ad.id ? `Номер объявления: ${ad.id.toString()}` : "",
     };
 
     if ("isActive" in ad) {
@@ -100,7 +100,7 @@ export const renderAdvertismentMessage = async (
       .replace(/{telegramUsername}/g, tempAd.adTelegramUsername)
       .replace(/{photosCount}/g, tempAd.adPhotosCount.toString())
       .replace(/{phoneNumber}/g, tempAd.adPhoneNumber)
-      .replace(/{lotId}/g, tempAd.adLotId);
+      .replace(/{lotId}/g, isDraft ? '' : tempAd.adLotId);
 
     if (ad.autotekaLink) {
       message = message.replace(

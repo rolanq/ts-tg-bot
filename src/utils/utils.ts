@@ -183,3 +183,7 @@ export const searchUser = async (
     return { user: await getUserByIdOrUsername(search), byAd: false };
   }
 };
+
+export const generateRandomId = () => {
+  return Math.floor(Math.random() * (2147483640 - 10000000 + 1) + 10000000);
+};

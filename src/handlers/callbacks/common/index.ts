@@ -5,7 +5,10 @@ import {
 } from "constants/buttons/buttons";
 import { STEPS_ENUM } from "constants/config";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
-import { updateAdvertisementDraft } from "services/advertismentDraft";
+import {
+  getAdvertisementDraft,
+  updateAdvertisementDraft,
+} from "services/advertismentDraft";
 import { Telegraf } from "telegraf";
 
 export const registerCommonCallbacks = (bot: Telegraf) => {
@@ -40,13 +43,23 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
       const data = (callbackQuery as CallbackQuery.DataQuery).data;
       const [, skipData] = data.split(":");
 
+      const draft = await getAdvertisementDraft(ctx.from.id.toString());
+
+      if (!draft) {
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
+      }
+
       if (skipData === STEPS_ENUM.AUTOTEKA_LINK) {
-        await updateAdvertisementDraft(ctx.from?.id.toString(), {
+        await updateAdvertisementDraft(ctx.from.id.toString(), {
           currentStep: STEPS_ENUM.PHOTOS,
         });
 
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
-          reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
+          reply_markup: {
+            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+          },
         });
       }
     } catch (error) {

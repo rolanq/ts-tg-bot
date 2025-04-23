@@ -115,24 +115,29 @@ export const EDIT_AD_DRAFT_BUTTONS = [
   ...CLOSE_BUTTONS(),
 ];
 
-export const FINISH_PHOTOS_BUTTONS = [
-  [
-    {
-      text: "Готово 🆗",
-      callback_data: "done_photos",
-    },
-  ],
-];
+export const FINISH_PHOTOS_BUTTONS = (
+  isShowDeleteAllPhotos: boolean = false
+) => {
+  const buttons = [
+    [
+      {
+        text: "Готово 🆗",
+        callback_data: "done_photos",
+      },
+    ],
+  ];
 
-export const PHOTOS_BUTTONS = [
-  ...FINISH_PHOTOS_BUTTONS,
-  [
-    {
-      text: "Удалить все фото 🗑️",
-      callback_data: "delete_all_photos",
-    },
-  ],
-];
+  if (isShowDeleteAllPhotos) {
+    buttons.push([
+      {
+        text: "Удалить все фото 🗑️",
+        callback_data: "delete_all_photos",
+      },
+    ]);
+  }
+
+  return buttons;
+};
 
 export const SEARCH_PARAMETERS_BUTTONS_FILLED = (
   region: string,

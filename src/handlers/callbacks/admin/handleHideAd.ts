@@ -2,13 +2,14 @@ import { CallbackQuery } from "@telegraf/types";
 import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { HIDE_REASONS } from "constants/config";
 import { ADMIN_MESSAGES, ERROR_MESSAGES } from "constants/messages";
+import { editAdInChannel } from "handlers/common/channelMessage";
 import {
   getAdvertisementById,
   updateAdvertisement,
 } from "services/advertisment";
-import { Context } from "telegraf";
+import { Context, Telegraf } from "telegraf";
 
-export const handleHideAd = async (ctx: Context) => {
+export const handleHideAd = async (ctx: Context, bot: Telegraf) => {
   try {
     const [hideAction, adId, messageId] = (
       ctx.callbackQuery as CallbackQuery.DataQuery
@@ -22,12 +23,27 @@ export const handleHideAd = async (ctx: Context) => {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
     }
-    await updateAdvertisement(adId, {
+
+    const updatedAd = await updateAdvertisement(adId, {
       isActive: isUnhide,
       hideReason: isUnhide ? null : HIDE_REASONS.ADMIN_REASON,
     });
 
-    await ctx.deleteMessage(Number(messageId));
+    if (!updatedAd) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_AD_NOT_FOUND, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
+    const result = await editAdInChannel(bot, updatedAd);
+    if (!result) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_EDIT_CHANNEL_MESSAGE);
+    }
+
+    if (messageId) {
+      await ctx.deleteMessage(Number(messageId));
+    }
+
     await ctx.deleteMessage();
 
     return ctx.reply(

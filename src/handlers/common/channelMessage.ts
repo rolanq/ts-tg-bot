@@ -26,7 +26,7 @@ export const sendAdToChannel = async (bot: Telegraf, ad: IAdvertisement) => {
     } else if (formattedAd.text) {
       const message = await bot.telegram.sendMessage(
         channelId,
-        formattedAd.text,
+        formattedAd.text
       );
       messageId = message.message_id;
     }
@@ -58,14 +58,14 @@ export const editAdInChannel = async (bot: Telegraf, ad: IAdvertisement) => {
         channelId,
         Number(ad.channelMessageId),
         undefined,
-        message,
+        message
       );
     } else {
       await bot.telegram.editMessageText(
         channelId,
         Number(ad.channelMessageId),
         undefined,
-        message,
+        message
       );
     }
 

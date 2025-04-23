@@ -5,9 +5,12 @@ import {
 } from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
-import { updateAdvertisementDraft } from "services/advertismentDraft";
+import {
+  getAdvertisementDraft,
+  updateAdvertisementDraft,
+} from "services/advertismentDraft";
 import { Context } from "telegraf";
-import { parseAutotekaLink, parsePhoneNumber } from "utils/utils";
+import { parseAutotekaLink } from "utils/utils";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const handleAutotekaLinkStep = async (
@@ -17,6 +20,14 @@ export const handleAutotekaLinkStep = async (
   try {
     if (!ctx.from?.id || !ctx.message) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+      });
+    }
+
+    const draft = await getAdvertisementDraft(ctx.from.id.toString());
+
+    if (!draft) {
+      return ctx.reply(ERROR_MESSAGES.ERROR_WITH_AD_DRAFT, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
     }
@@ -43,7 +54,9 @@ export const handleAutotekaLinkStep = async (
     }
 
     return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
-      reply_markup: { inline_keyboard: FINISH_PHOTOS_BUTTONS },
+      reply_markup: {
+        inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+      },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

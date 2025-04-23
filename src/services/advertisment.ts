@@ -7,9 +7,12 @@ import {
   IAdvertisementDraft,
   Region,
 } from "utils/db";
+import { generateRandomId } from "utils/utils";
 
 export const createAdvertisement = async (draft: IAdvertisementDraft) => {
+  const newAdId = await generateRandomIdForAdvertisement();
   const advertisement = await Advertisement.create({
+    id: newAdId,
     regionId: draft.regionId!,
     brandId: draft.brandId!,
     modelId: draft.modelId!,
@@ -125,3 +128,14 @@ export const getFirstAdvertisementByModelId = async (modelId: number) => {
   return advertisement?.get({ plain: true });
 };
 
+export const generateRandomIdForAdvertisement = async (): Promise<number> => {
+  const id = generateRandomId();
+
+  const advertisement = await Advertisement.findByPk(id);
+
+  if (advertisement) {
+    return generateRandomIdForAdvertisement();
+  }
+
+  return id;
+};

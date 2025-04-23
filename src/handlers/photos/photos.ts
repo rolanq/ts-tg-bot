@@ -1,20 +1,18 @@
-import { CLOSE_BUTTONS, PHOTOS_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
 import { checkUserState } from "handlers/common/checkUserState";
 import {
   addPhotoToDraft,
   getAdvertisementDraft,
+  updateAdvertisementDraft,
 } from "services/advertismentDraft";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { getBotSettings } from "services/botSettings";
 import { getPhotoAndAddWatermark } from "./helpers";
 
-export const registerPhotosHandler = (
-  bot: Telegraf,
-  isEdit: boolean = false
-) => {
+export const registerPhotosHandler = (bot: Telegraf) => {
   bot.on(message("photo"), async (ctx) => {
     try {
       if (!ctx.from?.id) {
@@ -35,12 +33,17 @@ export const registerPhotosHandler = (
       }
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
+      if (!draft || !draft.currentStep) {
+        return ctx.reply(ERROR_MESSAGES.ERROR, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
+      }
+
       if (
-        !draft ||
-        !draft.currentStep ||
-        draft.currentStep !== STEPS_ENUM.PHOTOS
+        draft.currentStep !== STEPS_ENUM.PHOTOS &&
+        draft.currentStep !== STEPS_ENUM.PHOTOS_EDIT
       ) {
-        return ctx.reply(ERROR_MESSAGES.ERROR);
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
       }
 
       const { photos } = draft;
@@ -70,17 +73,15 @@ export const registerPhotosHandler = (
         return ctx.reply(ERROR_MESSAGES.ERROR);
       }
 
-      const message = MESSAGES.PHOTOS_RECEIVED.replace(
-        "{photoNumber}",
-        newDraft.photos.length.toString()
-      );
+      await updateAdvertisementDraft(ctx.from.id.toString(), {
+        currentStep: STEPS_ENUM.REGION,
+      });
+
       await ctx.deleteMessage();
-      await ctx.reply(message, {
-        reply_markup: { inline_keyboard: PHOTOS_BUTTONS },
+      await ctx.reply(MESSAGES.PHOTOS_RECEIVED, {
+        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });
     } catch (error) {
-      console.log(error);
-
       return ctx.reply(ERROR_MESSAGES.ERROR, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
       });

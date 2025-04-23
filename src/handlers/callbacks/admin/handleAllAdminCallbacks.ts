@@ -8,8 +8,8 @@ import { handleEditModels } from "./handleEditModels";
 export const registerAdminCallbacks = async (bot: Telegraf) => {
   bot.action(/^admin_user_ban:/, handleBanUser);
   bot.action(/^edit_bot_settings:/, handleEditBotSettings);
-  bot.action(/^admin_hide_ad:/, handleHideAd);
-  bot.action(/^admin_unhide_ad:/, handleHideAd);
+  bot.action(/^admin_hide_ad:/, (ctx) => handleHideAd(ctx, bot));
+  bot.action(/^admin_unhide_ad:/, (ctx) => handleHideAd(ctx, bot));
   bot.action(/^delete_brand:/, handleDeleteBrand);
   bot.action(/^add_model:/, handleEditModels);
 };
