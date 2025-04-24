@@ -74,7 +74,7 @@ export const registerPhotosHandler = (bot: Telegraf) => {
       }
 
       await updateAdvertisementDraft(ctx.from.id.toString(), {
-        currentStep: STEPS_ENUM.REGION,
+        currentStep: STEPS_ENUM.PHOTOS,
       });
 
       await ctx.deleteMessage();

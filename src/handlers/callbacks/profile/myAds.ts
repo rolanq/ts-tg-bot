@@ -57,6 +57,7 @@ export const handleMyAds = async (ctx: Context) => {
           reply_markup: {
             inline_keyboard: keyboard,
           },
+          parse_mode: "HTML",
         });
       }
     }

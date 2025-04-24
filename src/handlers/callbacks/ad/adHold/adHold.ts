@@ -63,6 +63,7 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
         Number(messageId),
         undefined,
         message,
+        { parse_mode: "HTML" }
       );
       const keyboard = AD_ACTIONS_BUTTONS(updatedAd, Number(messageId));
 
@@ -76,6 +77,7 @@ const handleAdOnHold = async (ctx: Context, bot: Telegraf) => {
         reply_markup: {
           inline_keyboard: AD_ACTIONS_BUTTONS(updatedAd),
         },
+        parse_mode: "HTML",
       });
     }
   } catch (error) {

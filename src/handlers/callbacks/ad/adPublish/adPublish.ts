@@ -90,6 +90,7 @@ export const registerAdPublishCallbacks = async (bot: Telegraf) => {
               reply_markup: {
                 inline_keyboard: CLOSE_BUTTONS(),
               },
+              parse_mode: "HTML",
             }
           );
         }

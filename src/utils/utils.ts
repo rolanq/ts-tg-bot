@@ -136,6 +136,7 @@ export const formatAdvertisementMedia = async (
     type: "photo",
     media: photo,
     caption: index === 0 ? message : undefined,
+    parse_mode: "HTML",
   }));
 
   return { text: null, media };

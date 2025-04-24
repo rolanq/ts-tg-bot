@@ -38,6 +38,7 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
             type: "photo",
             media: photo,
             caption: i === 0 ? message : undefined,
+            parse_mode: "HTML",
           }))
         );
 
@@ -50,6 +51,7 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
 
       await ctx.reply(message, {
         reply_markup: { inline_keyboard: EXISTING_ADVERTISEMENT_DRAFT_BUTTONS },
+        parse_mode: "HTML",
       });
     } catch (error) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {

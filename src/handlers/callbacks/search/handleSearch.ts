@@ -42,10 +42,11 @@ export const handleSearch = async (ctx: Context) => {
             type: "photo",
             media: photo,
             caption: i === 0 ? message : undefined,
+            parse_mode: "HTML",
           }))
         );
       } else {
-        await ctx.reply(message);
+        await ctx.reply(message, { parse_mode: "HTML" });
       }
     });
   } catch (error) {
