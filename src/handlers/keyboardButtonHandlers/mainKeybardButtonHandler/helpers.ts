@@ -105,7 +105,7 @@ export const renderAdvertismentMessage = async (
     if (ad.autotekaLink) {
       message = message.replace(
         /{autotekaLink}/g,
-        `🔗 <a href="${ad.autotekaLink}">Автотека</a>\n\n`
+        `🔗 <a href="${ad.autotekaLink}">АВТОТЕКА</a>\n\n`
       );
     } else {
       message = message.replace(
