@@ -78,9 +78,6 @@ export const registerPhotosHandler = (bot: Telegraf) => {
       });
 
       await ctx.deleteMessage();
-      await ctx.reply(MESSAGES.PHOTOS_RECEIVED, {
-        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
-      });
     } catch (error) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {
         reply_markup: { inline_keyboard: CLOSE_BUTTONS() },

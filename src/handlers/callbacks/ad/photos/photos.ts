@@ -69,7 +69,12 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
       });
 
       await ctx.reply(MESSAGES.PHOTOS_DELETED, {
-        reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        reply_markup: {
+          inline_keyboard: [
+            ...FINISH_PHOTOS_BUTTONS(false),
+            ...CLOSE_BUTTONS(),
+          ],
+        },
       });
     } catch (error) {
       return ctx.reply(ERROR_MESSAGES.ERROR, {
