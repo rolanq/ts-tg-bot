@@ -112,6 +112,12 @@ export const EDIT_AD_DRAFT_BUTTONS = [
       callback_data: `edit_field_draft:${STEPS_ENUM.PHOTOS}`,
     },
   ],
+  [
+    {
+      text: "Видео 🎥",
+      callback_data: `edit_field_draft:${STEPS_ENUM.VIDEO}`,
+    },
+  ],
   ...CLOSE_BUTTONS(),
 ];
 
@@ -342,6 +348,14 @@ export const DELETE_AUTOTEKA_LINK_BUTTON = [
   ],
 ];
 
+export const DELETE_VIDEO_BUTTON = [
+  [
+    {
+      text: "Удалить видео 🔄",
+      callback_data: `delete_video`,
+    },
+  ],
+];
 export const ADMIN_USER_BUTTONS = (userId: string, action: "ban" | "unban") => [
   [
     {

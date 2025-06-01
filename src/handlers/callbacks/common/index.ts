@@ -89,4 +89,14 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
     });
   });
+
+  bot.action(/^delete_video/, async (ctx) => {
+    await updateAdvertisementDraft(ctx.from?.id.toString(), {
+      video: null,
+    });
+
+    return ctx.reply(MESSAGES.DELETE_VIDEO, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
+  });
 };
