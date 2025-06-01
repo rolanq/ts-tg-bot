@@ -22,10 +22,6 @@ export const sendAdToChannel = async (bot: Telegraf, ad: IAdvertisement) => {
 
     if (formattedAd.media) {
       const mediaGroup: (InputMediaPhoto | InputMediaVideo)[] = [
-        ...(ad.photos?.map((photo) => ({
-          type: "photo" as const,
-          media: photo,
-        })) || []),
         ...(ad.video
           ? [
               {
@@ -34,6 +30,10 @@ export const sendAdToChannel = async (bot: Telegraf, ad: IAdvertisement) => {
               },
             ]
           : []),
+        ...(ad.photos?.map((photo) => ({
+          type: "photo" as const,
+          media: photo,
+        })) || []),
       ];
 
       if (mediaGroup.length > 0) {

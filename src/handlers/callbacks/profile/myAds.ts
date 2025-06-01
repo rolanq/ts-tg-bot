@@ -47,10 +47,6 @@ export const handleMyAds = async (ctx: Context) => {
 
       if (formattedAd.media) {
         const mediaGroup: (InputMediaPhoto | InputMediaVideo)[] = [
-          ...(ad.photos?.map((photo) => ({
-            type: "photo" as const,
-            media: photo,
-          })) || []),
           ...(ad.video
             ? [
                 {
@@ -59,6 +55,10 @@ export const handleMyAds = async (ctx: Context) => {
                 },
               ]
             : []),
+          ...(ad.photos?.map((photo) => ({
+            type: "photo" as const,
+            media: photo,
+          })) || []),
         ];
 
         if (mediaGroup.length > 0) {
