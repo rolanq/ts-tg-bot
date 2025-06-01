@@ -32,11 +32,25 @@ export const registerPhotosCallbacks = (bot: Telegraf) => {
 
       const message = await renderAdvertismentMessage(draft, true);
 
-      if (draft.photos?.length) {
-        await ctx.sendMediaGroup(
-          draft.photos.map((photo, i) => ({
-            type: "photo",
+      if (draft.photos?.length || draft.video) {
+        const mediaGroup = [
+          ...(draft.photos?.map((photo) => ({
+            type: "photo" as const,
             media: photo,
+          })) || []),
+          ...(draft.video
+            ? [
+                {
+                  type: "video" as const,
+                  media: draft.video,
+                },
+              ]
+            : []),
+        ];
+
+        await ctx.sendMediaGroup(
+          mediaGroup.map((media, i) => ({
+            ...media,
             caption: i === 0 ? message : undefined,
             parse_mode: "HTML",
           }))

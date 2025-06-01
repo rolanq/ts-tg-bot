@@ -4,7 +4,7 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { Message } from "@telegraf/types";
 import { parseNumberWithAbbreviations } from "utils/utils";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const handleMileAgeStep = async (
@@ -48,7 +48,9 @@ export const handleMileAgeStep = async (
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION);
+    return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION, {
+      reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+    });
   } catch (error) {
     console.log(error);
 

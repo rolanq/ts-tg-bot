@@ -4,6 +4,10 @@ import { ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { getAdvertisementById } from "services/advertisment";
 import { Context } from "telegraf";
 import { formatAdvertisementMedia } from "utils/utils";
+import {
+  InputMediaPhoto,
+  InputMediaVideo,
+} from "telegraf/typings/core/types/typegram";
 
 export const handleAdvertisementsAdmin = async (ctx: Context) => {
   try {
@@ -30,10 +34,33 @@ export const handleAdvertisementsAdmin = async (ctx: Context) => {
     );
 
     if (media) {
-      const mediaGroup = await ctx.sendMediaGroup(media);
+      const mediaGroup: (InputMediaPhoto | InputMediaVideo)[] = [
+        ...(advertisement.photos?.map((photo) => ({
+          type: "photo" as const,
+          media: photo,
+        })) || []),
+        ...(advertisement.video
+          ? [
+              {
+                type: "video" as const,
+                media: advertisement.video,
+              },
+            ]
+          : []),
+      ];
+
+      if (mediaGroup.length > 0) {
+        mediaGroup[0] = {
+          ...mediaGroup[0],
+          caption: message || undefined,
+          parse_mode: "HTML",
+        };
+      }
+
+      const sentMediaGroup = await ctx.sendMediaGroup(mediaGroup);
       const keyboard = ADMIN_AD_ACTIONS_BUTTONS(
         advertisement,
-        mediaGroup[0].message_id
+        sentMediaGroup[0].message_id
       );
 
       await ctx.reply(MESSAGES.AD_ACTIONS, {

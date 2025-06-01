@@ -55,6 +55,7 @@ export interface IAdvertisement {
   telegramUsername?: string;
   autotekaLink: string | null;
   photos: string[];
+  video: string | null;
   isActive: boolean;
   isOnHold: boolean;
   hideReason: HIDE_REASONS | null;
@@ -85,6 +86,7 @@ export interface IAdvertisementDraft {
   telegramUsername?: string;
   userId: string;
   autotekaLink: string | null;
+  video: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

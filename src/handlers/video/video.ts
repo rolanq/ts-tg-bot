@@ -1,20 +1,25 @@
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
-import { MESSAGES, ERROR_MESSAGES } from "constants/messages";
+import {
+  CLOSE_BUTTONS,
+  FINISH_PHOTOS_BUTTONS,
+  STEP_BACK_BUTTON,
+} from "constants/buttons/buttons";
 import { STEPS_ENUM, USER_STATE_ENUM } from "constants/config";
+import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { checkUserState } from "handlers/common/checkUserState";
 import {
-  addPhotoToDraft,
   getAdvertisementDraft,
   updateAdvertisementDraft,
 } from "services/advertismentDraft";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 
-export const registerPhotosHandler = (bot: Telegraf) => {
-  bot.on(message("photo"), async (ctx) => {
+export const registerVideoHandler = (bot: Telegraf) => {
+  bot.on(message("video"), async (ctx) => {
     try {
       if (!ctx.from?.id) {
-        ctx.reply(ERROR_MESSAGES.ERROR);
+        ctx.reply(ERROR_MESSAGES.ERROR, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
         return;
       }
       const isUserInState = await checkUserState(
@@ -22,7 +27,9 @@ export const registerPhotosHandler = (bot: Telegraf) => {
         USER_STATE_ENUM.AD_CREATION
       );
       if (!isUserInState) {
-        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
       }
 
       const draft = await getAdvertisementDraft(ctx.from.id.toString());
@@ -34,34 +41,29 @@ export const registerPhotosHandler = (bot: Telegraf) => {
       }
 
       if (
-        draft.currentStep !== STEPS_ENUM.PHOTOS &&
-        draft.currentStep !== STEPS_ENUM.PHOTOS_EDIT
+        draft.currentStep !== STEPS_ENUM.VIDEO &&
+        draft.currentStep !== STEPS_ENUM.VIDEO_EDIT
       ) {
-        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP);
+        return ctx.reply(ERROR_MESSAGES.ERROR_WITH_STEP, {
+          reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+        });
       }
 
-      const { photos } = draft;
-
-      if (photos && photos?.length >= 9) {
-        await ctx.reply(MESSAGES.PHOTOS_LIMIT_REACHED);
-        return;
-      }
-      const photo = ctx.message.photo[ctx.message.photo.length - 1];
-
-      const newDraft = await addPhotoToDraft(
-        ctx.from.id.toString(),
-        photo.file_id
-      );
-
-      if (!newDraft) {
-        return ctx.reply(ERROR_MESSAGES.ERROR);
-      }
+      const videoFileId = ctx.message.video.file_id;
 
       await updateAdvertisementDraft(ctx.from.id.toString(), {
+        video: videoFileId,
         currentStep: STEPS_ENUM.PHOTOS,
       });
 
-      await ctx.deleteMessage();
+      await ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
+        reply_markup: {
+          inline_keyboard: [
+            ...FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+            ...STEP_BACK_BUTTON,
+          ],
+        },
+      });
     } catch (error) {
       console.log(error);
 

@@ -2,7 +2,7 @@ import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const transmissionTypeStep = async (
@@ -30,7 +30,9 @@ export const transmissionTypeStep = async (
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER);
+    return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER, {
+      reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+    });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },

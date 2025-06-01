@@ -352,6 +352,15 @@ export const ADMIN_USER_BUTTONS = (userId: string, action: "ban" | "unban") => [
   ...CLOSE_BUTTONS(),
 ];
 
+export const STEP_BACK_BUTTON = [
+  [
+    {
+      text: "Назад 🔄",
+      callback_data: "stepBack",
+    },
+  ],
+];
+
 export const ADMIN_BOT_SETTINGS_BUTTONS = [
   [
     {

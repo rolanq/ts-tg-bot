@@ -1,4 +1,5 @@
 import { CallbackQuery } from "@telegraf/types";
+import { CLOSE_BUTTONS } from "constants/buttons/buttons";
 import { ERROR_MESSAGES } from "constants/messages";
 import { getBrandById, getCarModelById } from "services/brandService";
 import { Context } from "telegraf";
@@ -43,6 +44,8 @@ export const handleEditBrandsOrModels = async (ctx: Context) => {
         return handleEditModel(ctx, Number(id));
     }
   } catch (error) {
-    return ctx.reply(ERROR_MESSAGES.ERROR);
+    return ctx.reply(ERROR_MESSAGES.ERROR, {
+      reply_markup: { inline_keyboard: CLOSE_BUTTONS() },
+    });
   }
 };

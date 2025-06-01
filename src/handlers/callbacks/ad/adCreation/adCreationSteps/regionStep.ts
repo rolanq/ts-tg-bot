@@ -4,7 +4,7 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { getRegionById } from "services/regionService";
 import { Context } from "telegraf";
 import { getFirstPageForBrands } from "utils/pagination/getFirstPages";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { handleCreateAd } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/handleCreateAd";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
@@ -43,7 +43,7 @@ export const regionStep = async (
 
     const keyboard = await getFirstPageForBrands();
     return ctx.reply(CHOOSE_MESSAGES.BRAND, {
-      reply_markup: { inline_keyboard: keyboard },
+      reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

@@ -3,7 +3,7 @@ import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { getFirstPageForTransmissionTypes } from "utils/pagination/getFirstPages";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const driveTypeStep = async (
@@ -34,7 +34,7 @@ export const driveTypeStep = async (
     const keyboard = getFirstPageForTransmissionTypes();
 
     return ctx.reply(CHOOSE_MESSAGES.TRANSMISSION, {
-      reply_markup: { inline_keyboard: keyboard },
+      reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

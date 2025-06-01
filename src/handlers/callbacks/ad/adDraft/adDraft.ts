@@ -23,6 +23,7 @@ import {
   EDIT_AD_DRAFT_BUTTONS,
   SKIP_BUTTON,
   DELETE_AUTOTEKA_LINK_BUTTON,
+  STEP_BACK_BUTTON,
 } from "constants/buttons/buttons";
 import { CallbackQuery } from "@telegraf/types";
 import { updateUser } from "services/User";
@@ -48,28 +49,83 @@ const adDraftContinue = async (ctx: Context) => {
     const keyboard = await getKeyboardForStep(draft);
 
     await ctx.deleteMessage();
-
+    console.log(draft.currentStep);
+    
     switch (draft.currentStep) {
+      case STEPS_ENUM.REGION:
+        return ctx.reply(CHOOSE_MESSAGES.REGION, {
+          reply_markup: { inline_keyboard: keyboard },
+        });
+      case STEPS_ENUM.YEAR:
+        return ctx.reply(CHOOSE_MESSAGES.YEAR, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+      case STEPS_ENUM.BRAND:
+        return ctx.reply(CHOOSE_MESSAGES.BRAND, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+      case STEPS_ENUM.MODEL:
+        return ctx.reply(CHOOSE_MESSAGES.MODEL, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+      case STEPS_ENUM.ENGINETYPE:
+        return ctx.reply(CHOOSE_MESSAGES.ENGINE_TYPE, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+      case STEPS_ENUM.DRIVETYPE:
+        return ctx.reply(CHOOSE_MESSAGES.DRIVE_TYPE, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+      case STEPS_ENUM.TRANSMISSIONTYPE:
+        return ctx.reply(CHOOSE_MESSAGES.TRANSMISSION, {
+          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+        });
+        
       case STEPS_ENUM.HORSEPOWER:
-        return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER);
+        return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.MILEAGE:
-        return ctx.reply(CHOOSE_MESSAGES.MILEAGE);
+        return ctx.reply(CHOOSE_MESSAGES.MILEAGE, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.DESCRIPTION:
-        return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION);
+        return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.PRICE:
-        return ctx.reply(CHOOSE_MESSAGES.PRICE);
+        return ctx.reply(CHOOSE_MESSAGES.PRICE, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.PHONENUMBER:
-        return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER);
+        return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.AUTOTEKA_LINK:
         return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK, {
           reply_markup: {
-            inline_keyboard: SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
+            inline_keyboard: [
+              ...SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
+              ...STEP_BACK_BUTTON,
+            ],
+          },
+        });
+      case STEPS_ENUM.VIDEO:
+        return ctx.reply(CHOOSE_MESSAGES.VIDEO, {
+          reply_markup: {
+            inline_keyboard: [
+              ...SKIP_BUTTON(STEPS_ENUM.VIDEO),
+              ...STEP_BACK_BUTTON,
+            ],
           },
         });
       case STEPS_ENUM.PHOTOS:
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
           reply_markup: {
-            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+            inline_keyboard: [
+              ...FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+              ...STEP_BACK_BUTTON,
+            ],
           },
         });
     }
@@ -150,12 +206,12 @@ const adDraftEditField = async (ctx: Context) => {
       case STEPS_ENUM.YEAR:
         const keyboardYears = getFirstPageForYears(true);
         return ctx.reply(CHOOSE_MESSAGES.YEAR, {
-          reply_markup: { inline_keyboard: keyboardYears },
+          reply_markup: { inline_keyboard: [...keyboardYears, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.BRAND:
         const keyboardBrands = await getFirstPageForBrands(true);
         return ctx.reply(CHOOSE_MESSAGES.BRAND, {
-          reply_markup: { inline_keyboard: keyboardBrands },
+          reply_markup: { inline_keyboard: [...keyboardBrands, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.MODEL:
         if (!draft.brandId) {
@@ -165,55 +221,65 @@ const adDraftEditField = async (ctx: Context) => {
         }
         const keyboardModels = await getFirstPageForModels(draft.brandId, true);
         return ctx.reply(CHOOSE_MESSAGES.MODEL, {
-          reply_markup: { inline_keyboard: keyboardModels },
+          reply_markup: { inline_keyboard: [...keyboardModels, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.ENGINETYPE:
         const keyboardEngineTypes = getFirstPageForEngineTypes(true);
         return ctx.reply(CHOOSE_MESSAGES.ENGINE_TYPE, {
-          reply_markup: { inline_keyboard: keyboardEngineTypes },
+          reply_markup: { inline_keyboard: [...keyboardEngineTypes, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.DRIVETYPE:
         const keyboardDriveTypes = getFirstPageForDriveTypes(true);
         return ctx.reply(CHOOSE_MESSAGES.DRIVE_TYPE, {
-          reply_markup: { inline_keyboard: keyboardDriveTypes },
+          reply_markup: { inline_keyboard: [...keyboardDriveTypes, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.TRANSMISSIONTYPE:
         const keyboardTransmissions = getFirstPageForTransmissionTypes(true);
         return ctx.reply(CHOOSE_MESSAGES.TRANSMISSION, {
-          reply_markup: { inline_keyboard: keyboardTransmissions },
+          reply_markup: { inline_keyboard: [...keyboardTransmissions, ...STEP_BACK_BUTTON] },
         });
 
       case STEPS_ENUM.HORSEPOWER:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.HORSEPOWER_EDIT,
         });
-        return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER);
+        return ctx.reply(CHOOSE_MESSAGES.HORSE_POWER, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.MILEAGE:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.MILEAGE_EDIT,
         });
-        return ctx.reply(CHOOSE_MESSAGES.MILEAGE);
+        return ctx.reply(CHOOSE_MESSAGES.MILEAGE, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.DESCRIPTION:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.DESCRIPTION_EDIT,
         });
-        return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION);
+        return ctx.reply(CHOOSE_MESSAGES.DESCRIPTION, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.PRICE:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.PRICE_EDIT,
         });
-        return ctx.reply(CHOOSE_MESSAGES.PRICE);
+        return ctx.reply(CHOOSE_MESSAGES.PRICE, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.PHONENUMBER:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.PHONENUMBER_EDIT,
         });
-        return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER);
+        return ctx.reply(CHOOSE_MESSAGES.PHONE_NUMBER, {
+          reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+        });
       case STEPS_ENUM.AUTOTEKA_LINK:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
           currentStep: STEPS_ENUM.AUTOTEKA_LINK_EDIT,
         });
         return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK_EDIT, {
-          reply_markup: { inline_keyboard: DELETE_AUTOTEKA_LINK_BUTTON },
+          reply_markup: { inline_keyboard: [...DELETE_AUTOTEKA_LINK_BUTTON, ...STEP_BACK_BUTTON] },
         });
       case STEPS_ENUM.PHOTOS:
         await updateAdvertisementDraft(ctx.from?.id.toString(), {
@@ -221,7 +287,10 @@ const adDraftEditField = async (ctx: Context) => {
         });
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
           reply_markup: {
-            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+            inline_keyboard: [
+              ...FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+              ...STEP_BACK_BUTTON,
+            ],
           },
         });
     }

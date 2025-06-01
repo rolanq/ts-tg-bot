@@ -4,7 +4,7 @@ import { Context } from "telegraf";
 import { getPaginatedInlineKeyboard } from "utils/pagination";
 import { renderPaginatedYearButtons } from "constants/buttons/renderPaginatedButtons";
 import { getYearsPerPage } from "utils/utils";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 
 export const registerYearsPagination = async (ctx: Context) => {
   try {
@@ -32,7 +32,7 @@ export const registerYearsPagination = async (ctx: Context) => {
     );
 
     return ctx.editMessageReplyMarkup({
-      inline_keyboard: keyboard,
+      inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON],
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

@@ -4,6 +4,7 @@ import { registerAllCommands } from "./commands";
 import { registerAllCallbacks } from "./callbacks";
 import { registerMessageHandlers } from "./messageHandlers";
 import { registerPhotosHandler } from "./photos";
+import { registerVideoHandler } from "./video/video";
 export const registerAllHandlers = (bot: Telegraf) => {
   registerAllCommands(bot);
 
@@ -12,4 +13,5 @@ export const registerAllHandlers = (bot: Telegraf) => {
 
   registerMessageHandlers(bot);
   registerPhotosHandler(bot);
+  registerVideoHandler(bot);
 };

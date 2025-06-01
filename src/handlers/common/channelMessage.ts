@@ -3,6 +3,10 @@ import { IAdvertisement } from "../../utils/db";
 import { formatAdvertisementMedia } from "utils/utils";
 import { updateAdvertisement } from "services/advertisment";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
+import {
+  InputMediaPhoto,
+  InputMediaVideo,
+} from "telegraf/typings/core/types/typegram";
 
 const channelId = process.env.TELEGRAM_CHANNEL_ID;
 
@@ -17,12 +21,35 @@ export const sendAdToChannel = async (bot: Telegraf, ad: IAdvertisement) => {
     let messageId: number = 0;
 
     if (formattedAd.media) {
-      const mediaGroup = await bot.telegram.sendMediaGroup(
+      const mediaGroup: (InputMediaPhoto | InputMediaVideo)[] = [
+        ...(ad.photos?.map((photo) => ({
+          type: "photo" as const,
+          media: photo,
+        })) || []),
+        ...(ad.video
+          ? [
+              {
+                type: "video" as const,
+                media: ad.video,
+              },
+            ]
+          : []),
+      ];
+
+      if (mediaGroup.length > 0) {
+        mediaGroup[0] = {
+          ...mediaGroup[0],
+          caption: formattedAd.text || undefined,
+          parse_mode: "HTML",
+        };
+      }
+
+      const sentMediaGroup = await bot.telegram.sendMediaGroup(
         channelId,
-        formattedAd.media
+        mediaGroup
       );
 
-      messageId = mediaGroup[0].message_id;
+      messageId = sentMediaGroup[0].message_id;
     } else if (formattedAd.text) {
       const message = await bot.telegram.sendMessage(
         channelId,

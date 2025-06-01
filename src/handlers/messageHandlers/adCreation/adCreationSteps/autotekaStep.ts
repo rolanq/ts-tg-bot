@@ -2,6 +2,8 @@ import { Message } from "@telegraf/types";
 import {
   CLOSE_BUTTONS,
   FINISH_PHOTOS_BUTTONS,
+  SKIP_BUTTON,
+  STEP_BACK_BUTTON,
 } from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
@@ -43,7 +45,7 @@ export const handleAutotekaLinkStep = async (
     }
 
     await updateAdvertisementDraft(ctx.from.id.toString(), {
-      currentStep: STEPS_ENUM.PHOTOS,
+      currentStep: STEPS_ENUM.VIDEO,
       autotekaLink: autotekaLink,
     });
 
@@ -53,9 +55,12 @@ export const handleAutotekaLinkStep = async (
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
+    return ctx.reply(CHOOSE_MESSAGES.VIDEO, {
       reply_markup: {
-        inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+        inline_keyboard: [
+          ...SKIP_BUTTON(STEPS_ENUM.VIDEO),
+          ...STEP_BACK_BUTTON,
+        ],
       },
     });
   } catch (error) {

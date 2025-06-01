@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+      video: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       price: {
         type: Sequelize.DECIMAL(12, 0),
         allowNull: true,

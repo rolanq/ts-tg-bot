@@ -36,11 +36,25 @@ export const handleSearch = async (ctx: Context) => {
     ads.forEach(async (ad) => {
       const message = await renderAdvertismentMessage(ad);
 
-      if (ad.photos.length) {
-        await ctx.sendMediaGroup(
-          ad.photos.map((photo, i) => ({
-            type: "photo",
+      if (ad.photos?.length || ad.video) {
+        const mediaGroup = [
+          ...(ad.photos?.map((photo) => ({
+            type: "photo" as const,
             media: photo,
+          })) || []),
+          ...(ad.video
+            ? [
+                {
+                  type: "video" as const,
+                  media: ad.video,
+                },
+              ]
+            : []),
+        ];
+
+        await ctx.sendMediaGroup(
+          mediaGroup.map((media, i) => ({
+            ...media,
             caption: i === 0 ? message : undefined,
             parse_mode: "HTML",
           }))

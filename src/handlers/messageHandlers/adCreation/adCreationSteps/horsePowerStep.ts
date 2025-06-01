@@ -7,7 +7,7 @@ import {
 } from "services/advertismentDraft";
 import { Context } from "telegraf";
 import { parseNumberWithAbbreviations } from "utils/utils";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const handleHorsePowerStep = async (ctx: Context, isEdit: boolean = false) => {
@@ -48,7 +48,9 @@ export const handleHorsePowerStep = async (ctx: Context, isEdit: boolean = false
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.MILEAGE);
+    return ctx.reply(CHOOSE_MESSAGES.MILEAGE, {
+      reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+    });
   } catch (error) {
     console.log(error);
 

@@ -1,16 +1,43 @@
+import { getPhotoAndAddWatermark } from "handlers/photos/helpers";
 import { WhereOptions } from "sequelize";
+import { Context } from "telegraf";
 import {
   Advertisement,
   Brand,
   CarModel,
   IAdvertisement,
   IAdvertisementDraft,
+  IBotSettings,
   Region,
 } from "utils/db";
 import { generateRandomId } from "utils/utils";
 
-export const createAdvertisement = async (draft: IAdvertisementDraft) => {
+const photosChannelId = process.env.PHOTOS_CHANNEL_ID;
+
+export const createAdvertisement = async (
+  draft: IAdvertisementDraft,
+  ctx: Context,
+  botSettings: IBotSettings
+) => {
   const newAdId = await generateRandomIdForAdvertisement();
+  if (!photosChannelId) {
+    throw new Error("PHOTOS_CHANNEL_ID is not set");
+  }
+  const newPhotos = await Promise.all(
+    draft.photos.map(async (photo) => {
+      const fileInfo = await ctx.telegram.getFile(photo);
+      const processedImageBuffer = await getPhotoAndAddWatermark(
+        fileInfo,
+        botSettings
+      );
+      const sentPhoto = await ctx.telegram.sendPhoto(photosChannelId, {
+        source: processedImageBuffer,
+      });
+      await ctx.telegram.deleteMessage(photosChannelId, sentPhoto.message_id);
+      return sentPhoto.photo[0].file_id;
+    })
+  );
+
   const advertisement = await Advertisement.create({
     id: newAdId,
     regionId: draft.regionId!,
@@ -26,7 +53,8 @@ export const createAdvertisement = async (draft: IAdvertisementDraft) => {
     description: draft.description!,
     price: draft.price!,
     phoneNumber: draft.phoneNumber!,
-    photos: draft.photos!,
+    photos: newPhotos,
+    video: draft.video,
 
     isActive: true,
     isOnHold: false,

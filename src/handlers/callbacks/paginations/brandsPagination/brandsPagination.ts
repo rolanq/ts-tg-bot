@@ -7,7 +7,7 @@ import {
   renderPaginatedBrandButtonsAdmin,
 } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { getUserById } from "services/User";
 import { USER_STATE_ENUM } from "constants/config";
 export const registerBrandsPaginations = async (ctx: Context) => {
@@ -48,7 +48,7 @@ export const registerBrandsPaginations = async (ctx: Context) => {
     );
 
     return ctx.editMessageReplyMarkup({
-      inline_keyboard: keyboard,
+      inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON],
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

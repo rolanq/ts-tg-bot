@@ -4,7 +4,7 @@ import { getPaginatedInlineKeyboard } from "utils/pagination";
 import { CallbackQuery } from "@telegraf/types";
 import { renderPaginatedModelButtons } from "constants/buttons/renderPaginatedButtons";
 import { ERROR_MESSAGES } from "constants/messages";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { getAdvertisementDraft } from "services/advertismentDraft";
 export const registerMarksPaginations = async (ctx: Context) => {
   try {
@@ -40,7 +40,7 @@ export const registerMarksPaginations = async (ctx: Context) => {
     );
 
     return ctx.editMessageReplyMarkup({
-      inline_keyboard: keyboard,
+      inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON],
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

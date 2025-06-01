@@ -4,7 +4,7 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { getFirstPageForYears } from "utils/pagination/getFirstPages";
 import { Context } from "telegraf";
 import { getCarModelById } from "services/brandService";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const modelStep = async (
@@ -42,7 +42,7 @@ export const modelStep = async (
 
     const keyboard = getFirstPageForYears();
     return ctx.reply(CHOOSE_MESSAGES.YEAR, {
-      reply_markup: { inline_keyboard: keyboard },
+      reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

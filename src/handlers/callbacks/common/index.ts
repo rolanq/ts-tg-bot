@@ -2,6 +2,7 @@ import { CallbackQuery } from "@telegraf/types";
 import {
   CLOSE_BUTTONS,
   FINISH_PHOTOS_BUTTONS,
+  SKIP_BUTTON,
 } from "constants/buttons/buttons";
 import { STEPS_ENUM } from "constants/config";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
@@ -52,6 +53,16 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
       }
 
       if (skipData === STEPS_ENUM.AUTOTEKA_LINK) {
+        await updateAdvertisementDraft(ctx.from.id.toString(), {
+          currentStep: STEPS_ENUM.VIDEO,
+        });
+
+        return ctx.reply(CHOOSE_MESSAGES.VIDEO, {
+          reply_markup: {
+            inline_keyboard: SKIP_BUTTON(STEPS_ENUM.VIDEO),
+          },
+        });
+      } else if (skipData === STEPS_ENUM.VIDEO) {
         await updateAdvertisementDraft(ctx.from.id.toString(), {
           currentStep: STEPS_ENUM.PHOTOS,
         });

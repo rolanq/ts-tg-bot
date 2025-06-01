@@ -20,7 +20,7 @@ export const getKeyboardForStep = async (draft: IAdvertisementDraft) => {
         keyboard = await getFirstPageForRegions();
         break;
       case STEPS_ENUM.BRAND:
-        keyboard = await getFirstPageForBrands();
+        keyboard = await getFirstPageForBrands(false, true);
         break;
       case STEPS_ENUM.MODEL:
         if (draft.brandId) {
@@ -28,16 +28,16 @@ export const getKeyboardForStep = async (draft: IAdvertisementDraft) => {
         }
         break;
       case STEPS_ENUM.YEAR:
-        keyboard = getFirstPageForYears();
+        keyboard = getFirstPageForYears(false, true);
         break;
       case STEPS_ENUM.ENGINETYPE:
-        keyboard = getFirstPageForEngineTypes();
+        keyboard = getFirstPageForEngineTypes(false, true);
         break;
       case STEPS_ENUM.DRIVETYPE:
-        keyboard = getFirstPageForDriveTypes();
+        keyboard = getFirstPageForDriveTypes(false, true);
         break;
       case STEPS_ENUM.TRANSMISSIONTYPE:
-        keyboard = getFirstPageForTransmissionTypes();
+        keyboard = getFirstPageForTransmissionTypes(false, true);
         break;
       default:
         break;

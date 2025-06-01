@@ -4,7 +4,7 @@ import { updateAdvertisementDraft } from "services/advertismentDraft";
 import { getBrandById } from "services/brandService";
 import { Context } from "telegraf";
 import { getFirstPageForModels } from "utils/pagination/getFirstPages";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 
 export const brandStep = async (
@@ -42,7 +42,7 @@ export const brandStep = async (
 
     const keyboard = await getFirstPageForModels(brand.id);
     return ctx.reply(CHOOSE_MESSAGES.MODEL, {
-      reply_markup: { inline_keyboard: keyboard },
+      reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
     });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {

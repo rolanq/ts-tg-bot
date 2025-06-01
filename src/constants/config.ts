@@ -33,6 +33,8 @@ export enum STEPS_ENUM {
   AUTOTEKA_LINK_EDIT = "autoteka_link_edit",
   PHOTOS = "photos",
   PHOTOS_EDIT = "photos_edit",
+  VIDEO = "video",
+  VIDEO_EDIT = "video_edit",
 }
 
 export enum USER_STATE_ENUM {

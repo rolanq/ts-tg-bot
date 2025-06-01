@@ -1,5 +1,7 @@
 import { STEPS_ENUM } from "constants/config";
+import { Op } from "sequelize";
 import { IAdvertisementDraft, AdvertisementDraft } from "utils/db";
+import { Sequelize } from "sequelize";
 
 export const getAdvertisementDraft = async (
   userId: string
@@ -77,8 +79,9 @@ export const addPhotoToDraft = async (userId: string, photo: string) => {
     return null;
   }
 
-  draft.set("photos", [...draft.getDataValue("photos"), photo]);
-  await draft.save();
+  await draft.update({
+    photos: Sequelize.fn("array_append", Sequelize.col("photos"), photo),
+  });
 
   return draft.get({ plain: true });
 };

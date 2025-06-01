@@ -1,5 +1,5 @@
 import { Message } from "@telegraf/types";
-import { CLOSE_BUTTONS } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { STEPS_ENUM } from "constants/config";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
 import { sendDraftMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
@@ -37,7 +37,9 @@ export const handleDescriptionStep = async (
       return await sendDraftMessage(ctx);
     }
 
-    return ctx.reply(CHOOSE_MESSAGES.PRICE);
+    return ctx.reply(CHOOSE_MESSAGES.PRICE, {
+      reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
+    });
   } catch (error) {
     return ctx.reply(ERROR_MESSAGES.ERROR, {
       reply_markup: { inline_keyboard: CLOSE_BUTTONS() },

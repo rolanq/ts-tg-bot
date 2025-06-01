@@ -1,12 +1,13 @@
 import {
   InlineKeyboardButton,
   InputMediaPhoto,
+  InputMediaVideo,
 } from "telegraf/typings/core/types/typegram";
 import { IAdvertisement, IAdvertisementDraft, ISavedSearch, IUser } from "./db";
 import { Op, WhereOptions } from "sequelize";
 import { renderAdvertismentMessage } from "handlers/keyboardButtonHandlers/mainKeybardButtonHandler/helpers";
 import { MediaGroup } from "telegraf/typings/telegram-types";
-import { BAD_WORDS } from "constants/config";
+import { BAD_WORDS, STEPS_ENUM } from "constants/config";
 import { getAdvertisementById } from "services/advertisment";
 import { getUserById, getUserByIdOrUsername } from "services/User";
 
@@ -125,21 +126,78 @@ export const getAdvertismentWhereCondition = (savedSearch: ISavedSearch) => {
 
 export const formatAdvertisementMedia = async (
   ad: IAdvertisement
-): Promise<{ text: string | null; media: InputMediaPhoto[] | null }> => {
+): Promise<{
+  text: string | null;
+  media: (InputMediaPhoto | InputMediaVideo)[] | null;
+}> => {
   const message = await renderAdvertismentMessage(ad);
 
-  if (!ad.photos || ad.photos.length === 0) {
+  if ((!ad.photos || ad.photos.length === 0) && !ad.video) {
     return { text: message, media: null };
   }
 
-  const media: InputMediaPhoto[] = ad.photos.map((photo, index) => ({
-    type: "photo",
-    media: photo,
-    caption: index === 0 ? message : undefined,
-    parse_mode: "HTML",
-  }));
+  const media: (InputMediaPhoto | InputMediaVideo)[] = [
+    ...(ad.photos?.map((photo) => ({
+      type: "photo" as const,
+      media: photo,
+    })) || []),
+    ...(ad.video
+      ? [
+          {
+            type: "video" as const,
+            media: ad.video,
+          },
+        ]
+      : []),
+  ];
 
-  return { text: null, media };
+  if (media.length > 0) {
+    media[0] = {
+      ...media[0],
+      caption: message,
+      parse_mode: "HTML",
+    };
+  }
+
+  return { text: message, media };
+};
+
+export const formatAdvertisementDraftMedia = async (
+  draft: IAdvertisementDraft
+): Promise<{
+  text: string | null;
+  media: (InputMediaPhoto | InputMediaVideo)[] | null;
+}> => {
+  const message = await renderAdvertismentMessage(draft, true);
+
+  if ((!draft.photos || draft.photos.length === 0) && !draft.video) {
+    return { text: message, media: null };
+  }
+
+  const media: (InputMediaPhoto | InputMediaVideo)[] = [
+    ...(draft.photos?.map((photo) => ({
+      type: "photo" as const,
+      media: photo,
+    })) || []),
+    ...(draft.video
+      ? [
+          {
+            type: "video" as const,
+            media: draft.video,
+          },
+        ]
+      : []),
+  ];
+
+  if (media.length > 0) {
+    media[0] = {
+      ...media[0],
+      caption: message,
+      parse_mode: "HTML",
+    };
+  }
+
+  return { text: message, media };
 };
 
 export const checkBadWords = (text: string) => {
@@ -187,4 +245,41 @@ export const searchUser = async (
 
 export const generateRandomId = () => {
   return Math.floor(Math.random() * (2147483640 - 10000000 + 1) + 10000000);
+};
+
+export const getStepBack = (step: STEPS_ENUM) => {
+  switch (step) {
+    case STEPS_ENUM.REGION:
+      return null;
+    case STEPS_ENUM.BRAND:
+      return STEPS_ENUM.REGION;
+    case STEPS_ENUM.MODEL:
+      return STEPS_ENUM.BRAND;
+    case STEPS_ENUM.YEAR:
+      return STEPS_ENUM.MODEL;
+    case STEPS_ENUM.ENGINETYPE:
+      return STEPS_ENUM.YEAR;
+    case STEPS_ENUM.DRIVETYPE:
+      return STEPS_ENUM.ENGINETYPE;
+    case STEPS_ENUM.TRANSMISSIONTYPE:
+      return STEPS_ENUM.DRIVETYPE;
+    case STEPS_ENUM.HORSEPOWER:
+      return STEPS_ENUM.TRANSMISSIONTYPE;
+    case STEPS_ENUM.MILEAGE:
+      return STEPS_ENUM.HORSEPOWER;
+    case STEPS_ENUM.DESCRIPTION:
+      return STEPS_ENUM.MILEAGE;
+    case STEPS_ENUM.PRICE:
+      return STEPS_ENUM.DESCRIPTION;
+    case STEPS_ENUM.PHONENUMBER:
+      return STEPS_ENUM.PRICE;
+    case STEPS_ENUM.AUTOTEKA_LINK:
+      return STEPS_ENUM.PHONENUMBER;
+    case STEPS_ENUM.VIDEO:
+      return STEPS_ENUM.AUTOTEKA_LINK;
+    case STEPS_ENUM.PHOTOS:
+      return STEPS_ENUM.VIDEO;
+    default:
+      return null;
+  }
 };

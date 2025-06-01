@@ -1,5 +1,5 @@
 import { Message } from "@telegraf/types";
-import { CLOSE_BUTTONS, SKIP_BUTTON } from "constants/buttons/buttons";
+import { CLOSE_BUTTONS, SKIP_BUTTON, STEP_BACK_BUTTON } from "constants/buttons/buttons";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES } from "constants/messages";
 import { STEPS_ENUM } from "constants/config";
 import { updateAdvertisementDraft } from "services/advertismentDraft";
@@ -41,7 +41,10 @@ export const handlePhoneNumberStep = async (
 
     return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK, {
       reply_markup: {
-        inline_keyboard: SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
+        inline_keyboard: [
+          ...SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK),
+          ...STEP_BACK_BUTTON,
+        ],
       },
     });
   } catch (error) {
