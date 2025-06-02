@@ -1,4 +1,5 @@
-import { getPhotoAndAddWatermark } from "handlers/photos/helpers";
+import { Message } from "@telegraf/types";
+import { getPhotosAndAddWatermark } from "handlers/photos/helpers";
 import { WhereOptions } from "sequelize";
 import { Context } from "telegraf";
 import {
@@ -19,25 +20,69 @@ export const createAdvertisement = async (
   ctx: Context,
   botSettings: IBotSettings
 ) => {
+  console.log(
+    "Starting advertisement creation with draft:",
+    JSON.stringify(draft, null, 2)
+  );
+
   const newAdId = await generateRandomIdForAdvertisement();
+  console.log("Generated new advertisement ID:", newAdId);
+
   if (!photosChannelId) {
     throw new Error("PHOTOS_CHANNEL_ID is not set");
   }
+
+  console.log("Processing photos...");
   const newPhotos = await Promise.all(
-    draft.photos.map(async (photo) => {
+    draft.photos.map(async (photo, index) => {
+      console.log(`Getting file info for photo ${index + 1}`);
       const fileInfo = await ctx.telegram.getFile(photo);
-      const processedImageBuffer = await getPhotoAndAddWatermark(
-        fileInfo,
-        botSettings
-      );
-      const sentPhoto = await ctx.telegram.sendPhoto(photosChannelId, {
-        source: processedImageBuffer,
-      });
-      await ctx.telegram.deleteMessage(photosChannelId, sentPhoto.message_id);
-      return sentPhoto.photo[0].file_id;
+      console.log(`File info for photo ${index + 1}:`, fileInfo);
+      return fileInfo;
     })
   );
+  console.log("All photos processed:", newPhotos.length);
 
+  console.log("Adding watermark to photos...");
+  const processedImageBuffers = await getPhotosAndAddWatermark(
+    newPhotos,
+    botSettings
+  );
+  console.log("Watermark added to photos");
+
+  if (!processedImageBuffers || processedImageBuffers.length === 0) {
+    throw new Error("No processed images available");
+  }
+
+  console.log("Preparing media group...");
+  const mediaGroup = processedImageBuffers.map((buffer, index) => {
+    console.log(`Preparing media item ${index + 1}`);
+    return {
+      type: "photo" as const,
+      media: { source: buffer },
+    };
+  });
+
+  if (!mediaGroup || mediaGroup.length === 0) {
+    throw new Error("Error preparing media group");
+  }
+
+  console.log("Sending media group to channel...");
+  const sentPhotos = await ctx.telegram.sendMediaGroup(
+    photosChannelId,
+    mediaGroup
+  );
+  console.log("Media group sent successfully");
+
+  console.log("Extracting file IDs from sent photos...");
+  const newPhotosToSave = sentPhotos.map((photo, index) => {
+    const fileId = (photo as Message.PhotoMessage).photo[0].file_id;
+    console.log(`Extracted file ID for photo ${index + 1}:`, fileId);
+    return fileId;
+  });
+  console.log("All file IDs extracted:", newPhotosToSave);
+
+  console.log("Creating advertisement in database...");
   const advertisement = await Advertisement.create({
     id: newAdId,
     regionId: draft.regionId!,
@@ -47,15 +92,13 @@ export const createAdvertisement = async (
     engineType: draft.engineType!,
     driveType: draft.driveType!,
     transmission: draft.transmission!,
-
     horsePower: draft.horsePower!,
     mileage: draft.mileage!,
     description: draft.description!,
     price: draft.price!,
     phoneNumber: draft.phoneNumber!,
-    photos: newPhotos,
+    photos: newPhotosToSave,
     video: draft.video,
-
     isActive: true,
     isOnHold: false,
     hideReason: null,
@@ -64,6 +107,7 @@ export const createAdvertisement = async (
     telegramUsername: draft.telegramUsername,
     autotekaLink: draft.autotekaLink,
   });
+  console.log("Advertisement created successfully:", advertisement.get("id"));
 
   return advertisement.get({ plain: true });
 };
