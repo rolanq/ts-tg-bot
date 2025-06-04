@@ -3,6 +3,7 @@ import {
   CLOSE_BUTTONS,
   FINISH_PHOTOS_BUTTONS,
   SKIP_BUTTON,
+  STEP_BACK_BUTTON,
 } from "constants/buttons/buttons";
 import { STEPS_ENUM } from "constants/config";
 import { CHOOSE_MESSAGES, ERROR_MESSAGES, MESSAGES } from "constants/messages";
@@ -59,7 +60,10 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
 
         return ctx.reply(CHOOSE_MESSAGES.VIDEO, {
           reply_markup: {
-            inline_keyboard: SKIP_BUTTON(STEPS_ENUM.VIDEO),
+            inline_keyboard: [
+              ...SKIP_BUTTON(STEPS_ENUM.VIDEO),
+              ...STEP_BACK_BUTTON,
+            ],
           },
         });
       } else if (skipData === STEPS_ENUM.VIDEO) {
@@ -69,7 +73,10 @@ export const registerCommonCallbacks = (bot: Telegraf) => {
 
         return ctx.reply(CHOOSE_MESSAGES.PHOTOS, {
           reply_markup: {
-            inline_keyboard: FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+            inline_keyboard: [
+              ...FINISH_PHOTOS_BUTTONS(draft.photos?.length > 0),
+              ...STEP_BACK_BUTTON,
+            ],
           },
         });
       }

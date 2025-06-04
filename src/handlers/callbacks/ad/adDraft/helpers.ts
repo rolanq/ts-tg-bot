@@ -24,7 +24,7 @@ export const getKeyboardForStep = async (draft: IAdvertisementDraft) => {
         break;
       case STEPS_ENUM.MODEL:
         if (draft.brandId) {
-          keyboard = await getFirstPageForModels(draft.brandId);
+          keyboard = await getFirstPageForModels(draft.brandId, true);
         }
         break;
       case STEPS_ENUM.YEAR:

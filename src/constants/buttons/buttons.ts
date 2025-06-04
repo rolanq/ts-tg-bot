@@ -369,7 +369,7 @@ export const ADMIN_USER_BUTTONS = (userId: string, action: "ban" | "unban") => [
 export const STEP_BACK_BUTTON = [
   [
     {
-      text: "Назад 🔄",
+      text: "Назад",
       callback_data: "stepBack",
     },
   ],

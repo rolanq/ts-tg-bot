@@ -50,7 +50,6 @@ const adDraftContinue = async (ctx: Context) => {
     const keyboard = await getKeyboardForStep(draft);
 
     await ctx.deleteMessage();
-    console.log(draft.currentStep);
 
     switch (draft.currentStep) {
       case STEPS_ENUM.REGION:
@@ -59,27 +58,27 @@ const adDraftContinue = async (ctx: Context) => {
         });
       case STEPS_ENUM.YEAR:
         return ctx.reply(CHOOSE_MESSAGES.YEAR, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
       case STEPS_ENUM.BRAND:
         return ctx.reply(CHOOSE_MESSAGES.BRAND, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
       case STEPS_ENUM.MODEL:
         return ctx.reply(CHOOSE_MESSAGES.MODEL, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
       case STEPS_ENUM.ENGINETYPE:
         return ctx.reply(CHOOSE_MESSAGES.ENGINE_TYPE, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
       case STEPS_ENUM.DRIVETYPE:
         return ctx.reply(CHOOSE_MESSAGES.DRIVE_TYPE, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
       case STEPS_ENUM.TRANSMISSIONTYPE:
         return ctx.reply(CHOOSE_MESSAGES.TRANSMISSION, {
-          reply_markup: { inline_keyboard: [...keyboard, ...STEP_BACK_BUTTON] },
+          reply_markup: { inline_keyboard: [...keyboard] },
         });
 
       case STEPS_ENUM.HORSEPOWER:

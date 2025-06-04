@@ -134,12 +134,14 @@ export const handleStepBack = async (ctx: Context) => {
           reply_markup: { inline_keyboard: STEP_BACK_BUTTON },
         });
       case STEPS_ENUM.AUTOTEKA_LINK:
+        const autotekaLinkKeyboard = [...SKIP_BUTTON(STEPS_ENUM.AUTOTEKA_LINK)];
+        if (draft.autotekaLink) {
+          autotekaLinkKeyboard.push(...DELETE_AUTOTEKA_LINK_BUTTON);
+        }
+        autotekaLinkKeyboard.push(...STEP_BACK_BUTTON);
         return ctx.reply(CHOOSE_MESSAGES.AUTOTEKA_LINK_EDIT, {
           reply_markup: {
-            inline_keyboard: [
-              ...DELETE_AUTOTEKA_LINK_BUTTON,
-              ...STEP_BACK_BUTTON,
-            ],
+            inline_keyboard: autotekaLinkKeyboard,
           },
         });
       case STEPS_ENUM.VIDEO:
